@@ -1,8 +1,10 @@
 ---
 title: Angular最佳实践
+tags: web
+categories: web
 ---
 
-![Alt text](test/angular.ico "Optional title")
+![Alt text](index/angular.ico "Optional title")
 
 ## 为什么选择Angular
 
