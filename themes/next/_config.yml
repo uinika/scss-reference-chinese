@@ -47,13 +47,10 @@ index_with_subtitle: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  about: /about
-  electron: /electron
-  design: /design
-  web: /web
-  zen: /zen
-  archives: /archives
   tags: /tags
+  archives: /archives
+  categories: /categories
+  about: /about
 
 # Enable/Disable menu icons.
 # Icon Mapping:
@@ -63,13 +60,10 @@ menu:
 menu_icons:
   enable: true
   home: home
-  about: user
-  electron: microchip
-  design: slideshare
-  web: firefox
-  zen: medium
-  archives: archive
   tags: tags
+  archives: archive
+  categories: th
+  about: user
 
 # ---------------------------------------------------------------
 # Scheme Settings
