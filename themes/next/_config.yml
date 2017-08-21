@@ -47,12 +47,13 @@ index_with_subtitle: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  about: /about/
-  electron: /electron/
-  design: /design/
-  web: /web/
-  zen: /zen/
-  archives: /archives/
+  about: /about
+  electron: /electron
+  design: /design
+  web: /web
+  zen: /zen
+  archives: /archives
+  tags: /tags
 
 # Enable/Disable menu icons.
 # Icon Mapping:
@@ -68,6 +69,7 @@ menu_icons:
   web: firefox
   zen: medium
   archives: archive
+  tags: tags
 
 # ---------------------------------------------------------------
 # Scheme Settings
@@ -247,7 +249,7 @@ custom_logo:
 # Available value:
 #    normal | night | night eighties | night blue | night bright
 # https://github.com/chriskempson/tomorrow-theme
-highlight_theme: night bright
+highlight_theme: night
 
 
 # ---------------------------------------------------------------
@@ -561,7 +563,7 @@ pace: false
 pace_theme: pace-theme-minimal
 
 # Canvas-nest
-canvas_nest: true
+canvas_nest: false
 
 # three_waves
 three_waves: false

@@ -2,10 +2,19 @@
 title: Angular最佳实践
 ---
 
-## 为什么选择Angular？
+## 为什么选择Angular
 
-要
 
-## 总体结构？
+## 总体项目结构
 
-在
+## app.js
+
+## http.js
+
+## controller.js
+
+## service.js
+
+## directive.js
+
+
