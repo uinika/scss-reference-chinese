@@ -2,6 +2,8 @@
 title: Angular最佳实践
 ---
 
+![Alt text](test/angular.ico "Optional title")
+
 ## 为什么选择Angular
 
 
