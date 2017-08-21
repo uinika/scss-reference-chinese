@@ -1,38 +1,14 @@
 ---
-title: Hello World
+title: 目录
 ---
-Welcome to [Hexo](https://hexo.io/)! This is your very first post. Check [documentation](https://hexo.io/docs/) for more info. If you get any problems when using Hexo, you can find the answer in [troubleshooting](https://hexo.io/docs/troubleshooting.html) or you can ask me on [GitHub](https://github.com/hexojs/hexo/issues).
 
-## Quick Start
+## Electron`硬件&嵌入式`
 
-### Create a new post
+## Web `Web开发`
 
-``` bash
-$ hexo new "My New Post"
-```
+> Angular
 
-More info: [Writing](https://hexo.io/docs/writing.html)
 
-### Run server
+## Design `视觉和交互设计`
 
-``` bash
-$ hexo server
-```
-
-More info: [Server](https://hexo.io/docs/server.html)
-
-### Generate static files
-
-``` bash
-$ hexo generate
-```
-
-More info: [Generating](https://hexo.io/docs/generating.html)
-
-### Deploy to remote sites
-
-``` bash
-$ hexo deploy
-```
-
-More info: [Deployment](https://hexo.io/docs/deployment.html)
+## Zen `模式和最佳实践`
