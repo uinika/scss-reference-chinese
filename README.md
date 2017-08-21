@@ -1,6 +1,6 @@
 # [https://uinika.github.io/](https://uinika.github.io/)
 
-## Bit by bit
+## Hank's bit by bit
 
 ![](themes/next/source/images/hank.gif) 
 
