@@ -4,7 +4,7 @@ tags: web
 categories: web
 ---
 
-![Alt text](index/vue.png "Optional title")
+![Alt text](2-vue/vue.png "Optional title")
 
 ## 为什么选择Angular
 
