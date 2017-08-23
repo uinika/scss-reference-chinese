@@ -99,24 +99,19 @@ categories: All hands train
 
   angular.module("app", [
       // library
-      "ngAnimate",
-      "ngSanitize",
-      "ui.router",
-      "ui.bootstrap",
+      "ngAnimate", "ngSanitize", "ui.router", "ui.bootstrap",
       // custom
-      "app.common",
-      "app.login",
-      "app.layout",
+      "app.common", "app.login", "app.layout",
     ])
     .config(config)
     .run(run)
 
-  /* 配置块 */
+  /* config block */
   config.$inject = ["$qProvider", "$stateProvider", "$urlRouterProvider", "$httpProvider"];
 
   function config($qProvider, $stateProvider, $urlRouterProvider, $httpProvider) {};
 
-  /* 运行块 */
+  /* run block */
   run.$inject = ["$rootScope"];
 
   function run($rootScope) {}
@@ -124,11 +119,136 @@ categories: All hands train
 })();
 ```
 
-### controller.js
+### a.module.js
+```javascript
+(function () {
 
-### service.js
+  angular.module("app.login", []);
 
-### directive.js
+})();
+```
 
-### http.js
+### script.controller.js
+```javascript
+(function () {
 
+  angular
+    .module("app.login")
+    .controller("LoginController", LoginController);
+
+  LoginController.$inject = ["loginService", "$state", "verify", "$uibModal", "$scope"];
+
+  function LoginController(loginService, $state, verify, $uibModal, $scope) {
+    var vm = this;
+
+    // initialization
+    function activate() {};
+
+    // two-way data binding on view
+    vm.account = {
+      username: "",
+      password: "",
+      message: "",
+      onSubmit: function () {
+        loginService.auth({
+            username: vm.account.username,
+            password: vm.account.password
+          })
+          .then(function (result) {
+            if (loginService.validate(result)) {
+              vm.account.message = result.message;
+            }
+          })
+      }
+    };
+
+    // initialization function invoked
+    activate();
+  };
+
+})();
+```
+
+### script.service.js
+```javascript
+(function () {
+
+  angular
+    .module("app.login")
+    .service("loginService", loginService);
+
+  loginService.$inject = ["$http", "URL"];
+
+  function loginService($http, URL) {
+    var path = URL.master;
+    return {
+      auth: function (data) {
+        return $http.post(
+            path + "/login", data
+          )
+          .catch(function (error) {
+            console.error(error);
+          })
+      },
+      validate: function () {
+        // it is a login validator
+      }
+    }
+  };
+
+})();
+```
+
+### script.directive.js
+```javascript
+(function () {
+
+  angular.module("app.common")
+    .directive("wiservCommonEditor", wiservCommonEditor);
+
+  wiservCommonEditor.$inject = ["$sce"];
+
+  function wiservCommonEditor($sce) {
+    return {
+      restrict: 'A', // only activate on element attribute
+      require: '?ngModel', // get a hold of NgModelController
+      link: function (scope, element, attrs, ngModel) {
+        if (!ngModel) return; // do nothing if no ng-model
+        
+        // Add attribute "contenteditable = true"
+        element.attr({
+          contenteditable: "true"
+        });
+
+        // Specify how UI should be updated
+        ngModel.$render = function () {
+          element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
+        };
+
+        // Listen for change events to enable binding
+        element.on('blur keyup change', function () {
+          scope.$evalAsync(read);
+        });
+        read(); // initialize
+
+        // Write data to the model
+        function read() {
+          var html = element.html();
+          // When we clear the content editable the browser leaves a <br> behind
+          // If strip-br attribute is provided then we strip this out
+          if (attrs.stripBr && html === '<br>') {
+            html = '';
+          }
+          ngModel.$setViewValue(html);
+        }
+      }
+    };
+  };
+
+})();
+```
+
+### script.http.js
+```javascript
+
+```
