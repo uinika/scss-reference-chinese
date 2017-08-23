@@ -4,7 +4,7 @@ tags: web
 categories: All hands train
 ---
 
-![](1-angular/angular.ico "Angular1.x项目结构")
+![](1-angular/angular.ico)
 
 ## 为什么选择Angular，而非React？
 
@@ -23,6 +23,8 @@ categories: All hands train
 截至到目前为止，前端小组的同学已经使用Angular近1年半的时间，其间经历了5个项目、1款产品的考验，积累了许多实践经验，仅在这里做一些总结和分享。
 
 > 2017年，Webpack2、Vue2、Angular4的相继发布，编译式的前端开发已经成为大势所趋，且单页面场景下Angular在性能和组件化解耦方面暴露出非常多不足，目前勤智的前端小组正在全面转向Vue2。
+
+<!-- more -->
 
 ## 项目结构
 
@@ -98,7 +100,7 @@ categories: All hands train
 </html>
 ```
 
-## app.js
+## app
 
 该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用自执行的闭包函数进行封装，防止局部变量泄露到全局。run和config代码块编写为单独的函数进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
 
@@ -129,7 +131,7 @@ categories: All hands train
 })();
 ```
 
-## a.module.js
+## module
 ```javascript
 (function () {
 
@@ -138,7 +140,7 @@ categories: All hands train
 })();
 ```
 
-## script.controller.js
+## controller
 ```javascript
 (function () {
 
@@ -179,7 +181,7 @@ categories: All hands train
 })();
 ```
 
-## script.service.js
+## service
 ```javascript
 (function () {
 
@@ -209,7 +211,7 @@ categories: All hands train
 })();
 ```
 
-## script.directive.js
+## directive
 ```javascript
 (function () {
 
