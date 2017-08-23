@@ -26,9 +26,17 @@ categories: All hands train
 
 ## 项目结构
 
-![](1-angular/structure.png "Angular1.x")
+目录build、release主要放置编译、打包压缩后的前端代码，mocks里是基于express编写的模拟restful接口，与前端页面服务分处于不同端口不同域下，因此express中需要进行CORS跨域处理。partials目录下是全部工程代码，内部模块组织结构如下：
 
-### index.html
+![](1-angular/structure-global.png "整体结构")
+
+将javascript业务、css样式、html表现分离开编写，css采用Less进行预编译，使用gulp先合并全部Less后再处理成css，便于colors、resets等变量全局共享。使用`script.`、`style.`、`view.`前缀便于在vscode或atom中组织代码层次，以体现更加直观、优雅的项目结构。
+
+![](1-angular/structure-module.png "模块结构")
+
+## index.html
+
+一个非常传统的index.html，但是内置了URL的配置模块，方便实施人员根据现场服务环境，对后端URL地址进行修改。但更好的实践是单独将其作为一个config.js文件外部引入，代价是需要调整打包策略，避免gulp对config.js进行代码混淆和压缩操作。
 
 ```html
 <!DOCTYPE html>
@@ -90,7 +98,9 @@ categories: All hands train
 </html>
 ```
 
-### app.js
+## app.js
+
+该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用自执行的闭包函数进行封装，防止局部变量泄露到全局。run和config代码块编写为单独的函数进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
 
 ```javascript
 "use strict";
@@ -119,7 +129,7 @@ categories: All hands train
 })();
 ```
 
-### a.module.js
+## a.module.js
 ```javascript
 (function () {
 
@@ -128,7 +138,7 @@ categories: All hands train
 })();
 ```
 
-### script.controller.js
+## script.controller.js
 ```javascript
 (function () {
 
@@ -169,7 +179,7 @@ categories: All hands train
 })();
 ```
 
-### script.service.js
+## script.service.js
 ```javascript
 (function () {
 
@@ -199,56 +209,111 @@ categories: All hands train
 })();
 ```
 
-### script.directive.js
+## script.directive.js
 ```javascript
 (function () {
 
+  /**
+   * @type directive
+   * @name wiserv-scroll
+   * @param wiserv-scroll-offset
+   * @description auto resize base on overflow-y
+   */
   angular.module("app.common")
-    .directive("wiservCommonEditor", wiservCommonEditor);
+    .directive("wiservScroll", wiservScroll);
 
-  wiservCommonEditor.$inject = ["$sce"];
+  wiservScroll.$inject = ["$window", "$document"];
 
-  function wiservCommonEditor($sce) {
+  function wiservScroll($window, $document) {
     return {
-      restrict: 'A', // only activate on element attribute
-      require: '?ngModel', // get a hold of NgModelController
-      link: function (scope, element, attrs, ngModel) {
-        if (!ngModel) return; // do nothing if no ng-model
-        
-        // Add attribute "contenteditable = true"
-        element.attr({
-          contenteditable: "true"
-        });
+      restrict: "ACE",
+      scope: {
+        offset: "@wiservScrollOffset"
+      },
+      link: function link(scope, element, attrs) {
+        var _window = $($window);
+        var _document = $($document);
+        var _offset = $window.parseInt(scope.offset);
 
-        // Specify how UI should be updated
-        ngModel.$render = function () {
-          element.html($sce.getTrustedHtml(ngModel.$viewValue || ''));
-        };
+        format();
 
-        // Listen for change events to enable binding
-        element.on('blur keyup change', function () {
-          scope.$evalAsync(read);
-        });
-        read(); // initialize
+        _window.resize(function () {
+          format();
+        })
 
-        // Write data to the model
-        function read() {
-          var html = element.html();
-          // When we clear the content editable the browser leaves a <br> behind
-          // If strip-br attribute is provided then we strip this out
-          if (attrs.stripBr && html === '<br>') {
-            html = '';
-          }
-          ngModel.$setViewValue(html);
+        function format() {
+          // scroll
+          element.css({
+            "overflow-y": "scroll"
+          });
+          // size
+          var contentHeight = _window.height() || 0;
+          var navbarHeight = _document.find(".main-header").outerHeight() || 0;
+          var boxheaderHeight = _document.find(".box-header").outerHeight() || 0;
+          // calculate
+          element.outerHeight((contentHeight - navbarHeight - boxheaderHeight) - _offset);
         }
       }
     };
   };
 
+  /**
+   * @type directive
+   * @name slim-scroll
+   * @param slim-scroll-offset slim-scroll-width slim-scroll-color slim-scroll-edge
+   * @description auto resize base on slimscroll
+   */
+  angular.module("app.common")
+    .directive("slimScroll", slimScroll);
+
+  slimScroll.$inject = ["$window", "$document"];
+
+  function slimScroll($window, $document) {
+    return {
+      restrict: "ACE",
+      scope: {
+        height: "@slimScrollOffset",
+        size: "@slimScrollWidth",
+        color: "@slimScrollColor",
+        distance: "@slimScrollEdge"
+      },
+      link: function link(scope, element, attrs) {
+        var _window = $($window);
+        var _document = $($document);
+        // property
+        var _height = $window.parseInt(scope.height);
+        var _size = scope.size ? (scope.size + "px") : ("6px");
+        var _color = scope.color ? (scope.color + "") : ("red");
+        var _distance = scope.distance ? (scope.distance + "px") : ("0px");
+
+        format();
+
+        _window.resize(function () {
+          format();
+        });
+
+        function format() {
+          // size
+          var contentHeight = _window.height() || 0;
+          var navbarHeight = _document.find(".main-header").outerHeight() || 0;
+          var boxheaderHeight = _document.find(".box-header").outerHeight() || 0;
+          // calculate
+          element.slimScroll({
+            height: ((contentHeight - navbarHeight - boxheaderHeight) - _height) + "px",
+            color: _color,
+            size: _size,
+            distance: _distance,
+            alwaysVisible: true
+          });
+        };
+
+      }
+    };
+  };
 })();
 ```
 
-### script.http.js
+## script.http.js
 ```javascript
 
 ```
