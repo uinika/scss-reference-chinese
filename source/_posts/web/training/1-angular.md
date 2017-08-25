@@ -36,7 +36,7 @@ categories: training
 
 ![](1-angular/structure-module.png "模块结构")
 
-## index.html
+## Index
 
 一个非常传统的index.html，但是内置了URL的配置模块，方便实施人员根据现场服务环境，对后端URL地址进行修改。但更好的实践是单独将其作为一个config.js文件外部引入，代价是需要调整打包策略，避免gulp对config.js进行代码混淆和压缩操作。
 
@@ -100,7 +100,7 @@ categories: training
 </html>
 ```
 
-## app
+## App
 
 该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用自执行的闭包函数进行封装，防止局部变量泄露到全局。run和config代码块编写为单独的函数进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
 
@@ -131,7 +131,7 @@ categories: training
 })();
 ```
 
-## module
+## Module
 ```javascript
 (function () {
 
@@ -140,7 +140,7 @@ categories: training
 })();
 ```
 
-## controller
+## Controller
 ```javascript
 (function () {
 
@@ -181,7 +181,7 @@ categories: training
 })();
 ```
 
-## service
+## Service
 ```javascript
 (function () {
 
@@ -211,7 +211,7 @@ categories: training
 })();
 ```
 
-## directive
+## Directive
 ```javascript
 (function () {
 
@@ -315,7 +315,9 @@ categories: training
 })();
 ```
 
-## script.http.js
+## 基于JWT的简单SPA权限认证方案
 ```javascript
 
 ```
+
+
