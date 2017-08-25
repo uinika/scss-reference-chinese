@@ -132,15 +132,56 @@ categories: training
 ```
 
 ## Module
+
+为了更直观的体现**Angular模块化**的概念，会将如下代码新建为单独的`a.module.js`文件，主要用于模块的依赖声明，以及嵌套路由配置。其中，路由使用了[ui-router](https://github.com/angular-ui/ui-router/wiki)提供的方案，父级路由使用`abstract`属性和`template:"<ui-view/>"`来实现与子路由的松耦合。
+
+Angular module中的路由配置是整份前端代码的切割点，通过它完成了整个单页面应用在源码层面的文件切分。更重要的是，通过`controllerAs`的使用，在接下来的控制器中，通过`this`指针代替传统`$scope`的写法，有助于避免在有嵌套的controller中调用`$parent`，有效防止作用域污染的发生。
+
 ```javascript
 (function () {
+  
+  angular
+    .module("app.template", []);
 
-  angular.module("app.login", []);
+  angular
+    .module("app.template")
+    .config(templateConfig);
+
+  templateConfig.$inject = ["$stateProvider"];
+
+  function templateConfig($stateProvider) {
+    $stateProvider
+      .state("template", {
+        parent: "layout",
+        abstract: true,
+        url: "/template",
+        template: "<ui-view/>"
+      })
+      // Judged
+      .state("template.judged", {
+        parent: "template",
+        url: "/judged",
+        templateUrl: "partials/template/judge/view.html",
+        controller: "TemplateJudgeController",
+        controllerAs: "Judge"
+      })
+      // Trial
+      .state("template.trial", {
+        parent: "template",
+        url: "/trial",
+        templateUrl: "partials/template/trial/view.html",
+        controller: "TemplateTrialController",
+        controllerAs: "Trial"
+      })
+  }
 
 })();
 ```
 
 ## Controller
+
+
+
 ```javascript
 (function () {
 
