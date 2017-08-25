@@ -4,6 +4,8 @@ tags: Linux
 categories: Note
 ---
 
+<!-- more -->
+
 # note.electron
 
 ## Configuration for Linux Development Environment 
