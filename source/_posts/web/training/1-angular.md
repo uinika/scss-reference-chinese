@@ -1,7 +1,7 @@
 ---
 title: Angular最佳实践
-tags: web
-categories: training
+tags: Web
+categories: Training
 ---
 
 ![](1-angular/angular.ico)
