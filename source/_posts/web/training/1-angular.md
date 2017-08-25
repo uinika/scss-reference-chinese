@@ -1,7 +1,7 @@
 ---
 title: Angular最佳实践
 tags: web
-categories: All hands train
+categories: training
 ---
 
 ![](1-angular/angular.ico)
