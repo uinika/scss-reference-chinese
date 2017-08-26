@@ -1,5 +1,5 @@
 ---
-title: Linux命令集锦
+title: Linux命令二三事儿
 tags: Linux
 categories: Note
 ---
