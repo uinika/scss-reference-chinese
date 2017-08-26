@@ -1,5 +1,5 @@
 ---
-title: 2017年10月，写在成都本轮房地产周期尘埃落定之后
+title: 2017年，写在成都本轮房地产周期尘埃落定之后
 tags: Economy
 categories: Article
 ---
