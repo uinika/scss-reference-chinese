@@ -86,7 +86,9 @@ scheme: Gemini
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
   GitHub: https://github.com/uinika
+  StackOverflow: https://stackoverflow.com/users/7998979/uinika?tab=profile
   知乎: https://www.zhihu.com/people/uinika/activities
+  Email: mailto:uinika@outlook.com
 
 # Social Links Icons
 # Icon Mapping:
@@ -100,7 +102,7 @@ social_icons:
   # Icon Mappings.
   # KeyMapsToSocialItemKey: NameOfTheIconFromFontAwesome
   GitHub: github
-  E-Mail: envelope
+  Email: envelope
   Google: google
   Twitter: twitter
   FB Page: facebook
