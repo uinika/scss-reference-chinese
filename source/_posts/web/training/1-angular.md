@@ -370,11 +370,11 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-## 基于JWT的简单SPA权限认证方案
+## JWT风格的权限校验
 
-JWT是一种JSON风格的轻量级的授权和身份认证规范，主要用于前后端分离之后，在不借助cookie和session的场景下（部分移动端浏览器未实现相关特性），对每次浏览器端发起的HTTP请求进行拦截校验。
+JWT（*JSON Web Token*）是一种JSON风格的轻量级的授权和身份认证规范，主要用于前后端分离之后，在不借助cookie和session的场景下（*部分移动端浏览器未实现相关特性*），对每次浏览器端发起的HTTP请求进行拦截校验。
 
-前后端分离后的单页面场景下，权限认证需要解决如下3个核心问题：
+单页面场景下，权限认证需要解决如下3个核心问题：
 
 1. 登陆校验成功后，持有服务器端生成的token令牌。
 2. 每次HTTP请求都需要持有该token令牌的信息。
@@ -452,3 +452,28 @@ function run($rootScope) {
 };
 ```
 
+# Filter
+
+## Module中的Run和Config代码块
+
+Run和Config分别是Aangular模块加载的2个生命周期：
+
+1. **Config**：首先执行的是Config阶段，该阶段发生在provider注册和配置的时候，主要用于连接并注册好所有数据源，因此**provider**、**constant**都可以注入到Config代码块中，但是其它不确定是否初始化完成的服务不能注入进来。
+2. **run**：其次开始进入Run阶段，该阶段发生在injector创建完成之后，主要用于启动应用，是Angular中最接近C语言main方法的概念。为了避免在模块启动之后再进行配置操作，所以只允许注入**service**、**value**、**constant**。
+
+## 如何理解Provider
+
+## 脏数据检查机制
+
+## 跨控制器的事件交互
+
+$on $emit $broadcast
+
+## 指令的生命周期
+
+complie和link
+
+## $location的配置
+
+Hashbang模式
+HTML5模式
