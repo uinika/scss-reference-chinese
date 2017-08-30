@@ -477,3 +477,21 @@ complie和link
 
 Hashbang模式
 HTML5模式
+
+## 不可忽视的ngSanitize模块
+
+Filter
+Name	Description
+linky	
+Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and plain email address links.
+
+Service
+Name	Description
+$sanitize	
+Sanitizes an html string by stripping all potentially dangerous tokens.
+
+Provider
+Name	Description
+$sanitizeProvider	
+Creates and configures $sanitize instance.
+
