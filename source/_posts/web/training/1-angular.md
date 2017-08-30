@@ -102,7 +102,7 @@ categories: Training
 
 ## App
 
-该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用自执行的闭包函数进行封装，防止局部变量泄露到全局。run和config代码块编写为单独的函数进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
+该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用立即调用函数表达式**IIFE**（*Immediately-Invoked Function Expression*）进行封装，防止局部变量泄露到全局。`run`和`config`代码块编写为函数名称进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
 
 ```javascript
 "use strict";
@@ -372,11 +372,12 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
 ## Filter
 
+避免使用filters扫描一个复杂对象的所有属性，应该用filters来筛选选择的属性，避免带来糟糕的性能问题。
 
 
 ## 权限控制
 
-为了适配移动端浏览器，采用JWT（*JSON Web Token，一种JSON风格的轻量级的授权和身份认证规范*）作为前后端交互时的权限控制协议。主要是考虑前后端分离之后，在不借助cookie和session的场景下（*部分移动端浏览器未实现相关特性*），使浏览器端发起的每个HTTP请求都能够携带权限信息，以便于服务器端进行有效行拦截。
+为了适配移动端浏览器，采用JWT（*JSON Web Token，一种JSON风格的轻量级的授权和身份认证规范*）作为前后端交互时的权限控制协议。主要是考虑前后端分离之后，在不借助cookie和session的场景下（*部分移动端浏览器未实现相关特性*），使浏览器端发起的每个HTTP请求都能正确携带权限信息，以便于服务器端进行有效行拦截。
 
 单页面场景下，权限认证需要关注如下3个核心问题：
 
@@ -456,7 +457,7 @@ function run($rootScope) {
 };
 ```
 
-## Module中的Run和Config代码块
+## Module中的Run和Config
 
 Run和Config分别是Aangular模块加载的2个生命周期：
 
