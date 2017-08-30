@@ -184,6 +184,8 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
 由于Angular会自动绑定未在HTML中声明的属性，因此约定将所有双向绑定属性声明到vm对象当中，且通过赋予其默认值来表达所属数据类型。
 
+> 下面代码中的`activate()`函数主要用来放置controller的初始化逻辑。
+
 ```javascript
 (function () {
 
@@ -224,9 +226,12 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-
-
 ## Service
+
+主要用来放置数据操作和数据交互的逻辑，例如：*负责XHR请求、本地存储、内存存储和其它任何数据操作*。最后，Service通过返回一个对象来组织这些服务。通常情况下，项目每个模块只拥有一个controller，但是可以存在多个service，Angular的设计理念就是寄希望通过service来完成业务的复用，这一点主要继承了传统MVC的分层思想。
+
+> Angular的service总是单例的，这意味每个`injector`都只有一个实例化的`service`。
+
 ```javascript
 (function () {
 
@@ -257,6 +262,11 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 ```
 
 ## Directive
+
+指令的命名需要使用一个短小、唯一、具有描述性的前缀（*比例企业名称*），可以通过在指令配置对象中使用`controllerAs`属性，取得与控制器中vm同样的用法，
+
+> 使用controllerAs属性时，如果需要把父级作用域绑定到指令controller属性指定的作用域时，可以使用`bindToController=true`。
+
 ```javascript
 (function () {
 
@@ -361,8 +371,84 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 ```
 
 ## 基于JWT的简单SPA权限认证方案
-```javascript
 
+JWT是一种JSON风格的轻量级的授权和身份认证规范，主要用于前后端分离之后，在不借助cookie和session的场景下（部分移动端浏览器未实现相关特性），对每次浏览器端发起的HTTP请求进行拦截校验。
+
+前后端分离后的单页面场景下，权限认证需要解决如下3个核心问题：
+
+1. 登陆校验成功后，持有服务器端生成的token令牌。
+2. 每次HTTP请求都需要持有该token令牌的信息。
+3. 登陆超时和访问未授权页面的处理（通常为跳转）。
+
+> 如下代码为项目入口点`config代码块`的配置，用于获取并放置token令牌，以及处理登陆超时的跳转。
+
+```javascript
+config.$inject = ["$qProvider", "$stateProvider", "$urlRouterProvider", "$httpProvider"];
+
+function config($qProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
+  $qProvider.errorOnUnhandledRejections(false);
+  $urlRouterProvider.otherwise("/login");
+  $stateProvider
+    .state("login", {
+      url: "/login",
+      templateUrl: "partials/login/view.html",
+      controller: "LoginController",
+      controllerAs: "Login"
+    })
+    .state("layout", {
+      url: "/layout",
+      templateUrl: "partials/layout/view.html",
+      controller: "LayoutController",
+      controllerAs: "Layout"
+    })
+
+  /** HTTP Interceptor */
+  $httpProvider.interceptors.push(interceptor);
+  interceptor.$inject = ["$q", "$location"];
+
+  function interceptor($q, $location) {
+    return {
+      "request": function (config) {
+        var token = sessionStorage.token;
+        if (token) {
+          config.headers = _.assign({}, {
+            "Authorization": "Wiserv " + token
+          }, config.headers)
+        };
+        return config;
+      },
+      "response": function (response) {
+        $q.when(response, function (result) {
+          if (response.data && response.data.head && typeof response.data === "object") {
+            if (result.data.head.status === 202) {
+              sessionStorage.message = "登录超时，请重新登录！";
+              $location.url("/wiserv");
+            };
+          };
+        });
+        return response;
+      }
+    };
+  };
+
+};
 ```
 
+> 如下代码为项目入口点`run代码块`的配置，主要是处理未登陆访问授权页面的跳转。
+
+```javascript
+run.$inject = ["$rootScope"];
+
+function run($rootScope) {
+  // router listener
+  $rootScope.$on("$stateChangeStart",
+    function (event, toState, toParams, fromState, fromParams) {
+      if (toState.name !== "login") {
+        if (!sessionStorage.token) {
+          window.location.href = "/wiserv";
+        };
+      };
+    });
+};
+```
 
