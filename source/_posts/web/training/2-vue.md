@@ -1,5 +1,5 @@
 ---
-title: Vue2新特性速览
+title: Vue2新特性两三事儿
 tags: Web
 categories: Training
 ---

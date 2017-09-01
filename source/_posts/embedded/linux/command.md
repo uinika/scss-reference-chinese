@@ -1,5 +1,5 @@
 ---
-title: Linux常用命令精粹
+title: Linux命令行必知必会
 tags: Linux
 categories: Note
 ---

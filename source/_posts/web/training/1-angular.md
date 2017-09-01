@@ -1,5 +1,5 @@
 ---
-title: Angular最佳实践
+title: Angular1.x最佳实践总结
 tags: Web
 categories: Training
 ---
