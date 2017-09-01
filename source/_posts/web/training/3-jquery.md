@@ -1,5 +1,5 @@
 ---
-title: jQuery中一些容易被忽略的问题
+title: jQuery中那些容易被忽略的问题
 tags: Web
 categories: Training
 ---
@@ -62,9 +62,13 @@ var jq = $(dom);
 
 ## jQuery选择器性能
 
+提升选择器性能的有效途径是为选择器指定上下文，并以上下文为基础使用`first()`、`last()`、`find()`、`filter()`、`hasClass()`等jQuery筛选API。
+
 下面对jQuery选择器的性能由高向低进行排序：
 
 1. ID选择器
+
+底层通过调用`document.getElementById()`实现。
 
 ```javascript
 $("#id")
@@ -72,20 +76,196 @@ $("#id")
 
 2. 标签选择器
 
+底层通过调用`document.getElementsByTagName()`实现。
+
 ```javascript
 $("input")
 ```
 
 3. 类选择器
 
+底层通过调用`document.getElementsByClassName()`实现。
+
 ```javascript
 $(".class")
 ```
 
-4. 伪类选择器
+4. 属性及其它选择器
+
+底层通过对HTML字符串进行正则表达式匹配来实现。
 
 ```javascript
 $("[contenteditable]")
 ```
 
+> jQuery源代码许多地方使用了原生的`document.querySelectorAll()`进行DOM节点的选择，目前已经兼容IE8及以上浏览器。
+
+
+## 缓存常用的jQuery选择器对象
+
+将需要常用的jQuery选择器对象赋值给一个局部或全局变量，是有效提升jQuery运行性能的良好开端。
+
+```javascript
+var $jq = $("#app");
+$jq.find("div.tree").append("string");
+$jq.find("[contenteditable].test").html();
+$jq.find(".demo.test").html();
+```
+
+## 减少循环时的DOM操作
+
+在`for`、`while`、`$.each()`等循环语句中，尽量减少DOM操作的次数，最好先将模板在循环中组装完成之后再一次性插入DOM。
+
+```javascript
+var $app = $("#app");
+var template = "";
+for (var i = 0; i <= 100; i++) {
+  template += "<p>This is a paragraph!<p>"
+}
+$app.find("div").html(template);
+```
+
+## 使用原生方式处理jQuery数组
+
+jQuery选择器的结果是一个数组类型的对象，建议使用`for`或`while`等原生语法对其进行处理，而非jQuery封装过的`$.each()`。
+
+```html
+<body>
+  <div id="app">
+    <div class="demo">1</div>
+    <div class="demo">2</div>
+    <div class="demo">3</div>
+    <div class="demo">4</div>
+    <div class="demo">5</div>
+  </div>
+</body>
+```
+
+```javascript
+var $demo = $(".demo");
+for (var i = 0; i < $demo.length; i++) {
+  // 通过数组索引提取后，jQuery对象转换成DOM对象，所以这里使用了DOM对象的innerHTML属性
+  console.info($demo[i].innerHTML);
+}
+```
+
+可以通过关键字`length`检查数组长度，从而判断jQuery对象是否存在。
+
+```javascript
+var $demo = $(".demo");
+if ($demo.length !== 0) {
+  // do something
+}
+```
+
+## 尽可能使用事件委托
+
+jQuery3.x版本继续简化了事件委托函数，仅剩下`on()`、`off()`、`one()`、`trigger()`、`triggerHandler()`五个事件处理函数。
+
+```html
+<div id="app">
+  <div id="parent">
+    <p>parent</p>
+    <div id="current">
+      <p>current</p>
+      <div id="child">child</div>
+    </div>
+  </div>
+</div>
+```
+
+```javascript
+/* on可以用于处理冒泡事件，但是无法捕获事件 */
+$("#current").on("click", function () {
+  console.info("current is clicked!");
+});
+
+$("#child").trigger("click");  // on可以处理向上冒泡的click事件
+
+$("#parent").trigger("click");  // on无法捕获父级元素的click事件
+```
+
+> 单页面场景下绑定的`on`事件，必须在路由切换时通过`off`解除事件绑定，否则会造成大量无用的事件句柄堆积在内存。
+
+## 通过extend()封装可复用代码
+
+- `jQuery.extend()`：拓展**全局对象$**，例如下面例子中的`$.test()`，`$.demo()`;
+
+- `jQuery.fn.extend()`：拓展**jQuery对象数组**，例如下面例子中的`$("div").test()`，`$("div").demo()`;
+
+```javascript
+(function ($) {
+  /* 标准写法 */
+  $.extend({
+    test: function () {
+      alert("$.extend");
+    }
+  });
+  /* 简便写法 */
+  $.demo = function () {
+    // 返回全局对象$，便于链式调用
+    return this;
+  };
+  /* 标准写法 */
+  $.fn.extend({
+    test: function () {
+      alert("$.fn.extend");
+    }
+  });
+  /* 简便写法 */
+  $.fn.demo = function () {
+    // 返回jQuery对象数组，便于链式调用
+    return this;
+  }
+})(jQuery);
+```
+
+> 两种方式的最大区别在于自定义方法所属的宿主对象不同。
+
+## 使用HTML5的data属性绑定数据
+
+通过HTML5提供的data属性可以更加方便的完成数据绑定，特别是在不借助`handlebar`、`lodash.template()`等模板引擎的时候。
+
+```html
+<div id="app"
+  data-number = 13.2
+  data-string = "uinika"
+  data-boolean = true
+  data-null = null
+  data-undefine = undefine
+  data-object= '{"name": "hank"}'
+  data-array= '["demo1", "demo2"]'>
+</div>
+```
+
+```javascript
+$("#app").data("number");
+$("#app").data("string");
+$("#app").data("boolean");
+$("#app").data("null");
+$("#app").data("undefine");
+$("#app").data("object").name;
+$("#app").data("array")[1];
+```
+
+## 尽量使用原生JavaScript
+
+在不影响浏览器兼容性的情况下，尽量使用JavaScript原生API。
+
+```javascript
+var $demo = $(".demo");  // 缓存选择器
+
+$demo.is(":checked");  // 通过jQuery封装过的is()方法
+$demo[0].checked;  // 通过DOM原生的checked属性
+
+$demo.css({"color": "red"});  // 通过jQuery封装过的css()方法
+$demo[0].style.color = "red";  // 通过DOM原生的style.color属性
+
+$("<p></p>");  // 通过jQuery新建<p>标签
+$(document.createElement("p"));  // 通过DOM原生的createElement方法
+```
+
+## $(document).ready()
+
 ## 异步$defer对象
+
