@@ -9,7 +9,7 @@ categories: Training
 - DOM对象：通过原生javascript（如`getElementsByTagName`或`getElementId`）获取的html节点。
 
 ```javascript
-var dom = document.getElementById("id") // 获取DOM对象
+var dom = document.getElementById("app") // 获取DOM对象
 var html = dom.innerHTML; // 获取DOM元素内的HTML代码 
 ```
 
@@ -18,7 +18,7 @@ var html = dom.innerHTML; // 获取DOM元素内的HTML代码
 - JQuery对象：被jquery包装过的DOM对象
 
 ```javascript
-var jq = $("#id"); // 获取JQuery对象
+var jq = $("#app"); // 获取JQuery对象
 var html = jq.html(); // 获取JQuery对象内的HTML代码
 ```
 
