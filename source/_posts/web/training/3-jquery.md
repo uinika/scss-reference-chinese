@@ -267,5 +267,19 @@ $(document.createElement("p"));  // 通过DOM原生的createElement方法
 
 ## $(document).ready()
 
+该函数内的代码会在DOM加载完毕后，内容（*如图片*）加载完成前执行；生产环境中，尽可能在每个js文件下使用该函数。
+
+```javascript
+$(document).ready(function () {
+  // 标准写法
+});
+
+$(function () {
+  // 简化写法
+});
+```
+
+> JavaScript原生的`window.onload()`只会在DOM和图片等资源全部加载完成之后才执行。
+
 ## 异步$defer对象
 
