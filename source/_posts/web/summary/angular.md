@@ -1,10 +1,10 @@
 ---
 title: Angular1.x最佳实践总结
 tags: Web
-categories: Training
+categories: Summary
 ---
 
-![](1-angular/angular.ico)
+![](angular/angular.ico)
 
 ## 为什么是Angular，而非React
 
@@ -30,11 +30,11 @@ categories: Training
 
 目录build、release主要放置编译、打包压缩后的前端代码，mocks里是基于express编写的模拟restful接口，与前端页面服务分处于不同端口不同域下，因此express中需要进行CORS跨域处理。partials目录下是全部工程代码，内部模块组织结构如下：
 
-![](1-angular/structure-global.png "整体结构")
+![](angular/structure-global.png "整体结构")
 
 将javascript业务、css样式、html表现分离开编写，css采用Less进行预编译，使用gulp先合并全部Less后再处理成css，便于colors、resets等变量全局共享。使用`script.`、`style.`、`view.`前缀便于在vscode或atom中组织代码层次，以体现更加直观、优雅的项目结构。
 
-![](1-angular/structure-module.png "模块结构")
+![](angular/structure-module.png "模块结构")
 
 ## Index
 

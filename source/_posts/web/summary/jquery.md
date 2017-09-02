@@ -1,7 +1,7 @@
 ---
 title: jQuery中那些容易被忽略的问题
 tags: Web
-categories: Training
+categories: Summary
 ---
 
 伴随`Vue`、`Angular`、`React`等编译式前端框架的崛起，前端开发人员逐渐从繁琐的DOM操作当中解脱出来。但是在项目实践过程当中，依然有诸多问题需要通过直接与DOM对话来解决，虽然现代化浏览器已经支持等HTML5新特性，不过为了屏蔽各种浏览器原生API接口的差异化，最终依然需要借助`jQuery`来实现DOM操作。所以，`jQuery`这款诞生于2006年的库，依然在现代化前端开发当中扮演着重要角色，本文结合笔者近几年的实践经验，总结了使用`jQuery`过程当中容易被忽略的一些问题。
@@ -15,7 +15,7 @@ var dom = document.getElementById("app") // 获取DOM对象
 var html = dom.innerHTML; // 获取DOM元素内的HTML代码 
 ```
 
-![](3-jquery/dom.png "通过document获取原生DOM对象")
+![](jquery/dom.png "通过document获取原生DOM对象")
 
 - jQuery对象：被jQuery包装过的DOM对象
 
@@ -24,7 +24,7 @@ var jq = $("#app"); // 获取jQuery对象
 var html = jq.html(); // 获取jQuery对象内的HTML代码
 ```
 
-![](3-jquery/jquery.png "jQuery对象的本质是数组")
+![](jquery/jquery.png "jQuery对象的本质是数组")
 
 > 不能交换使用jQuery对象、DOM对象上的属性，如上面代码中的`innerHTML`与`html()`。
 
