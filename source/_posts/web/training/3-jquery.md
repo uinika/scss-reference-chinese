@@ -98,8 +98,9 @@ $(".class")
 $("[contenteditable]")
 ```
 
-> jQuery源代码许多地方使用了原生的`document.querySelectorAll()`进行DOM节点的选择，目前已经兼容IE8及以上浏览器。
+> jQuery底层有使用原生`document.querySelectorAll()`，可以有效提升IE8及以上浏览器当中选择器的性能。
 
+> jQuery作者已经将选择器引擎独立为[Sizzle](http://sizzlejs.com/)库，而Sizzle会按照**从右到左**的顺序来解析选择器字符串，从而提高查询效率，缩小查找范围和遍历次数。
 
 ## 缓存常用的jQuery选择器对象
 
