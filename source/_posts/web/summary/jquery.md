@@ -282,5 +282,28 @@ $(function () {
 
 > JavaScript原生的`window.onload()`只会在DOM和图片等资源全部加载完成之后才执行。
 
-## 异步$defer对象
+## 延迟对象$.Deferred()
+
+Deferred()是一个工厂函数，用来建立新的deferred对象（deferred [dɪ'fɜ:d] adj.延缓的），该对象上可以注册多个回调函数队列，这些函数的执行依赖于任意同步或者异步函数的执行结果（`sucess`或`failure`），通常该对象主要用于处理异步事件。
+
+>  jQuery的Deferred是基于[CommonJS Promises/A](http://wiki.commonjs.org/wiki/Promises/A)规范进行设计的。
+
+- deferred.notify()：触发Deferred上progress相关的回调函数。
+
+- deferred.resolve()：Resolve一个Deferred对象，并触发resolve状态相关的回调函数。
+
+- deferred.reject()：Reject一个Deferred对象，并触发reject状态相关的回调函数。
+
+- deferred.progress()：该函数在Deferred对象生成progress通知时被调用。
+
+- deferred.done()：该函数在Deferred对象被resolve时调用。
+
+- deferred.fail()：该函数在Deferred对象被rejecte时调用。
+
+- deferred.then()：Deferred对象resolved、rejected、progress时，都会被触发的回调函数。
+
+
+> `$.ajax()`、`$.when()`返回的是deferred对象。
+
+
 
