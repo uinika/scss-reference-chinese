@@ -302,7 +302,7 @@ Deferred()是一个工厂函数，用来建立新的deferred对象（deferred [d
 
 - deferred.then()：Deferred对象resolved、rejected、progress时，都会被触发的回调函数。
 
-> `$.ajax()`、`$.when()`返回的是deferred对象。
+> `$.ajax()`返回的就是一个deferred对象。
 
 
 
