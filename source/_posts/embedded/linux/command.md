@@ -585,7 +585,32 @@ HOME=/home/hank
 操作磁盘分区表。
 
 
+## su / sudo
 
+### su
+
+切换到root用户，可能存在危险。
+
+```bash
+➜  su
+➜  whoami
+root
+➜  exit
+➜  whoami
+hank
+```
+
+> 切换到root用户后，可以通过`exit`命令进行退出。
+
+### sudo
+
+临时获取root用户权限。
+
+```
+➜  sudo vim /etc/sudoers
+```
+
+> sudo命令需要将用户添加到sudoer组中，一般通过/etc/sudoers文件进行修改。
 
 ## uname
 
@@ -613,4 +638,6 @@ Linux hank-linux 4.12.2-041202-generic #201707150832 SMP Sat Jul 15 12:34:02 UTC
 ## whois
 
 ## whoami
+
+## ssh
 
