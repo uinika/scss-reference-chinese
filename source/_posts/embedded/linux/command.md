@@ -395,7 +395,9 @@ tmpfs            1211076        68   1211008    1% /run/user/1000
 
 Linux允许多个文件系统共存，也允许在系统运行时挂载当前内核提供支持的文件系统。
 
-- mount 挂载文件系统至指定目录，可以通过`-t`参数指定挂载的文件系统类型：
+### mount
+
+挂载文件系统至指定目录，可以通过`-t`参数指定挂载的文件系统类型：
 
 1. `ext/ext2/ext3/ext4`  Linux常用文件系统
 2. `msdos`               MS-DOS的FAT，即FAT16
@@ -408,14 +410,207 @@ Linux允许多个文件系统共存，也允许在系统运行时挂载当前内
 ➜  sudo mount -t ntfs /dev/sdc1 /workspace/linux
 ```
 
-- umount 卸载指定目录下挂载的文件系统
+### umount
+
+卸载指定目录下挂载的文件系统
 
 ```bash
 ➜  sudo umount /dev/sdc1
 ```
 
->  嵌入式开发中常用的文件系统还有cramfs、jffs2（NOR Flash）、yaffs/yaffs2（NAND Flash）。
+>  嵌入式开发中常用的文件系统还有cramfs、jffs2（*NOR Flash*）、yaffs/yaffs2（*NAND Flash*）。
+
+## lsmod / insmod / rmmod
+
+Linux内核时可以动态加载、卸载模块（*例如驱动程序模块*）。
+
+### lsmod
+
+查看当前Linux内核已经加载的模块，该命令实际是列出/proc/modules目录下的内容。
+
+```bash
+➜  lsmod
+Module                  Size  Used by
+nls_iso8859_1          16384  0
+uas                    24576  0
+usb_storage            69632  2 uas
+cmac                   16384  1
+rfcomm                 77824  14
+ccm                    20480  6
+rtsx_usb_ms            20480  0
+memstick               16384  1 rtsx_usb_ms
+... ... ...
+```
+
+### insmod
+
+向内核插入模块。
+
+如下代码向内核插入驱动模块driver.ko。
+
+```bash
+➜  insmod driver.ko
+```
+> .ko是内核模块文件的后缀名。
+
+插入模块时可以通过insmod命令向模块传入参数，
+
+```bash
+➜  insmod test.ko time=2017
+```
+
+> 如果模块版本与内核不一致，模块将无法插入系统，虽然可以使用`-f`参数强制插入，但可能会引起错误。
+
+### rmmod
+
+将模块从内核中卸载，并释放所占用的系统资源。
+
+```bash
+➜  rmmod test.ko
+```
+
+> 模块可能被其它模块依赖，或正在被应用程序使用，此时无法卸载该模块。依然可以通过`-f`参数强制卸载，不过并不推荐这么做。
+
+## modprobe
+
+可以加载、卸载内核模块，并且可以自动解决模块间的依赖关系，将某模块所依赖的其它模块全部加载。
+
+> 因为`modprobe`处理模块时会忽略模块路径，所以模块必须按照`make modues_install`方式安装（*即模块必须放在`/lib/modules/$(uname -r)`目录下*），并拥有正确的`/lib/modules/$(uname -r)/modules.dep`文件，`modprobe`命令会根据该文件来解析依赖关系。
+
+## mknod
+
+加载驱动模块到内核之后，需要通过`mknod`为驱动建立对应的设备节点，否则无法通过驱动来操作设备。
+命令使用格式为`mknod 设备名 设备类型 主设备号 次设备号`，下面命令创建了一个字符设备led，主设备号为231，次设备号为0。
+
+```bash
+➜  mknod /dev/led c 231 0
+```
+
+## sync
+
+Linux对文件的操作都是先保存在缓存中，并没有立即写入磁盘，通常需要经系统调度后才会写入磁盘，当然这里也可以使用`sync`命令强制进行写入。
+
+```bash
+➜  sync
+```
+
+## find
+
+搜索目录当中的**文件**，命令格式为`$find 路径 –选项 目标文件`。
+
+* -name 根据文件名进行搜索
+
+```
+➜  find -name index.html
+./.deploy_git/2017/08/30/article/2017/guiyang-big-data/index.html
+./.deploy_git/2017/08/27/article/2017/chengdu-real-estate-1/index.html
+./.deploy_git/2017/08/27/article/2017/chengdu-real-estate-2/index.html
+./.deploy_git/2017/08/27/article/2017/chengdu-real-estate-3/index.html
+... ... ...
+```
+
+## grep
+
+搜索目录下文件当中存在的**字符串**，下面例子查询字符串`"hank"`被`./source`目录下哪些文件所使用。
+
+* -R 在指定目录下进行递归查找。
+
+```
+➜  blog git:(master) ✗ grep "hank" -R ./source 
+source/_posts/web/summary/jquery.md:  data-object= '{"name": "hank"}'
+source/_posts/embedded/linux/command.md:drwxrwxr-x   9 hank hank   4096 8月  31 00:02 .
+source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank   1966 8月  26 18:56 _config.yml
+source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank 505845 8月  31 00:02 db.json
+source/_posts/embedded/linux/command.md:drwxrwxr-x  13 hank hank   4096 8月  31 00:02 .deploy_git
+source/_posts/embedded/linux/command.md:drwxrwxr-x   8 hank hank   4096 8月  31 00:18 .git
+source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank     83 8月  26 02:29 .gitignore
+source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank    277 8月  24 03:15 index.html
+... ... ...
+```
+
+## env / printenv
+
+查看系统当前的环境变量设置，下面例表是一些常见环境变量：
+
+- *PATH*：指定Shell执行时会到哪些目录寻找应用。
+- *TERM*：指定系统终端。
+- *SHELL*：当前用户Shell类型。
+- *HOME*：当前用户主目录。
+- *LOGNAME*：当前用户的登录名。
+- *USER*：当前用户名。
+- *HISTSIZE*：历史命令记录数。
+
+> Shell中可以通过`$环境变量名`来引用指定的环境变量信息。
+
+
+如下是Linux环境变量修改的3种方式及其区别：
+
+- `/etc/profile` 对本机全部用户有效。
+- `~/.bashrc` 对当前用户有效。
+- `export 新增环境变量` 仅对当前打开的终端有效。
+
+```bash
+➜  echo $PATH
+/home/hank/bin:/home/hank/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/jdk/bin:/opt/nodejs/bin:/opt/mongodb/bin
+➜  PATH=$PATH:/workspace/linux
+➜  printenv PATH
+/home/hank/bin:/home/hank/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/jdk/bin:/opt/nodejs/bin:/opt/mongodb/bin:/workspace/linux
+```
+
+### env
+
+该命令用于在一个被修改的环境变量下运行程序，也可用于打印全部或指定的环境变量（*通过`env $PATH`*）。
+
+```bash
+➜  env
+... ... ...
+PATH=/home/hank/bin:/home/hank/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/jdk/bin:/opt/nodejs/bin:/opt/mongodb/bin
+SSH_AUTH_SOCK=/run/user/1000/keyring/ssh
+TERM=xterm
+HOME=/home/hank
+... ... ...
+```
+
+### printenv
+
+专门用于打印全部或指定的环境变量（*通过`printenv PATH`*）。
+
+```bash
+➜  printenv PATH
+/home/hank/bin:/home/hank/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/jdk/bin:/opt/nodejs/bin:/opt/mongodb/bin
+```
+
+## fdisk
+
+操作磁盘分区表。
 
 
 
+
+## uname
+
+打印系统信息。
+
+```bash
+➜  uname -a
+Linux hank-linux 4.12.2-041202-generic #201707150832 SMP Sat Jul 15 12:34:02 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
+```
+
+## man
+
+1 可执行程序或shell命令
+2 系统调用（*内核提供的函数*）
+3 库调用（*程序库中的函数*）
+4 特殊文件（*通常位于 /dev*）
+5 文件格式和规范，如/etc/passwd
+6 游戏
+7 杂项（*包括宏包和规范，如man(7)，groff(7)*）
+8 系统管理命令(*通常只针对root用户*)
+9 内核例程
+
+## whereis
+
+## whois
+
+## whoami
 
