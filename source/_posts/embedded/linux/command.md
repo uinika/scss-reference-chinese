@@ -214,6 +214,20 @@ themes:            directory
 
 > 通过cat和重定向搭配使用，可以完成将多个文件合并为一个新文件的操作。
 
+```bash
+➜  cat /proc/cpuinfo
+processor	: 0
+vendor_id	: GenuineIntel
+cpu family	: 6
+model		: 142
+model name	: Intel(R) Core(TM) i5-7200U CPU @ 2.50GHz
+... ... ...
+➜  cat /proc/version 
+Linux version 4.12.2-041202-generic (kernel@gloin) (gcc version 6.3.0 20170618 (Ubuntu 6.3.0-19ubuntu1) ) #201707150832 SMP Sat Jul 15 12:34:02 UTC 2017
+```
+
+> cat命令也可用于查看CPU、内核版本等系统信息。
+
 ## mv
 
 移动文件，或修改文件名称。
@@ -346,20 +360,62 @@ PING 192.168.0.1 (192.168.0.1) 56(84) bytes of data.
 64 bytes from 192.168.0.1: icmp_seq=3 ttl=64 time=2.23 ms
 ```
 
-## mount / unmount
+## free
 
-Linux允许多个文件系统共存，也允许在系统运行时挂载内核所支持的文件系统。
-
-- mount 挂载文件系统至指定目录
+查看操作系统内存使用情况。
 
 ```bash
-
+➜  free
+              total        used        free      shared  buff/cache   available
+Mem:       12110732     1996616     2339832      380248     7774284     9356872
+Swap:      12389372           0    12389372
 ```
 
-- unmount 卸载指定目录下挂载的文件系统
+## df
+
+查看文件系统磁盘空间的使用。
+
+```
+➜  df
+文件系统           1K-块      已用      可用 已用% 挂载点
+udev             6032356         0   6032356    0% /dev
+tmpfs            1211076      9768   1201308    1% /run
+/dev/sdb1      110743360  15959824  89135000   16% /
+tmpfs            6055364     32508   6022856    1% /dev/shm
+tmpfs               5120         4      5116    1% /run/lock
+tmpfs            6055364         0   6055364    0% /sys/fs/cgroup
+cgmfs                100         0       100    0% /run/cgmanager/fs
+tmpfs            1211076        68   1211008    1% /run/user/1000
+/dev/sda3      511999996 400954728 111045268   79% /media/hank/media
+/dev/sda2      204799996 137228808  67571188   68% /media/hank/develop
+/dev/sdc1       15099432   4246304  10853128   29% /media/hank/CCSA_X64FRE
+```
+
+## mount / umount
+
+Linux允许多个文件系统共存，也允许在系统运行时挂载当前内核提供支持的文件系统。
+
+- mount 挂载文件系统至指定目录，可以通过`-t`参数指定挂载的文件系统类型：
+
+1. `ext/ext2/ext3/ext4`  Linux常用文件系统
+2. `msdos`               MS-DOS的FAT，即FAT16
+3. `vfat`                Windows的FAT或FAT32
+4. `nfs`                 网络文件系统
+5. `ntfs`                Windows的NTFS
+6. `auto`                自动检测文件系统
 
 ```bash
-
+➜  sudo mount -t ntfs /dev/sdc1 /workspace/linux
 ```
 
-挂载和卸载文件系统
+- umount 卸载指定目录下挂载的文件系统
+
+```bash
+➜  sudo umount /dev/sdc1
+```
+
+>  嵌入式开发中常用的文件系统还有cramfs、jffs2（NOR Flash）、yaffs/yaffs2（NAND Flash）。
+
+
+
+
