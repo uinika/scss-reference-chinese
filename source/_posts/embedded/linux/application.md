@@ -1,5 +1,5 @@
 ---
-title: Linux应用程序开发
+title: Linux应用开发指南
 tags: Linux
 categories: Note
 ---
