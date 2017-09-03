@@ -4,7 +4,7 @@ tags: Linux
 categories: Note
 ---
 
-## Mount Windows Partition
+## Mount NTFS
 
 ```bash
 sudo apt-get install ntfs-3g
