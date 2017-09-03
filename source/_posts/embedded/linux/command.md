@@ -4,7 +4,7 @@ tags: Linux
 categories: Note
 ---
 
-将Linux作为开发环境编写代码已经3年有余，在配置了大量**快捷键**、**辅助工具**、**开源字体**之后，日常开发基本已经离不开Linux，本文总结了自己在Linux下进行日常开发所经常使用到的命令。
+将Linux作为开发环境编写代码已经3年有余，在配置了大量**快捷键**、**辅助工具**、**开源字体**之后，日常开发已经完全离不开Linux，本文基于最新的**Linux mint 18.2**发行版，总结了自己在Linux下进行日常开发所经常使用到的命令。
 
 ## ls
 
@@ -83,7 +83,11 @@ sudo rmdir /workspace/linux
 
 > zshell中可以缺省`-p`属性。
 
-## rm
+## rm / mv / cp
+
+文件操作相关的3个命令。
+
+### rm
 
 删除目录和文件
 
@@ -102,6 +106,30 @@ rm：是否删除普通空文件 'file2'？ y
 已删除'file2'
 rm：是否删除普通空文件 'file3'？ y
 已删除'file3'
+```
+
+### mv
+
+移动文件，或修改文件名称。
+
+```
+➜  mv file file1 
+```
+
+### cp
+
+复制文件。
+
+- `-a` 保留链接、文件属性并递归复制，等同于`-dpR`，常用用于复制目录
+- `-d` 复制时保留链接
+- `-f` 若目标文件存在，直接删除不提示
+- `-i` 若目标文件存在，需要用户确认操作，与-f 相反
+- `-p` 复制文件内容的同时，还复制了文件的访问权限和修改时间
+- `-r` 递归复制
+- `-v` 显示文件复制过程
+
+```bash
+➜  cp -a file1 file2  ./demo 
 ```
 
 ## touch
@@ -228,30 +256,6 @@ Linux version 4.12.2-041202-generic (kernel@gloin) (gcc version 6.3.0 20170618 (
 
 > cat命令也可用于查看CPU、内核版本等系统信息。
 
-## mv
-
-移动文件，或修改文件名称。
-
-```
-➜  mv file file1 
-```
-
-## cp
-
-复制文件。
-
-- `-a` 保留链接、文件属性并递归复制，等同于`-dpR`，常用用于复制目录
-- `-d` 复制时保留链接
-- `-f` 若目标文件存在，直接删除不提示
-- `-i` 若目标文件存在，需要用户确认操作，与-f 相反
-- `-p` 复制文件内容的同时，还复制了文件的访问权限和修改时间
-- `-r` 递归复制
-- `-v` 显示文件复制过程
-
-```bash
-➜  cp -a file1 file2  ./demo 
-```
-
 ## ln
 
 创建链接。
@@ -312,6 +316,44 @@ lrwxrwxrwx 1 hank hank 4 8月  31 02:22 shortcut -> file
 
 > 拥有可执行权限的文件，在Linux终端下通常呈现为绿色。
 > 可在通过`chmod +x file`快捷的为`user`、`group`、`other`增加可执行权限。
+
+## chown / chgrp
+
+修改指定文件的所有者关系，但是也可以修改所属组关系。
+
+### chown
+
+修改文件的所有者、所属组关系。
+
+```bash
+➜  ls -l
+-rwxrwxrwx 1 hank hank 148100671 7月   1 15:05 config.atom.zip
+➜  sudo chown root config.atom.zip
+➜  ls -l
+-rwxrwxrwx 1 root hank 148100671 7月   1 15:05 config.atom.zip
+```
+
+通过使用`:`符号可以同时修改文件所有者和所属组。
+
+```bash
+➜  ~ ll -l
+-rwxrwxrwx 1 hank hank 156M 7月   1 15:05 config.vscode.zip
+➜  ~ sudo chown root:root config.vscode.zip
+➜  ~ ls -l
+-rwxrwxrwx 1 root root 162986482 7月   1 15:05 config.vscode.zip
+```
+
+### chgrp
+
+修改文件的所属组关系。
+
+```bash
+➜  ls -l
+-rwxrwxrwx 1 root hank 148100671 7月   1 15:05 config.atom.zip
+➜  sudo chgrp root config.atom.zip 
+➜  ls -l
+-rwxrwxrwx 1 root root 148100671 7月   1 15:05 config.atom.zip
+```
 
 ## ifconfig
 
@@ -389,6 +431,40 @@ tmpfs            1211076        68   1211008    1% /run/user/1000
 /dev/sda3      511999996 400954728 111045268   79% /media/hank/media
 /dev/sda2      204799996 137228808  67571188   68% /media/hank/develop
 /dev/sdc1       15099432   4246304  10853128   29% /media/hank/CCSA_X64FRE
+```
+
+## fdisk
+
+操作磁盘分区表。
+
+* `-l` 列出磁盘的分区表。
+
+```bash
+➜  sudo fdisk -l
+Disk /dev/sda: 931.5 GiB, 1000204886016 bytes, 1953525168 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: dos
+Disk identifier: 0x97c43a12
+
+设备       启动      Start     末尾     扇区   Size Id 类型
+/dev/sda1  *          2048  204802047  204800000  97.7G  7 HPFS/NTFS/exFAT
+/dev/sda2        204802048  614402047  409600000 195.3G  7 HPFS/NTFS/exFAT
+/dev/sda3        614402048 1638402047 1024000000 488.3G  7 HPFS/NTFS/exFAT
+/dev/sda4       1638402048 1953521663  315119616 150.3G  7 HPFS/NTFS/exFAT
+
+Disk /dev/sdb: 119.2 GiB, 128035676160 bytes, 250069680 sectors
+Units: sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 4096 bytes
+I/O size (minimum/optimal): 4096 bytes / 4096 bytes
+Disklabel type: dos
+Disk identifier: 0xf8545dc0
+
+设备       启动     Start    末尾    扇区   Size Id 类型
+/dev/sdb1            2048 225288191 225286144 107.4G 83 Linux
+/dev/sdb2       225290238 250068991  24778754  11.8G  5 扩展
+/dev/sdb5       225290240 250068991  24778752  11.8G 82 Linux 交换 / Solaris
 ```
 
 ## mount / umount
@@ -498,7 +574,9 @@ Linux对文件的操作都是先保存在缓存中，并没有立即写入磁盘
 
 搜索目录当中的**文件**，命令格式为`$find 路径 –选项 目标文件`。
 
-* -name 根据文件名进行搜索
+* `-name` 根据文件名称。
+* `-type` 根据文件类型。
+* `-user` 根据文件拥有者。
 
 ```
 ➜  find -name index.html
@@ -509,6 +587,21 @@ Linux对文件的操作都是先保存在缓存中，并没有立即写入磁盘
 ... ... ...
 ```
 
+## locate
+
+在索引数据库中迅速的查找指定的文件名。
+
+```bash
+➜  locate /etc/host
+/etc/host.conf
+/etc/hostname
+/etc/hosts
+/etc/hosts.allow
+/etc/hosts.deny
+```
+
+> 大部分Linux发行版的索引数据库都放置在crontab中定时执行更新，但是也可以通过`sudo updatedb`手动的更新。
+
 ## grep
 
 搜索目录下文件当中存在的**字符串**，下面例子查询字符串`"hank"`被`./source`目录下哪些文件所使用。
@@ -516,15 +609,13 @@ Linux对文件的操作都是先保存在缓存中，并没有立即写入磁盘
 * -R 在指定目录下进行递归查找。
 
 ```
-➜  blog git:(master) ✗ grep "hank" -R ./source 
-source/_posts/web/summary/jquery.md:  data-object= '{"name": "hank"}'
-source/_posts/embedded/linux/command.md:drwxrwxr-x   9 hank hank   4096 8月  31 00:02 .
-source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank   1966 8月  26 18:56 _config.yml
-source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank 505845 8月  31 00:02 db.json
-source/_posts/embedded/linux/command.md:drwxrwxr-x  13 hank hank   4096 8月  31 00:02 .deploy_git
-source/_posts/embedded/linux/command.md:drwxrwxr-x   8 hank hank   4096 8月  31 00:18 .git
-source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank     83 8月  26 02:29 .gitignore
-source/_posts/embedded/linux/command.md:-rw-rw-r--   1 hank hank    277 8月  24 03:15 index.html
+➜  grep "hank" -R ./source 
+source/linux/command.md:drwxrwxr-x   9 hank hank   4096 8月  31 00:02 .
+source/linux/command.md:-rw-rw-r--   1 hank hank   1966 8月  26 18:56 _config.yml
+source/linux/command.md:-rw-rw-r--   1 hank hank 505845 8月  31 00:02 db.json
+source/linux/command.md:drwxrwxr-x   8 hank hank   4096 8月  31 00:18 .git
+source/linux/command.md:-rw-rw-r--   1 hank hank     83 8月  26 02:29 .gitignore
+source/linux/command.md:-rw-rw-r--   1 hank hank    277 8月  24 03:15 index.html
 ... ... ...
 ```
 
@@ -582,11 +673,6 @@ HOME=/home/hank
 
 > 直接在命令行输入`$PATH`也可打印环境变量。
 
-## fdisk
-
-操作磁盘分区表。
-
-
 ## su / sudo
 
 ### su
@@ -619,6 +705,8 @@ hank
 ## uname
 
 打印系统信息。
+
+* `-a` 打印全部的系统信息。
 
 ```bash
 ➜  uname -a
@@ -690,30 +778,152 @@ hank : hank adm cdrom sudo dip plugdev lpadmin sambashare vboxusers
 ➜  ~ sudo userdel uinika
 ```
 
-* /etc/passwd：用户账户信息。
-* /etc/shadow：安全用户账户信息。
+* `/etc/passwd`：用户账户信息文件。
+
+```
+hank:x:1000:1000:hank.zheng,,,:/home/hank:/usr/bin/zsh
+uinika:x:1001:1001::/home/uinika:
+```
+
+* `/etc/shadow`：用户账户加密信息文件。
+
+```
+hank:$6$qNevDR2S$zGTwRTbPTlB72L8Qj4gbLvFmFnX/UMVP729FYKQEQevjibRoiSYxaprsu1wvdWN3s5VaP0zq581pYTQATMAA0.:17362:0:99999:7:::
+uinika:$6$1vI1oFXa$0NDka/ceb6QMSkf9Z8M7S/UUO0dNAEnj2fFP7p2LKlEY.9tVyKxJ4AmRiUevUSzLc/fqyUF.PNQ91Fj4GYXw9.:17412:0:99999:7:::
+```
 
 ## groupadd / groupmod / groupdel
 
 添加、设置、删除组。
 
 ```bash
-
+➜  ~ sudo groupadd zheng
+➜  ~ sudo groupmod -g 8888 zheng  // 修改组ID为8888
+➜  ~ sudo groupdel zheng
 ```
 
-* /etc/group：组账户信息文件。
-* /etc/gshadow：组账户加密信息文件。
+* `/etc/group`：组账户信息文件。
+```
+hank:x:1000:
+vboxusers:x:132:hank
+zheng:x:8888:
+```
+* `/etc/gshadow`：组账户加密信息文件。
+```
+hank:!::
+vboxusers:!::hank
+zheng:!::
+```
 
-## ssh
+## ps / top / kill
 
-## whereis
+Linux进程相关的操作。
+
+### ps
+
+显示一个当前所有进程的快照。
+
+- `-ef` 查看所有进程的PID（*进程号*）、命令详细目录、执行者等信息。
+
+```bash
+➜  ps -ef
+UID        PID  PPID  C STIME TTY          TIME CMD
+root         1     0  0 00:03 ?        00:00:01 /sbin/init splash
+root         2     0  0 00:03 ?        00:00:00 [kthreadd]
+root         4     2  0 00:03 ?        00:00:00 [kworker/0:0H]
+... ... ...
+```
+
+- `-aux` 除显示进程信息外，还显示CPU及内存占用率、进程状态。
+
+```bash
+➜  ps -aux
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         1  0.1  0.0 185672  6156 ?        Ss   00:03   0:01 /sbin/init splash
+root         2  0.0  0.0      0     0 ?        S    00:03   0:00 [kthreadd]
+root         4  0.0  0.0      0     0 ?        S<   00:03   0:00 [kworker/0:0H]
+... ... ...
+```
+
+> 管道Linux进程间通信的重要方式，Shell命令行中，管道线`|`用于连接两个进程的输出和输入。
+
+```bash
+➜  blog git:(master) ✗ ps -ef | grep python
+hank      1598  1326  0 00:04 ?        00:00:00 /usr/bin/python3 /usr/bin/cinnamon-launcher
+hank      1638  1326  0 00:04 ?        00:00:00 /usr/bin/python3 /usr/bin/cinnamon-killer-daemon
+hank      1777  1326  0 00:04 ?        00:00:00 /usr/bin/python /usr/bin/blueberry-tray
+```
+
+### top
+
+动态显示Linux进程信息。
+
+```bash
+➜  top
+
+top - 00:36:54 up 33 min,  2 users,  load average: 0.70, 0.60, 0.48
+Tasks: 223 total,   1 running, 221 sleeping,   0 stopped,   1 zombie
+%Cpu(s):  1.7 us,  0.7 sy,  0.0 ni, 97.6 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem : 12110732 total,  9707752 free,  1079692 used,  1323288 buff/cache
+KiB Swap: 12389372 total, 12389372 free,        0 used. 10461888 avail Mem 
+
+PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND
+1167 root      20   0  430556  90728  64768 S   2.3  0.7   1:09.62 Xorg
+1639 hank      20   0  551256  56188  35188 S   2.3  0.5   0:21.21 python2
+1613 hank      20   0 2158736 198220  68256 S   1.0  1.6   1:07.52 cinnamon
+... ... ...
+```
+
+### kill
+
+发送一个信号给进程，可以使用信号名或数字，因此下面例子中的2条命令作用相同。
+
+```bash
+➜  kill -9 1639
+➜  kill -SIGKILL 1639
+```
+
+## which / whereis
+
+查询Linux命令所在的位置。
+
+### which
+
+查询指定Linux命令文件的位置。
+
+```bash
+➜  which atom
+/usr/bin/atom
+```
+
+### whereis
+
+找出指定Linux命令所对应的`binary`、`source`、`manual page`文件。
+
+```bash
+➜  whereis tar
+tar: /usr/lib/tar /bin/tar /usr/include/tar.h /usr/share/man/man1/tar.1.gz
+```
 
 ## whois
 
+查询域名注册的详细信息。
 
-
-
-
+```
+➜  whois chengdu.gov.cn 
+Domain Name: chengdu.gov.cn
+ROID: 20021209s10061s00002738-cn
+Domain Status: ok
+Registrant ID: s77d811mb88kmg
+Registrant: 成都市人民政府行政效能建设办公室（成都市人民政府政务公开办公室）
+Registrant Contact Email: cpletterbox@126.com
+Sponsoring Registrar: 北京新网数码信息技术有限公司
+Name Server: ns1.alidns.com
+Name Server: ns2.alidns.com
+Registration Time: 2001-06-28 00:00:00
+Expiration Time: 2018-06-28 00:00:00
+DNSSEC: unsigned
+```
 
 ## man
 
@@ -726,3 +936,37 @@ hank : hank adm cdrom sudo dip plugdev lpadmin sambashare vboxusers
 7 杂项（*包括宏包和规范，如man(7)，groff(7)*）
 8 系统管理命令(*通常只针对root用户*)
 9 内核例程
+
+## crontab
+
+Linux的定时任务通常由守护进程**cron**处理，cron会读取包含命令行及其调用时间的配置文件**crontab文件**（*英文crontab是指定时任务*），该命令就是用来对crontab配置文件执行列出、安装、删除等维护操作的。
+
+```bash
+➜  ps -ef | grep cron
+root       933     1  0 00:03 ?        00:00:00 /usr/sbin/cron -f
+hank     11203  8236  0 02:02 pts/1    00:00:00 grep --color=auto --exclude-dir=.bzr --exclude-dir=CVS --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn cron
+```
+
+通过`crontab -u 用户名 file`命令设置定时执行指定的file命令文件。
+
+```bash
+➜  crontab -u hank ./test.task
+```
+
+缺省文件名的情况下，使用如下参数可以管理crontab。
+
+- `-e` 编辑用户的crontab。
+- `-l` 列出用户的crontab。
+- `-r` 删除用户的crontab。
+- `-i` 删除crontab前弹出提示。
+
+下面的命令例出了用户hank下的定时任务。
+
+```bash
+➜  crontab -u hank -l
+no crontab for hank
+```
+
+## ssh
+
+## df / patch
