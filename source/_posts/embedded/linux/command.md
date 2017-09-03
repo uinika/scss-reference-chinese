@@ -967,6 +967,8 @@ hank     11203  8236  0 02:02 pts/1    00:00:00 grep --color=auto --exclude-dir=
 no crontab for hank
 ```
 
+## tar / 7z / rar / zip
+
 ## ssh
 
 ## df / patch
