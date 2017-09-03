@@ -580,6 +580,8 @@ HOME=/home/hank
 /home/hank/bin:/home/hank/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/opt/jdk/bin:/opt/nodejs/bin:/opt/mongodb/bin
 ```
 
+> 直接在命令行输入`$PATH`也可打印环境变量。
+
 ## fdisk
 
 操作磁盘分区表。
@@ -589,7 +591,7 @@ HOME=/home/hank
 
 ### su
 
-切换到root用户，可能存在危险。
+更改用户ID或切换到root用户。
 
 ```bash
 ➜  su
@@ -601,6 +603,8 @@ hank
 ```
 
 > 切换到root用户后，可以通过`exit`命令进行退出。
+
+* `-`, `-l`, `--login` 提供类似用户直接登陆的环境。
 
 ### sudo
 
@@ -621,6 +625,96 @@ hank
 Linux hank-linux 4.12.2-041202-generic #201707150832 SMP Sat Jul 15 12:34:02 UTC 2017 x86_64 x86_64 x86_64 GNU/Linux
 ```
 
+## who / whoami
+
+用户信息显示相关的两条命令。
+
+### who
+
+显示当前登陆到系统的所有用户。
+
+```bash
+➜  who
+hank     tty7         2017-09-03 12:15 (:0)
+hank     pts/0        2017-09-03 12:15 (hank-linux)
+hank     pts/1        2017-09-03 23:08 (hank-linux)
+hank     pts/2        2017-09-03 23:09 (hank-linux)
+hank     pts/3        2017-09-03 23:14 (hank-linux)
+hank     pts/4        2017-09-03 23:15 (hank-linux)
+```
+
+### whoami
+
+打印当前登陆用户的名称。
+
+```bash
+➜  whoami
+hank
+```
+
+## id
+
+打印用户以及组的ID。
+
+```bash
+➜  id root
+uid=0(root) gid=0(root) 组=0(root)
+```
+
+## groups
+
+显示用户所属组的详细信息。
+
+```bash
+➜  groups hank
+hank : hank adm cdrom sudo dip plugdev lpadmin sambashare vboxusers
+```
+
+## passwd
+
+更改指定用户密码。
+
+```bash
+➜  ~ passwd hank
+更改 hank 的密码。
+```
+
+## useradd / usermod / userdel
+
+添加、设置、删除用户。
+
+```bash
+➜  ~ sudo useradd uinika
+➜  ~ sudo passwd uinika 
+输入新的 UNIX 密码：
+➜  ~ sudo userdel uinika
+```
+
+* /etc/passwd：用户账户信息。
+* /etc/shadow：安全用户账户信息。
+
+## groupadd / groupmod / groupdel
+
+添加、设置、删除组。
+
+```bash
+
+```
+
+* /etc/group：组账户信息文件。
+* /etc/gshadow：组账户加密信息文件。
+
+## ssh
+
+## whereis
+
+## whois
+
+
+
+
+
+
 ## man
 
 1 可执行程序或shell命令
@@ -632,12 +726,3 @@ Linux hank-linux 4.12.2-041202-generic #201707150832 SMP Sat Jul 15 12:34:02 UTC
 7 杂项（*包括宏包和规范，如man(7)，groff(7)*）
 8 系统管理命令(*通常只针对root用户*)
 9 内核例程
-
-## whereis
-
-## whois
-
-## whoami
-
-## ssh
-
