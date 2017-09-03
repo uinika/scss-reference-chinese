@@ -4,6 +4,8 @@ tags: Linux
 categories: Note
 ---
 
+![](config/logo.png)
+
 ## Mount NTFS
 
 ```bash
