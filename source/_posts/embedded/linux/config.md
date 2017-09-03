@@ -1,5 +1,5 @@
 ---
-title: Linux开发环境配置
+title: Linux生产环境配置
 tags: Linux
 categories: Note
 ---
