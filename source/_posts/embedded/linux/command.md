@@ -355,6 +355,28 @@ lrwxrwxrwx 1 hank hank 4 8月  31 02:22 shortcut -> file
 -rwxrwxrwx 1 root root 148100671 7月   1 15:05 config.atom.zip
 ```
 
+## ssh
+
+OpenSSH的SSH客户端，用于登陆远程主机并执行命令行。
+
+```
+➜  ssh root@192.168.1.2  
+```
+
+## netstat
+
+显示网络连接、路由表、接口统计、伪装连接、多播成员信息。
+
+```bash
+➜  netstat -tcp
+Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name
+tcp        0      0 192.168.0.4:41966       sc.10086.com.defa:https ESTABLISHED 18133/chrome
+tcp        0      0 192.168.0.4:39476       user.128.220.139.p:http ESTABLISHED 18133/chrome
+... ... ...
+```
+
+> 相似功能的还有`ss`、`ip`命令。
+
 ## ifconfig
 
 配置和查看网卡信息。
@@ -969,6 +991,6 @@ no crontab for hank
 
 ## tar / 7z / rar / zip
 
-## ssh
+
 
 ## df / patch
