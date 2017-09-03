@@ -1,5 +1,5 @@
 ---
-title: jQuery中那些容易被忽略的问题
+title: jQuery那些容易被忽略的问题
 tags: Web
 categories: Summary
 ---
