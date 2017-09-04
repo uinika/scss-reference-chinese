@@ -1,5 +1,5 @@
 ---
-title: Linux Shell
+title: Linux Makefile
 tags: Linux
 categories: Note
 ---
