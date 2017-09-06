@@ -74,7 +74,7 @@ var vm = new Vue({
 ## Vue对象的实例生命周期
 
 
-
+![](vue/lifecycle.png "组件的生命周期")
 
 
 
