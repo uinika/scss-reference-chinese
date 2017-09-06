@@ -124,8 +124,9 @@ vm = {
 
 ![](vue/lifecycle.png "组件的生命周期")
 
-> 不要Vue实例的属性、回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
+> 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
 
+> 使用jQuery操作DOM时，需要在`Mounted`属性上进行。
 
 ## 数据绑定
 
