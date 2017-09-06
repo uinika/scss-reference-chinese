@@ -10,16 +10,16 @@ categories: Summary
 
 <!-- more -->
 
-## Vue与Angular的3个基本区别
+## Vue与Angular的比较
 
 1. **组件化**：Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
 
 ![](vue/components.png "组件化")
 
-### 双向绑定
+2. **双向绑定**：
 
 
-### 虚拟DOM
+3. **虚拟DOM**：
 
 
 ## Vue对象
@@ -72,10 +72,17 @@ var vm = new Vue({
 
 > Vue实例通常使用`vm`（View Model）变量来命名。
 
+### 计算属性computed
 
-## Vue对象的实例方法
+向HTML模板表达式放入太多逻辑会显得难以维护。
 
-Vue 实例暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来。
+### 观察者属性watch
+
+
+
+## 实例属性和方法
+
+Vue实例暴露了一系列带有前缀**$**的实例属性与方法。
 
 ```javascript
 let vm = new Vue();
@@ -111,7 +118,7 @@ vm = {
 }
 ```
 
-## Vue对象实例的生命周期
+## 生命周期
 
 每个Vue实例在创建时，都需要经过一系列初始化过程（*设置数据监听、编译模板、挂载实例到DOM、在数据变化时更新DOM*），并在同时运行一些钩子函数，让开发人员能够在特定生命周期内执行自己的代码。
 
@@ -125,8 +132,8 @@ vm = {
 Vue视图层通过[Mustache](http://mustache.github.io/)`['mʌstæʃ]`语法与Vue实例中的data属性进行双向绑定，但是也可以通过内置指令`v-once`完成一个单向的绑定，再或者通过`v-html`指令将绑定的字符串输出为HTML，虽然这样很容易招受XSS攻击。
 
 ```html
-<span>Message: {{ hello }}</span>
-<span v-once>这个将不会改变: {{ msg }}</span>
+<span>Message: {{ result }}</span>
+<span v-once>一次性绑定: {{ msg }}</span>
 <div v-html="rawHtml"></div>
 ```
 
@@ -137,7 +144,163 @@ Mustache不能用于HTML属性，需要借助于`v-bind`指令。
 <button v-bind:disabled="isButtonDisabled">Button</button>
 ```
 
-## Mustache语法中使用JavaScript语句
+### 绑定HTML的class和style
+
+操作class与style是前端数据绑定的常见需求，Vue通过`v-bind:class`和`v-bind:style`指令有针对性的对这两种操作进行了增强。
+
+#### v-bind:class
+
+绑定HTML的`class`属性。
+
+```html
+<!-- Vue对象中的data -->
+<script>
+... ...
+data: {
+  isActive: true,
+  hasError: false
+}
+... ...
+</script>
+<!-- 绑定class -->
+<div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+<!-- 渲染结果 -->
+<div class="static active"></div>
+```
+
+上面代码中的`v-bind`可以直接绑定到一个对象，以更简洁的方式实现相同的功能。
+
+```html
+<!-- Vue对象中的data -->
+<script>
+... ...
+data: {
+  classObject: {
+    active: true,
+    'text-danger': false
+  }
+}
+... ...
+</script>
+<!-- 直接绑定class到一个对象 -->
+<div v-bind:class="classObject"></div>
+<!-- 渲染结果 -->
+<div class="static active"></div>
+```
+
+也可以通过计算属性更加灵活的使用`v-bind:class`。
+
+```html
+<!-- Vue对象中的data -->
+<script>
+... ...
+data: {
+  isActive: true,
+  error: null
+},
+computed: {
+  classObject: function () {
+    return {
+      active: this.isActive && !this.error,
+      'text-danger': this.error && this.error.type === 'fatal',
+    }
+  }
+}
+... ...
+</script>
+<!-- 绑定class到计算属性 -->
+<div v-bind:class="classObject"></div>
+<!-- 渲染结果 -->
+<div class="static active"></div>
+```
+
+可以将数组传递给`v-bind:class`从而同时应用多个class属性。
+
+```html
+<!-- Vue对象中的data -->
+<script>
+... ...
+data: {
+  activeClass: 'active',
+  errorClass: 'text-danger'
+}
+... ...
+</script>
+<!-- 绑定class到计算属性 -->
+<div v-bind:class="[activeClass, errorClass]"></div>
+<!-- 渲染结果 -->
+<div class="active text-danger"></div>
+<!-- 使用三目运算符，始终添加errorClass，只在isActive为true时添加activeClass -->
+<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+<!-- 在数组中使用对象可以避免三目运算符的繁琐 -->
+<div v-bind:class="[{ active: isActive }, errorClass]"></div>
+```
+
+当在自定义组件上使用`class`属性时，这些属性将会被添加到该组件的根元素上面，这一特性同样适用于`v-bind:class`。
+
+```html
+<!-- 声明一个组件 -->
+<script>
+... ...
+Vue.component('my-component', {
+  template: '<p class="foo bar">Hi</p>',
+  data: {
+    isActive: true
+  },
+})
+... ...
+</script>
+<!-- 添加2个class属性 -->
+<my-component class="baz boo"></my-component>
+<!-- 渲染结果 -->
+<p class="foo bar baz boo">Hi</p>
+<!-- 使用v-bind:class -->
+<my-component v-bind:class="{ active: isActive }"></my-component>
+<!-- 渲染结果 -->
+<p class="foo bar active">Hi</p>
+```
+
+#### v-bind:style
+
+绑定HTML的`style`属性。
+
+```html
+<script>
+... ...
+data: {
+  styleObject: {
+    color: 'red',
+    fontSize: '13px'
+  },
+  styleHeight: {
+    height: 10rem;
+  }
+  styleWidth: {
+    width: 20rem;
+  }
+}
+... ...
+</script>
+<div v-bind:style="styleObject"></div>
+<!-- 使用数组可以将多个样式合并到一个HTML元素上面 -->
+<div v-bind:style="[styleHeight, styleWidth]"></div>
+```
+
+使用`v-bind:style`时Vue会自动添加prefix前缀，常见的prefix前缀如下：
+
+* `-webkit-` Chrome、Safari、新版Opera、所有iOS浏览器(包括iOS版Firefox)，几乎所有WebKit内核浏览器。
+* `-moz-` 针对Firefox浏览器。
+* `-o-` 使用WebKit内核前的老版本Opera。
+* `-ms-` 微软的IE以及Edge浏览器。
+
+我们还可以将1个数组赋值给`v-bind:style`中绑定的属性值，从而提供多个带前缀的值。
+
+```html
+<!-- 下面代码会渲染数组中最后一个被浏览器支持的值 -->
+<div :style="{ display: ['-webkit-box', '-ms-flexbox', 'flex'] }"></div>
+```
+
+### 使用JavaScript表达式
 
 Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个绑定只能使用**1**个表达式。
 
@@ -152,12 +315,13 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 {{ if (ok) { return message } }}
 ```
 
+
 ## 内置指令
 
 带有`v-`前缀，当表达式的值改变时，将其影响响应式的作用于DOM。指令可以接收后面以`:`表示的参数（*被指令内部的arg属性接收*），或者以`.`开头的修饰符（*指定该指令以特殊方式绑定*）。
 
 ```html
-<p v-if="seen">现在你看到我了</p>
+<p v-if="seen">Hello world!</p>
 <!-- 绑定事件 -->
 <a v-bind:href="url"></a>
 <!-- 绑定属性 -->
@@ -166,7 +330,7 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 <form v-on:submit.prevent="onSubmit"></form>
 ```
 
-Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式。
+Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 
 ```html
 <!-- v-bind -->
@@ -177,3 +341,20 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式。
 <a @click="doSomething"></a>
 ```
 
+Vue2.4.2中定义了如下内置指令：
+
+```
+v-text
+v-html
+v-show
+v-if
+v-else
+v-else-if
+v-for
+v-on
+v-bind
+v-model
+v-pre
+v-cloak
+v-once
+```
