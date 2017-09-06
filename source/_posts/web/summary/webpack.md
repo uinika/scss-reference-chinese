@@ -4,7 +4,7 @@ tags: Web
 categories: Summary
 ---
 
-![Alt text](webpack/logo.png)
+![](webpack/logo.png)
 
 ## Webpack3新特性ModuleConcatenationPlugin
 
@@ -17,6 +17,8 @@ new webpack.optimize.ModuleConcatenationPlugin()
 ```
 
 > Webpack3作用域提升的实现依赖于ECMAScript模块语法，因此Webpack会基于开发人员当前使用的模块系统回滚到过去的打包方式。
+
+<!-- more -->
 
 ### 不使用ModuleConcatenationPlugin打包的文件
 
@@ -62,4 +64,4 @@ new webpack.optimize.ModuleConcatenationPlugin()
 
 > 文件尺寸的变化不大。
 
-<!-- more -->
+

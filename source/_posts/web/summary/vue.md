@@ -9,9 +9,15 @@ categories: Summary
 
 ## Vue2.x与Aangular1.x不同点
 
+### 组件化
+
+
 ### 双向绑定
 
+
 ### 虚拟DOM
+
+
 
 
 
