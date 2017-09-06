@@ -117,7 +117,63 @@ vm = {
 
 ![](vue/lifecycle.png "组件的生命周期")
 
-
 > 不要Vue实例的属性、回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
 
+
+## 数据绑定
+
+Vue视图层通过[Mustache](http://mustache.github.io/)`['mʌstæʃ]`语法与Vue实例中的data属性进行双向绑定，但是也可以通过内置指令`v-once`完成一个单向的绑定，再或者通过`v-html`指令将绑定的字符串输出为HTML，虽然这样很容易招受XSS攻击。
+
+```html
+<span>Message: {{ hello }}</span>
+<span v-once>这个将不会改变: {{ msg }}</span>
+<div v-html="rawHtml"></div>
+```
+
+Mustache不能用于HTML属性，需要借助于`v-bind`指令。
+
+```html
+<div v-bind:id="dynamicId"></div>
+<button v-bind:disabled="isButtonDisabled">Button</button>
+```
+
+## Mustache语法中使用JavaScript语句
+
+Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个绑定只能使用**1**个表达式。
+
+```html
+<span>{{ number + 1 }}</span>
+<button>{{ ok ? 'YES' : 'NO' }}</button>
+<p>{{ message.split('').reverse().join('') }}</p>
+<div v-bind:id="'list-' + id"></div>
+<!-- 这是语句，不是表达式 -->
+{{ var a = 1 }}
+<!-- 流控制也不会生效，请使用三元表达式 -->
+{{ if (ok) { return message } }}
+```
+
+## 内置指令
+
+带有`v-`前缀，当表达式的值改变时，将其影响响应式的作用于DOM。指令可以接收后面以`:`表示的参数（*被指令内部的arg属性接收*），或者以`.`开头的修饰符（*指定该指令以特殊方式绑定*）。
+
+```html
+<p v-if="seen">现在你看到我了</p>
+<!-- 绑定事件 -->
+<a v-bind:href="url"></a>
+<!-- 绑定属性 -->
+<a v-on:click="doSomething">
+<!-- .prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault() -->
+<form v-on:submit.prevent="onSubmit"></form>
+```
+
+Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式。
+
+```html
+<!-- v-bind -->
+<a v-bind:href="url"></a>
+<a :href="url"></a>
+<!-- v-on -->
+<a v-on:click="doSomething"></a>
+<a @click="doSomething"></a>
+```
 
