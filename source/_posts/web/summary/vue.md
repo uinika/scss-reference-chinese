@@ -10,7 +10,7 @@ categories: Summary
 
 <!-- more -->
 
-## Vue相比Angular的3个重要区别
+## Vue与Angular的3个基本区别
 
 1. **组件化**：Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
 
@@ -71,10 +71,13 @@ var vm = new Vue({
 ```
 
 
-## Vue对象的实例生命周期
+## Vue对象实例的生命周期
 
+每个Vue实例在创建时，都需要经过一系列初始化过程（*设置数据监听、编译模板、挂载实例到DOM、在数据变化时更新DOM*），并在同时运行一些钩子函数，让开发人员能够在特定生命周期内执行自己的代码。
 
 ![](vue/lifecycle.png "组件的生命周期")
 
+
+> 不要Vue实例的属性、回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
 
 
