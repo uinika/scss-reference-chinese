@@ -24,7 +24,7 @@ categories: Summary
 
 ## Vue对象
 
-每个 Vue 应用都是通过 Vue 函数创建一个新的 Vue 实例开始的
+每个Vue 应用都是通过 Vue 函数创建一个新的 Vue 实例开始的
 
 ```javascript
 var vm = new Vue({
@@ -70,6 +70,43 @@ var vm = new Vue({
 });
 ```
 
+## Vue对象的实例方法
+
+Vue 实例暴露了一些有用的实例属性与方法。它们都有前缀 $，以便与用户定义的属性区分开来。
+
+```javascript
+let vm = new Vue();
+vm = {
+  // 属性
+  vm.$data: "",
+  vm.$props: "",
+  vm.$el: "",
+  vm.$options: "",
+  vm.$parent: "",
+  vm.$root: "",
+  vm.$children: "",
+  vm.$slots: "",
+  vm.$scopedSlots: "",
+  vm.$refs: "",
+  vm.$isServer: "",
+  vm.$attrs: "",
+  vm.$listeners: "",
+  // 数据
+  vm.$watch: "",
+  vm.$set: "",
+  vm.$delete: "",
+  // 事件
+  vm.$on: "",
+  vm.$once: "",
+  vm.$off: "",
+  vm.$emit: "",
+  // 生命周期
+  vm.$mount: "",
+  vm.$forceUpdate: "",
+  vm.$nextTick: "",
+  vm.$destroy: "",
+}
+```
 
 ## Vue对象实例的生命周期
 
