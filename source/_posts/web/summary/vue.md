@@ -24,7 +24,7 @@ categories: Summary
 
 ## Vue对象
 
-每个Vue 应用都是通过 Vue 函数创建一个新的 Vue 实例开始的
+通过向构造函数`new Vue()`传入一个`option`对象去创建一个Vue实例。
 
 ```javascript
 var vm = new Vue({
@@ -69,6 +69,9 @@ var vm = new Vue({
   comments: "设为true时会保留并且渲染模板中的HTML注释"
 });
 ```
+
+> Vue实例通常使用`vm`（View Model）变量来命名。
+
 
 ## Vue对象的实例方法
 
