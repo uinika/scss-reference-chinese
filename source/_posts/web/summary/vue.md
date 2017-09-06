@@ -126,7 +126,7 @@ vm = {
 
 > 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
 
-> 使用jQuery操作DOM时，需要在`Mounted`属性上进行。
+> 使用jQuery对DOM的操作可以放置在`Mounted`属性上进行，即Vue组件已经完成在DOM上挂载的时候。
 
 ## 数据绑定
 
