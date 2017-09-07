@@ -6,7 +6,7 @@ categories: Summary
 
 ![](vue/logo.png)
 
-Vue是一款高度封装的、开箱即用的、一栈式的前端框架，即可以结合webpack编译式使用，也可以通过gulp等自动化工具直接挂载到window上使用。经历2个小型项目的初步尝试之后，正在和勤智前端团队的小伙伴一起，将前端架构逐步从Angular切换至Vue。为了帮助team里小伙伴们更加快速的上手，所以专门组织了本次training，一方面为大家讲解Vue2带来的各种有趣特性，另一方面聊聊与之前使用Angular的相似与异同。
+Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框架**，即可以结合webpack进行编译式前端开发，也适用基于gulp、grunt等自动化工具直接挂载至window使用。经历2个小型项目的初步尝试之后，正在和勤智前端团队的小伙伴一起，将前端架构逐步从Angular切换至Vue。为了帮助team里小伙伴们更加快速的上手，所以专门组织了本次training，一方面为大家讲解Vue2带来的各种有趣特性，另一方面聊聊与之前使用Angular的相似与异同。
 
 <!-- more -->
 
@@ -87,34 +87,34 @@ Vue实例暴露了一系列带有前缀**$**的实例属性与方法。
 ```javascript
 let vm = new Vue();
 vm = {
-  // 属性
-  $data: "",
-  $props: "",
-  $el: "",
-  $options: "",
-  $parent: "",
-  $root: "",
-  $children: "",
-  $slots: "",
-  $scopedSlots: "",
-  $refs: "",
-  $isServer: "",
-  $attrs: "",
-  $listeners: "",
+  // Vue实例属性的代理
+  $data: "被watch的data对象",
+  $props: "当前组件收到的props",
+  $el: "Vue实例使用的根DOM元素",
+  $options: "当前Vue实例的初始化选项",
+  $parent: "父组件Vue对象的实例",
+  $root: "根组件Vue对象的实例",
+  $children: "当前实例的直接子组件",
+  $slots: "访问被slot分发的内容",
+  $scopedSlots: "访问scoped slots",
+  $refs: "包含所有拥有ref注册的子组件",
+  $isServer: "判断Vue实例是否运行于服务器",
+  $attrs: "包含父作用域中非props的属性绑定",
+  $listeners: "包含了父作用域中的v-on事件监听器",
   // 数据
-  $watch: "",
-  $set: "",
-  $delete: "",
+  $watch: "观察Vue实例变化的表达式、计算属性函数",
+  $set: "全局Vue.set的别名",
+  $delete: "全局Vue.delete的别名",
   // 事件
-  $on: "",
-  $once: "",
-  $off: "",
-  $emit: "",
+  $on: "监听当前实例上的自定义事件，事件可以由vm.$emit触发",
+  $once: "监听一个自定义事件，触发一次之后就移除监听器",
+  $off: "移除自定义事件监听器",
+  $emit: "触发当前实例上的事件",
   // 生命周期
-  $mount: "",
-  $forceUpdate: "",
-  $nextTick: "",
-  $destroy: "",
+  $mount: "手动地挂载一个没有挂载的Vue实例",
+  $forceUpdate: "强制Vue实例重新渲染，仅影响实例本身和插入插槽内容的子组件",
+  $nextTick: "将回调延迟到下次DOM更新循环之后执行",
+  $destroy: "完全销毁一个实例",
 }
 ```
 
@@ -342,20 +342,50 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 <a @click="doSomething"></a>
 ```
 
-Vue2.4.2中定义了如下内置指令：
+### Vue2.4.2内置指令
 
-```
-v-text
-v-html
-v-show
-v-if
-v-else
-v-else-if
-v-for
-v-on
-v-bind
-v-model
-v-pre
-v-cloak
-v-once
+```html
+<html
+  v-text = "更新元素的textContent"
+  v-html = "更新元素的innerHTML"
+  v-show = "根据表达式的true/false，切换HTML元素的display属性"
+  v-for = "遍历内部的HTML元素"
+  v-pre = "跳过表达式渲染过程，可以显示原始的Mustache标签"
+  v-cloak = "保持在HTML元素上直到关联实例结束编译，可以隐藏未编译的Mustache"
+  v-once = "只渲染元素和组件一次"
+></html>
+<!-- 根据表达式的true和false来决定是否渲染元素 -->
+<div v-if="type === 'A'">A</div>
+<div v-else-if="type === 'B'">B</div>
+<div v-else-if="type === 'C'">C</div>
+<div v-else>Not A/B/C</div>
+<!-- 动态地绑定属性或prop到表达式 -->
+<p v-bind:attrOrProp
+  .prop = "被用于绑定DOM属性"
+  .camel = "将kebab-case特性名转换为camelCase"
+  .sync = "语法糖，会扩展成一个更新父组件绑定值的v-on监听器"
+></p>
+<!-- 绑定事件监听器 -->
+<button
+  v-on:eventName
+  .stop = "调用event.stopPropagation()"
+  .prevent = "调用event.preventDefault()"
+  .capture = "添加事件监听器时使用capture模式"
+  .self = "当事件是从监听器绑定的元素本身触发时才触发回调" 
+  .native = "监听组件根元素的原生事件"-
+  .once = "只触发一次回调"
+  .left = "点击鼠标左键触发"
+  .right = "点击鼠标右键触发"
+  .middle = "点击鼠标中键触发"
+  .passive = "以{passive: true}模式添加监听器"
+  .{keyCode | keyAlias} = "触发特定键触事件"
+>
+</button>
+<!-- 表单控件双向绑定 -->
+<input 
+  v-model
+  .lazy = "取代input监听change事件"
+  .number = "输入字符串转为数字"
+  .trim = "过滤输入的首尾空格"
+/>
 ```
