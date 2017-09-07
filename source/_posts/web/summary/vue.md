@@ -81,25 +81,25 @@ var vm = new Vue({
 <div id="example">
   {{ message.split('').reverse().join('') }}
 </div>
+
 <!-- 将表达式抽象到计算属性 -->
 <div id="example">
   <p>Original message: "{{ message }}"</p>
   <p>Computed reversed message: "{{ reversedMessage }}"</p>
 </div>
+
 <script>
-var vm = new Vue({
-  el: '#example',
-  data: {
-    message: 'Hello'
-  },
-  computed: {
-    // a computed getter
-    reversedMessage: function () {
-      // `this` points to the vm instance
-      return this.message.split('').reverse().join('')
+  var vm = new Vue({
+    el: '#example',
+    data: {
+      message: 'Hello'
+    },
+    computed: {
+      reversedMessage: function () {
+        return this.message.split('').reverse().join('')
+      }
     }
-  }
-})
+  })
 </script>
 ```
 
@@ -125,10 +125,9 @@ computed: {
   }
 }
 ... ... ...
-// 下面语句会触发setter方法，但是firstName和lastName也会被相应更新
+// 下面语句触发setter方法，firstName和lastName也会被相应更新
 vm.fullName = 'John Doe'
 </script>
-
 ```
 
 ### 观察者属性watch
@@ -137,48 +136,47 @@ vm.fullName = 'John Doe'
 
 ```html
 <div id="watch-example">
-  <p>
-    Ask a yes/no question: <input v-model="question">
-  </p>
+  <p>Ask a yes/no question: <input v-model="question"></p>
   <p>{{ answer }}</p>
 </div>
+
 <script>
-var watchExampleVM = new Vue({
-  el: '#watch-example',
-  data: {
-    question: '',
-    answer: 'I cannot give you an answer until you ask a question!'
-  },
-  watch: {
-    // 如果question发生改变，该函数就会运行
-    question: function (newQuestion) {
-      this.answer = 'Waiting for you to stop typing...'
-      this.getAnswer()
+  var watchExampleVM = new Vue({
+    el: '#watch-example',
+    data: {
+      question: '',
+      answer: 'I cannot give you an answer until you ask a question!'
+    },
+    watch: {
+      // 如果question发生改变，该函数就会运行
+      question: function (newQuestion) {
+        this.answer = 'Waiting for you to stop typing...'
+        this.getAnswer()
+      }
+    },
+    methods: {
+      // _.debounce是lodash当中限制操作频率的函数
+      getAnswer: _.debounce(
+        function () {
+          if (this.question.indexOf('?') === -1) {
+            this.answer = 'Questions usually contain a question mark. ;-)'
+            return
+          }
+          this.answer = 'Thinking...'
+          var vm = this
+          axios.get('https://yesno.wtf/api')
+            .then(function (response) {
+              vm.answer = _.capitalize(response.data.answer)
+            })
+            .catch(function (error) {
+              vm.answer = 'Error! Could not reach the API. ' + error
+            })
+        },
+        // 这是用户停止输入等待的毫秒数
+        500
+      )
     }
-  },
-  methods: {
-    // _.debounce是lodash当中限制操作频率的函数
-    getAnswer: _.debounce(
-      function () {
-        if (this.question.indexOf('?') === -1) {
-          this.answer = 'Questions usually contain a question mark. ;-)'
-          return
-        }
-        this.answer = 'Thinking...'
-        var vm = this
-        axios.get('https://yesno.wtf/api')
-          .then(function (response) {
-            vm.answer = _.capitalize(response.data.answer)
-          })
-          .catch(function (error) {
-            vm.answer = 'Error! Could not reach the API. ' + error
-          })
-      },
-      // 这是用户停止输入等待的毫秒数
-      500
-    )
-  }
-})
+  })
 </script>
 ```
 
@@ -261,21 +259,24 @@ Mustache不能用于HTML属性，需要借助于`v-bind`指令。
 ```html
 <!-- Vue对象中的data -->
 <script>
-... ...
-data: {
-  isActive: true,
-  hasError: false,
-  classObject: {
-    active: true,
-    'text-danger': false
+  ... ...
+  data: {
+    isActive: true,
+    hasError: false,
+    classObject: {
+      active: true,
+      'text-danger': false
+    }
   }
-}
-... ...
+  ... ...
 </script>
+
 <!-- 直接绑定class到一个对象 -->
 <div v-bind:class="classObject"></div>
+
 <!-- 直接绑定class到对象的属性 -->
 <div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+
 <!-- 渲染结果 -->
 <div class="static active"></div>
 ```
@@ -285,19 +286,23 @@ data: {
 ```html
 <!-- Vue对象中的data -->
 <script>
-... ...
-data: {
-  activeClass: 'active',
-  errorClass: 'text-danger'
-}
-... ...
+  ... ...
+  data: {
+    activeClass: 'active',
+    errorClass: 'text-danger'
+  }
+  ... ...
 </script>
+
 <!-- 绑定class到计算属性 -->
 <div v-bind:class="[activeClass, errorClass]"></div>
+
 <!-- 渲染结果 -->
 <div class="active text-danger"></div>
+
 <!-- 使用三目运算符，始终添加errorClass，只在isActive为true时添加activeClass -->
 <div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+
 <!-- 在数组中使用对象可以避免三目运算符的繁琐 -->
 <div v-bind:class="[{ active: isActive }, errorClass]"></div>
 ```
@@ -307,21 +312,23 @@ data: {
 ```html
 <!-- 声明一个组件 -->
 <script>
-... ...
-Vue.component('my-component', {
-  template: '<p class="foo bar">Hi</p>',
-  data: {
-    isActive: true
-  },
-})
-... ...
+  Vue.component('my-component', {
+    template: '<p class="foo bar">Hi</p>',
+    data: {
+      isActive: true
+    },
+  })
 </script>
+
 <!-- 添加2个class属性 -->
 <my-component class="baz boo"></my-component>
+
 <!-- 渲染结果 -->
 <p class="foo bar baz boo">Hi</p>
+
 <!-- 使用v-bind:class -->
 <my-component v-bind:class="{ active: isActive }"></my-component>
+
 <!-- 渲染结果 -->
 <p class="foo bar active">Hi</p>
 ```
@@ -332,22 +339,24 @@ Vue.component('my-component', {
 
 ```html
 <script>
-... ...
-data: {
-  styleObject: {
-    color: 'red',
-    fontSize: '13px'
-  },
-  styleHeight: {
-    height: 10rem;
+  ... ...
+  data: {
+    styleObject: {
+      color: 'red',
+      fontSize: '13px'
+    },
+    styleHeight: {
+      height: 10rem;
+    }
+    styleWidth: {
+      width: 20rem;
+    }
   }
-  styleWidth: {
-    width: 20rem;
-  }
-}
-... ...
+  ... ...
 </script>
+
 <div v-bind:style="styleObject"></div>
+
 <!-- 使用数组可以将多个样式合并到一个HTML元素上面 -->
 <div v-bind:style="[styleHeight, styleWidth]"></div>
 ```
@@ -368,8 +377,10 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 <button>{{ ok ? 'YES' : 'NO' }}</button>
 <p>{{ message.split('').reverse().join('') }}</p>
 <div v-bind:id="'list-' + id"></div>
+
 <!-- 这是语句，不是表达式 -->
 {{ var a = 1 }}
+
 <!-- 流控制也不会生效，请使用三元表达式 -->
 {{ if (ok) { return message } }}
 ```
@@ -381,10 +392,13 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 
 ```html
 <p v-if="seen">Hello world!</p>
+
 <!-- 绑定事件 -->
 <a v-bind:href="url"></a>
+
 <!-- 绑定属性 -->
 <a v-on:click="doSomething">
+
 <!-- .prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault() -->
 <form v-on:submit.prevent="onSubmit"></form>
 ```
@@ -395,6 +409,7 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 <!-- v-bind -->
 <a v-bind:href="url"></a>
 <a :href="url"></a>
+
 <!-- v-on -->
 <a v-on:click="doSomething"></a>
 <a @click="doSomething"></a>
@@ -412,17 +427,20 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
   v-cloak = "保持在HTML元素上直到关联实例结束编译，可以隐藏未编译的Mustache"
   v-once = "只渲染元素和组件一次"
 ></html>
+
 <!-- 根据表达式的true和false来决定是否渲染元素 -->
 <div v-if="type === 'A'">A</div>
 <div v-else-if="type === 'B'">B</div>
 <div v-else-if="type === 'C'">C</div>
 <div v-else>Not A/B/C</div>
+
 <!-- 动态地绑定属性或prop到表达式 -->
 <p v-bind:attrOrProp
   .prop = "被用于绑定DOM属性"
   .camel = "将kebab-case特性名转换为camelCase"
   .sync = "语法糖，会扩展成一个更新父组件绑定值的v-on监听器"
 ></p>
+
 <!-- 绑定事件监听器 -->
 <button
   v-on:eventName
@@ -439,14 +457,204 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
   .{keyCode | keyAlias} = "触发特定键触事件"
 >
 </button>
+
 <!-- 表单控件双向绑定 -->
 <input 
   v-model
   .lazy = "取代input监听change事件"
   .number = "输入字符串转为数字"
-  .trim = "过滤输入的首尾空格"
-/>
+  .trim = "过滤输入的首尾空格" />
 ```
 
 
 ## 组件
+
+组件可以扩展HTML元素功能，并且封装可重用代码。可以通过`Vue.component( id, [definition] )`注册或者获取全局组件。
+
+```javascript
+// 注册组件，传入一个扩展过的构造器
+Vue.component('my-component', Vue.extend({ ... }))
+
+// 注册组件，传入一个option对象(自动调用Vue.extend)
+Vue.component('my-component', { ... })
+
+// 获取注册的组件(始终返回构造器)
+var MyComponent = Vue.component('my-component')
+```
+
+下面代码创建了一个Vue实例，并将自定义组件`my-component`挂载至HTML当中。
+
+```html
+<script>
+  // 创建Vue根实例
+  new Vue({
+    el: '#example'
+  })
+
+  // 注册自定义组件
+  Vue.component('my-component', {
+    template: '<div>A custom component!</div>'
+  })
+</script>
+
+<!-- 原始模板 -->
+<div id="example">
+  <my-component></my-component>
+</div>
+
+<!-- 渲染结果 -->
+<div id="example">
+  <div>A custom component!</div>
+</div>
+```
+
+- is属性
+
+浏览器解析完HTML之后才会渲染Vue表达式，但是诸如`<ul> <ol> <table> <select>`限制了能被其包裹的HTML元素，而`<option>`只能出现在某些HTML元素内部，造成Vue表达式可能不会被正确的渲染。因此，Vue提供了`is`作为属性的别名来解决这个问题。
+
+```html
+<!-- 不正确的方式 -->
+<table>
+  <my-row>...</my-row>
+</table>
+
+<!-- 使用is的正确方式 -->
+<table>
+  <tr is="my-row"></tr>
+</table>
+```
+
+- data必须是函数
+
+`Vue.component()`传入的data属性不能是对象，而必须是函数。这样做的目的是避免组件在相同模板的多个位置被复用时，仅仅返回对象会造成组件间的数据被相互污染，而通过函数每次都返回全新的data对象能很好的规避这个问题。
+
+```javascript
+Vue.component('simple-counter', {
+  template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+  data: function () {
+    return {
+      a: "",
+      b: ""
+    }
+  }
+});
+```
+
+- 父子组件之间的通信
+
+父组件通过`props`向下传递数据给子组件，子组件通过`events`给父组件发送消息，即**props down, events up**。
+
+![](vue/props-events.png "父子组件通信")
+
+### props
+
+虽然每个组件的作用域都是独立的，但是可以通过`props属性`向子组件传递数据，这是一种**单向数据流**的表现形式。
+
+```javascript
+Vue.component('child', {
+  // 声明props
+  props: ['message'],
+  // 和data属性一样，prop也可以在vm通过this.message进行引用
+  template: '<span>{{ message }}</span>'
+})
+```
+
+> 不要在子组件内部修改props，这样会导致后台报错。
+
+#### 命名方式转换
+
+因为HTML并不区分大小写，所以kebab-case(*驼峰*)风格命名的props，在组件中会以camelCased(*短横线隔开*)风格被接收。
+
+```html
+<!-- camelCase in JavaScript -->
+<script>
+Vue.component('child', {
+  props: ['myMessage'],
+  template: '<span>{{ myMessage }}</span>'
+})
+<script>
+
+<!-- kebab-case in HTML -->
+<child my-message="hello!"></child>
+```
+
+#### 动态props
+
+可以通过`v-bind`指令，响应式的绑定父组件数据到子组件的props。当父组件数据变化时，该变化也会传导至子组件。
+
+```html
+<div>
+  <input v-model="parentMsg">
+  <br>
+  <child v-bind:my-message="parentMsg"></child>
+</div>
+```
+
+使用`v-bind`可以让其参数值能够以JavaScript表达式的方式被解析，否则所有传入的props都会被子组件认为是字符串类型。
+
+```html
+<!-- 传递的是字符串"1" -->
+<comp some-prop="1"></comp>
+<!-- 传递实际的 number -->
+<comp v-bind:some-prop="1"></comp>
+```
+
+#### 验证props
+
+可以为组件的props指定验证规则，如果传入数据不符合要求，Vue会发出相应警告，这样可以有效提高组件的健壮性。
+
+```javascript
+Vue.component('example', {
+  props: {
+    // 基础类型检测
+    propA: Number,
+    // 多种类型
+    propB: [String, Number],
+    // 必传且是字符串
+    propC: {
+      type: String,
+      required: true
+    },
+    // 数字，有默认值
+    propD: {
+      type: Number,
+      default: 100
+    },
+    // 数组或对象的默认值由1个工厂函数返回
+    propE: {
+      type: Object,
+      default: function () {
+        return { message: 'hello' }
+      }
+    },
+    // 自定义验证函数
+    propF: {
+      validator: function (value) {
+        return value > 10
+      }
+    }
+  }
+});
+```
+
+>  `props`会在组件实例创建之前进行校验。
+
+#### 组件的非props属性
+
+组件可以接收任意传入的属性，这些属性都会被添加到组件HTML模板的根元素上（*无论有没有在props中定义*）。
+
+```html
+<!-- 带有属性的自定义组件 -->
+<bs-date-input
+  data-3d-date-picker="true"
+  class="date-picker-theme-dark">
+</bs-date-input>
+
+<!-- 渲染出来的组件，class属性被合并 -->
+<input type="date" data-3d-date-picker="true" class="form-control date-picker-theme-dark">
+```
+
+> 父组件传递给子组件的属性可能会覆盖子组件本身的属性，从而对子组件造成破坏和污染。
+
+
+
