@@ -34,16 +34,16 @@ var vm = new Vue({
   propsData: "创建实例时手动传递props，方便测试props",
   computed: "计算属性",
   methods: "定义可以通过vm对象访问的方法",
-  watch: "Vue实例化时会调用$watch()方法遍历watch对象的每1个属性",
+  watch: "Vue实例化时会调用$watch()方法遍历watch对象的每个属性",
   // DOM
   el: "将页面上已存在的DOM元素作为Vue实例的挂载目标",
   template: "可以替换挂载元素的字符串模板",
   render: "渲染函数，字符串模板的替代方案",
   renderError: "仅用于开发环境，在render()出现错误时，提供另外的渲染输出",
   // 生命周期钩子
-  beforeCreate: "发生在Vue实例初始化之后，data observer和event/watcher事件配置之前",
+  beforeCreate: "发生在Vue实例初始化之后，data observer和event/watcher事件被配置之前",
   created: "发生在Vue实例初始化以及data observer和event/watcher事件被配置之后",
-  beforeMount: "挂载开始之前被调用，render()首次被调用",
+  beforeMount: "挂载开始之前被调用，此时render()首次被调用",
   mounted: "el被新建的vm.$el替换，并挂载到实例上之后调用",
   beforeUpdate: "数据更新时调用，发生在虚拟DOM重新渲染和打补丁之前",
   updated: "数据更改导致虚拟DOM重新渲染和打补丁之后被调用",
@@ -63,7 +63,7 @@ var vm = new Vue({
   // 其它
   name: "允许组件递归调用自身，便于调试时显示更加友好的警告信息",
   delimiters: "改变模板字符串的风格，默认为{{}}",
-  functional: "使组件无状态(没有data)和无实例(没有this上下文)",
+  functional: "让组件无状态(没有data)和无实例(没有this上下文)",
   model: "允许自定义组件使用v-model时定制prop和event",
   inheritAttrs: "默认情况下，父作用域的非props属性绑定会应用在子组件的根元素上。当编写嵌套有其它组件或元素的组件时，可以将该属性设置为false关闭这些默认行为",
   comments: "设为true时会保留并且渲染模板中的HTML注释"
@@ -72,12 +72,117 @@ var vm = new Vue({
 
 > Vue实例通常使用`vm`（View Model）变量来命名。
 
-### 计算属性computed
+### 属性计算computed
 
-向HTML模板表达式放入太多逻辑会显得难以维护。
+在HTML模板表达式中放置太多业务逻辑，会让模板过重且难以维护。因此，可以考虑将模板中比较复杂的表达式拆分到computed属性当中。
+
+```html
+<!-- 不使用计算属性 -->
+<div id="example">
+  {{ message.split('').reverse().join('') }}
+</div>
+<!-- 将表达式抽象到计算属性 -->
+<div id="example">
+  <p>Original message: "{{ message }}"</p>
+  <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+<script>
+var vm = new Vue({
+  el: '#example',
+  data: {
+    message: 'Hello'
+  },
+  computed: {
+    // a computed getter
+    reversedMessage: function () {
+      // `this` points to the vm instance
+      return this.message.split('').reverse().join('')
+    }
+  }
+})
+</script>
+```
+
+> 计算属性只在相关依赖发生改变时才会重新求值，这意味只要上面例子中的message没有发生改变，多次访问reversedMessage计算属性总会返回之前的计算结果，而不必再次执行函数，这是computed和method的一个重要区别。
+
+计算属性默认只拥有getter方法，但是可以自定义一个setter方法。
+
+```html
+<script>
+... ... ...
+computed: {
+  fullName: {
+    // getter
+    get: function () {
+      return this.firstName + ' ' + this.lastName
+    },
+    // setter
+    set: function (newValue) {
+      var names = newValue.split(' ')
+      this.firstName = names[0]
+      this.lastName = names[names.length - 1]
+    }
+  }
+}
+... ... ...
+// 下面语句会触发setter方法，但是firstName和lastName也会被相应更新
+vm.fullName = 'John Doe'
+</script>
+
+```
 
 ### 观察者属性watch
 
+通过watch属性可以手动观察Vue实例上的数据变动，当然也可以调用实例上的`vm.$watch`达到相同的目的。
+
+```html
+<div id="watch-example">
+  <p>
+    Ask a yes/no question: <input v-model="question">
+  </p>
+  <p>{{ answer }}</p>
+</div>
+<script>
+var watchExampleVM = new Vue({
+  el: '#watch-example',
+  data: {
+    question: '',
+    answer: 'I cannot give you an answer until you ask a question!'
+  },
+  watch: {
+    // 如果question发生改变，该函数就会运行
+    question: function (newQuestion) {
+      this.answer = 'Waiting for you to stop typing...'
+      this.getAnswer()
+    }
+  },
+  methods: {
+    // _.debounce是lodash当中限制操作频率的函数
+    getAnswer: _.debounce(
+      function () {
+        if (this.question.indexOf('?') === -1) {
+          this.answer = 'Questions usually contain a question mark. ;-)'
+          return
+        }
+        this.answer = 'Thinking...'
+        var vm = this
+        axios.get('https://yesno.wtf/api')
+          .then(function (response) {
+            vm.answer = _.capitalize(response.data.answer)
+          })
+          .catch(function (error) {
+            vm.answer = 'Error! Could not reach the API. ' + error
+          })
+      },
+      // 这是用户停止输入等待的毫秒数
+      500
+    )
+  }
+})
+</script>
+```
+
+> 使用watch属性的灵活性在于，当监测到数据变化的时候，可以做一些设置中间状态之类的处理。
 
 
 ## 实例属性和方法
@@ -159,23 +264,7 @@ Mustache不能用于HTML属性，需要借助于`v-bind`指令。
 ... ...
 data: {
   isActive: true,
-  hasError: false
-}
-... ...
-</script>
-<!-- 绑定class -->
-<div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
-<!-- 渲染结果 -->
-<div class="static active"></div>
-```
-
-上面代码中的`v-bind`可以直接绑定到一个对象，以更简洁的方式实现相同的功能。
-
-```html
-<!-- Vue对象中的data -->
-<script>
-... ...
-data: {
+  hasError: false,
   classObject: {
     active: true,
     'text-danger': false
@@ -185,37 +274,13 @@ data: {
 </script>
 <!-- 直接绑定class到一个对象 -->
 <div v-bind:class="classObject"></div>
+<!-- 直接绑定class到对象的属性 -->
+<div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
 <!-- 渲染结果 -->
 <div class="static active"></div>
 ```
 
-也可以通过计算属性更加灵活的使用`v-bind:class`。
-
-```html
-<!-- Vue对象中的data -->
-<script>
-... ...
-data: {
-  isActive: true,
-  error: null
-},
-computed: {
-  classObject: function () {
-    return {
-      active: this.isActive && !this.error,
-      'text-danger': this.error && this.error.type === 'fatal',
-    }
-  }
-}
-... ...
-</script>
-<!-- 绑定class到计算属性 -->
-<div v-bind:class="classObject"></div>
-<!-- 渲染结果 -->
-<div class="static active"></div>
-```
-
-可以将数组传递给`v-bind:class`从而同时应用多个class属性。
+可以传递一个数组给`v-bind:class`从而同时设置多个class属性。
 
 ```html
 <!-- Vue对象中的data -->
