@@ -12,17 +12,17 @@ Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框�
 
 ## Vue与Angular的比较
 
-1. **组件化**：Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
+* **组件化**：Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
 
 ![](vue/components.png "组件化")
 
-2. **双向绑定**：
+* **双向绑定**：
 
 
-3. **虚拟DOM**：
+* **虚拟DOM**：Vue通过建立Virtual DOM（*VNode*）来追踪真实DOM发生的变化。
 
 
-## Vue对象
+## Vue对象的选项
 
 通过向构造函数`new Vue()`传入一个`option`对象去创建一个Vue实例。
 
@@ -182,6 +182,230 @@ vm.fullName = 'John Doe'
 
 > 使用watch属性的灵活性在于，当监测到数据变化的时候，可以做一些设置中间状态之类的处理。
 
+### 混合属性mixins
+
+用来将指定的mixin对象复用到Vue组件当中。
+
+```javascript
+// mixin对象
+var mixin = {
+  created: function () {
+    console.log('混合对象的钩子被调用')
+  },
+  methods: {
+    foo: function () {
+      console.log('foo')
+    },
+    conflicting: function () {
+      console.log('from mixin')
+    }
+  }
+}
+
+// vue属性
+var vm = new Vue({
+  mixins: [mixin],
+  created: function () {
+    console.log('组件钩子被调用')
+  },
+  methods: {
+    bar: function () {
+      console.log('bar')
+    },
+    conflicting: function () {
+      console.log('from self')
+    }
+  }
+})
+
+// => "混合对象的钩子被调用"
+// => "组件钩子被调用"
+vm.foo() // => "foo"
+vm.bar() // => "bar"
+vm.conflicting() // => "from self"
+```
+
+> 同名组件的option对象属性会被合并为数组依次调用，其中mixin对象里的属性会被首先调用。如果组件option对象的属性值是一个对象，则mixin中的属性会被忽略掉。
+
+### 渲染函数render()
+
+用来创建VNode，该函数接收`createElement()`方法作为第1个参数，该方法调用后会返回一个虚拟DOM（*即VNode*）。
+
+下面两种情况下，Vue都会自动保持页面的更新，即便`blogTitle`发生变化。
+
+```html
+<h1>{{ blogTitle }}</h1>
+
+<script>
+render: function (createElement) {
+  return createElement('h1', this.blogTitle)
+}
+</script>
+```
+
+> 如果组件是一个函数组件，render()还会接收一个context参数，为没有实例的函数组件提供上下文信息。
+
+通过render()函数实现虚拟DOM比较麻烦，因此可以使用Babel插件`babel-plugin-transform-vue-jsx`在render()函数中应用JSX语法。
+
+```javascript
+import AnchoredHeading from './AnchoredHeading.vue'
+
+new Vue({
+  el: '#demo',
+  render (h) {
+    return (
+      <AnchoredHeading level={1}>
+        <span>Hello</span> world!
+      </AnchoredHeading>
+    )
+  }
+})
+```
+
+
+## Vue对象全局API
+
+```javascript
+Vue.extend(options) //通过继承一个option对象来创建一个Vue实例。
+Vue.nextTick([callback, context]) //在下次DOM更新循环结束之后执行延迟回调。
+Vue.set(target, key, value) // 设置对象的属性，如果是响应式对象，会触发视图更新。
+Vue.delete(target, key) // 删除对象的属性，如果是响应式对象，会触发视图更新。
+Vue.directive(id, [definition]) // 注册或获取全局指令。
+Vue.filter(id, [definition]) // 注册或获取全局过滤器。
+Vue.component(id, [definition]) // 注册或获取全局组件。
+Vue.use(plugin) // 安装Vue插件。
+Vue.mixin(mixin) // 全局注册一个mixin对象。
+Vue.compile(template) // 在render函数中编译模板字符串。
+Vue.version // 提供当前使用Vue的版本号。
+```
+
+### Vue.mixin(mixin)
+
+使用全局mixins将会影响到所有之后创建的Vue实例。
+
+```javascript
+// 为自定义选项myOption注入一个处理器。
+Vue.mixin({
+  created: function () {
+    var myOption = this.$options.myOption
+    if (myOption) {
+      console.log(myOption)
+    }
+  }
+})
+
+new Vue({
+  myOption: 'hello!'
+})
+
+// => "hello!"
+```
+
+### Vue.directive(id, [definition])
+
+Vue允许注册自定义指令，用于对底层DOM进行操作。
+
+```javascript
+Vue.directive('focus', {
+  bind: function() {
+    // 指令第一次绑定到元素时调用，只会调用一次，可以用来执行一些初始化操作。
+  },
+  inserted: function (el) {
+    // 被绑定元素插入父节点时调用。
+  },
+  update: function() {
+    // 所在组件的VNode更新时调用，但是可能发生在其子VNode更新之前。
+  },
+  componentUpdated: function() {
+    // 所在组件VNode及其子VNode全部更新时调用。
+  },
+  unbind: function() {
+    // 指令与元素解绑时调用，只会被调用一次。
+  }
+})
+```
+
+> 钩子之间共享数据可以通过`HTMLElement`的`dataset`属性来进行（*即HTML标签上通过`data-`格式定义的属性*）。
+
+上面的钩子函数拥有如下参数：
+
+* el: 指令绑定的HTML元素，可以用来直接操作DOM。
+* vnode: Vue编译生成的虚拟节点。
+* oldVnode: 之前的虚拟节点，仅在`update`、`componentUpdated`钩子中可用。
+* binding: 一个对象，包含以下属性：
+  - name: 指令名称，不包括`v-`前缀。
+  - value: 指令的绑定值，例如`v-my-directive="1 + 1"`中`value`的值是`2`。
+  - oldValue: 指令绑定的之前一个值，仅在`update`、`componentUpdated`钩子中可用。
+  - expression: 绑定值的字符串形式，例如`v-my-directive="1 + 1"`当中`expression`的值为`"1 + 1"`。
+  - arg: 传给指令的参数，例如`v-my-directive:foo`中`arg`的值是`"foo"`。
+  - modifiers: 包含修饰符的对象，例如`v-my-directive.foo.bar`的`modifiers`的值是`{foo: true, bar: true}`。
+
+> 上面参数除`el`之外，其它参数都应该是只读的，尽量不要对其进行修改操作。
+
+### Vue.use(plugin)
+
+Vue通过插件来添加一些全局功能，Vue插件都会重写其`install()`方法，该方法第1个参数是`Vue构造器`, 第2个参数是可选的`option对象`:
+
+```javascript
+MyPlugin.install = function (Vue, options) {
+  // 1. 添加全局方法或属性
+  Vue.myGlobalMethod = function () {}
+
+  // 2. 添加全局资源
+  Vue.directive('my-directive', {
+    bind (el, binding, vnode, oldVnode) {}
+  })
+
+  // 3. 注入组件
+  Vue.mixin({
+    created: function () {}
+  })
+
+  // 4. 添加实例方法
+  Vue.prototype.$myMethod = function (methodOptions) {}
+}
+```
+
+通过全局方法`Vue.use()`使用指定插件，使用时可以传入一个选项对象。
+
+```javascript
+Vue.use(MyPlugin, {someOption: true})
+```
+
+> vue-router等插件检测到Vue是全局对象时会自动调用`Vue.use()`，如果在CommonJS模块环境中，则需要显式调用`Vue.use()`。
+
+### Vue.filter(id, [definition])
+
+Vue可以通过定义过滤器，进行一些常见的文本格式化，可以用于mustache插值和v-bind表达式当中，使用时通过管道符`|`添加在JavaScript表达式尾部。
+
+```html
+<!-- in mustaches -->
+{{ message | capitalize }}
+
+<!-- in v-bind -->
+<div v-bind:id="rawId | formatId"></div>
+
+<!-- capitalize filter -->
+<script>
+  new Vue({
+    filters: {
+      capitalize: function (value) {
+        if (!value) return ''
+        value = value.toString()
+        return value.charAt(0).toUpperCase() + value.slice(1)
+      }
+    }
+  })
+</script>
+```
+
+过滤器可以串联使用，也可以传入参数。
+
+```html
+<span>{{ message | filterA | filterB }}</span>
+<span>{{ message | filterA('arg1', arg2) }}</span>
+```
+
 
 ## 实例属性和方法
 
@@ -241,7 +465,7 @@ Vue视图层通过[Mustache](http://mustache.github.io/)`['mʌstæʃ]`语法与V
 <div v-html="rawHtml"></div>
 ```
 
-Mustache不能用于HTML属性，需要借助于`v-bind`指令。
+Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 
 ```html
 <div v-bind:id="dynamicId"></div>
@@ -385,6 +609,25 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 {{ if (ok) { return message } }}
 ```
 
+### v-model双向数据绑定
+
+`v-model`指令实质上是`v-on`和`v-bind`的糖衣语法，该指令会接收一个`value属性`，存在新值时则触发一个`input事件`。
+
+```html
+<!-- 使用v-model的版本 -->
+<input v-model="something">
+<!-- 使用v-on和v-bind的版本 -->
+<input v-bind:value="something"
+       v-on:input="something = $event.target.value">
+<!-- 也可以自定义输入域的双向绑定 -->
+<custom-input
+  v-bind:value="something"
+  v-on:input="something = arguments[0]">
+</custom-input>
+```
+
+> 单选框、复选框一类的输入域将value属性作为了其它用途，因此可以通过组件的`model`选项来避免冲突：
+
 
 ## 内置指令
 
@@ -415,7 +658,7 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 <a @click="doSomething"></a>
 ```
 
-### Vue2.4.2内置指令
+目前，Vue2.4.2版本当中提供了如下内置指令：
 
 ```html
 <html
@@ -486,14 +729,14 @@ var MyComponent = Vue.component('my-component')
 
 ```html
 <script>
-  // 创建Vue根实例
-  new Vue({
-    el: '#example'
-  })
-
   // 注册自定义组件
   Vue.component('my-component', {
     template: '<div>A custom component!</div>'
+  })
+
+  // 创建Vue根实例
+  new Vue({
+    el: '#example'
   })
 </script>
 
@@ -656,5 +899,95 @@ Vue.component('example', {
 
 > 父组件传递给子组件的属性可能会覆盖子组件本身的属性，从而对子组件造成破坏和污染。
 
+### 事件
+
+子组件可以通过Vue的自定义事件与父组件进行通信。
+
+每个Vue实例都实现了如下API，但是并不能直接通过$on监听子组件冒泡的事件，而必须使用v-on指令。
+
+1. `$on(eventName)` 监听事件
+2. `$emit(eventName)` 触发事件
+
+> `$on`和`$emit`并不是`addEventListener`和`dispatchEvent`的别名。
+
+```html
+<div id="counter-event-example">
+  <p>{{ total }}</p>
+  <button-counter v-on:increment="incrementTotal"></button-counter>
+  <button-counter v-on:increment="incrementTotal"></button-counter>
+</div>
+
+<script>
+  Vue.component('button-counter', {
+    template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+    data: function () {
+      return {
+        counter: 0
+      }
+    },
+    methods: {
+      // 子组件事件
+      incrementCounter: function () {
+        this.counter += 1
+        this.$emit('increment') //向父组件冒泡事件
+      }
+    },
+  })
+  new Vue({
+    el: '#counter-event-example',
+    data: {
+      total: 0
+    },
+    methods: {
+      // 父组件事件
+      incrementTotal: function () {
+        this.total += 1
+      }
+    }
+  })
+</script>
+```
+
+* `.native`修饰符
+
+开发人员也可以在组件的根元素上监听原生事件，这个时候需要借助到`.native`修饰符。
+
+```html
+<my-component v-on:click.native="doTheThing"></my-component>
+```
+
+* `.sync`修饰符
+
+Vue中的props本质是不能进行双向绑定的，以防止破坏单向数据流，造成多个子组件对父组件状态形成污染。但是生产环境下，props双向绑定的需求是切实存在的。因此，Vue将`.sync`修饰符封装为糖衣语法，父组件在子组件的props使用该修饰符后，父组件会为props自动绑定`v-on`事件，子组件则在监听到props变化时向父组件`$emit`更新事件，从而让父组件的props能够与子组件进行同步。
+
+```html
+<!-- 使用.sync修饰符 -->
+<comp :foo.sync="bar"></comp>
+
+<!-- 被自动扩展为如下形式，该组件的子组件会通过this.$emit('update:foo', newValue)显式触发更新事件 -->
+<comp :foo="bar" @update:foo="val => bar = val"></comp>
+```
+
+* 平行组件通信
+
+非父子关系的组件进行通信时，可以使用一个空的Vue实例作为中央事件总线。
+
+```javascript
+var bus = new Vue()
+// 触发组件A中的事件
+bus.$emit('id-selected', 1)
+// 在组件B监听事件
+bus.$on('id-selected', function (id) {
+  ... ... ...
+})
+```
+
+> 更好的方式是借助VueX或者Redux之类的flux状态管理库。
+
+### slot
 
 
+## 动画
+
+
+## 
