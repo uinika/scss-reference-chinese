@@ -358,38 +358,6 @@ Vue.directive('focus', {
 
 > 上面参数除`el`之外，其它参数都应该是只读的，尽量不要对其进行修改操作。
 
-### Vue.use(plugin)
-
-Vue通过插件来添加一些全局功能，Vue插件都会重写其`install()`方法，该方法第1个参数是`Vue构造器`, 第2个参数是可选的`option对象`:
-
-```javascript
-MyPlugin.install = function (Vue, options) {
-  // 1. 添加全局方法或属性
-  Vue.myGlobalMethod = function () {}
-
-  // 2. 添加全局资源
-  Vue.directive('my-directive', {
-    bind (el, binding, vnode, oldVnode) {}
-  })
-
-  // 3. 注入组件
-  Vue.mixin({
-    created: function () {}
-  })
-
-  // 4. 添加实例方法
-  Vue.prototype.$myMethod = function (methodOptions) {}
-}
-```
-
-通过全局方法`Vue.use()`使用指定插件，使用时可以传入一个选项对象。
-
-```javascript
-Vue.use(MyPlugin, {someOption: true})
-```
-
-> vue-router等插件检测到Vue是全局对象时会自动调用`Vue.use()`，如果在CommonJS模块环境中，则需要显式调用`Vue.use()`。
-
 ### Vue.filter(id, [definition])
 
 Vue可以通过定义过滤器，进行一些常见的文本格式化，可以用于mustache插值和v-bind表达式当中，使用时通过管道符`|`添加在JavaScript表达式尾部。
@@ -421,6 +389,38 @@ Vue可以通过定义过滤器，进行一些常见的文本格式化，可以�
 <span>{{ message | filterA | filterB }}</span>
 <span>{{ message | filterA('arg1', arg2) }}</span>
 ```
+
+### Vue.use(plugin)
+
+Vue通过插件来添加一些全局功能，Vue插件都会重写其`install()`方法，该方法第1个参数是`Vue构造器`, 第2个参数是可选的`option对象`:
+
+```javascript
+MyPlugin.install = function (Vue, options) {
+  // 1. 添加全局方法或属性
+  Vue.myGlobalMethod = function () {}
+
+  // 2. 添加全局资源
+  Vue.directive('my-directive', {
+    bind (el, binding, vnode, oldVnode) {}
+  })
+
+  // 3. 注入组件
+  Vue.mixin({
+    created: function () {}
+  })
+
+  // 4. 添加实例方法
+  Vue.prototype.$myMethod = function (methodOptions) {}
+}
+```
+
+通过全局方法`Vue.use()`使用指定插件，使用时可以传入一个选项对象。
+
+```javascript
+Vue.use(MyPlugin, {someOption: true})
+```
+
+> vue-router等插件检测到Vue是全局对象时会自动调用`Vue.use()`，如果在CommonJS模块环境中，则需要显式调用`Vue.use()`。
 
 
 ## 实例属性和方法
