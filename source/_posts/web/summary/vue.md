@@ -262,6 +262,22 @@ new Vue({
 })
 ```
 
+### 函数化组件functional
+
+即无状态（*没有data*）无实例（*没有this上下文*）的组件，渲染开销较小，且不会出现在`Vue devtools`当中。
+
+```javascript
+Vue.component('my-component', {
+  functional: true,
+  // 通过提供context参数为没有实例的函数组件提供上下文信息
+  render: function (createElement, context) {},
+  // Props可选
+  props: {}
+})
+```
+
+> 实际上，Vue当中的模板都被编译为了render()函数。
+
 
 ## Vue对象全局API
 
