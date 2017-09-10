@@ -1340,6 +1340,39 @@ demo.patch  test1.c  test1.c.orig  test2.c
 
 Linux在线参考手册。
 
+* `-k` 搜索关键词对应的手册概述并显示所有匹配结果。
+
+```bash
+➜  blog git:(master) ✗ man -k printf
+asprintf (3)         - print to allocated string
+dprintf (3)          - formatted output conversion
+fprintf (3)          - formatted output conversion
+fwprintf (3)         - formatted wide-character output conversion
+printf (1)           - format and print data
+printf (3)           - formatted output conversion
+snprintf (3)         - formatted output conversion
+sprintf (3)          - formatted output conversion
+swprintf (3)         - formatted wide-character output conversion
+vasprintf (3)        - print to allocated string
+vdprintf (3)         - formatted output conversion
+vfprintf (3)         - formatted output conversion
+vfwprintf (3)        - formatted wide-character output conversion
+vprintf (3)          - formatted output conversion
+vsnprintf (3)        - formatted output conversion
+vsprintf (3)         - formatted output conversion
+vswprintf (3)        - formatted wide-character output conversion
+vwprintf (3)         - formatted wide-character output conversion
+wprintf (3)          - formatted wide-character output conversion
+```
+
+* `-f` 等同于whatis，显示来自手册页的简短说明。
+
+```bash
+➜  blog git:(master) ✗ man -f printf
+printf (1)           - format and print data
+printf (3)           - formatted output conversion
+```
+
 ### 手册章节：
 
 1. 标准用户命令（*可执行程序或者Shell命令*）。
@@ -1352,6 +1385,11 @@ Linux在线参考手册。
 8. 系统管理命令(*通常只针对root用户*)。
 9. 内核例程。
 
+```bash
+➜  man 1 ls
+➜  man 3 printf
+```
+
 ### 手册操作：
 
 `空格键（向后翻屏）` `b（向前翻屏）`
@@ -1360,7 +1398,5 @@ Linux在线参考手册。
 `/关键字（向后查找）` `n：下一个`
 `q（退出）`
 
-```bash
-➜  man 1 ls
-➜  man 3 printf
-```
+> 在man中按`m键`，再按`字母a`可以标记一个a书签，浏览到页面其它部分，可以按`'`键和`字母a`回到a书签，退出man书签即失效。
+> 在man中输入感叹号`！`可以临时执行Linux命令，命令执行完成后按`回车键`即可返回man。
