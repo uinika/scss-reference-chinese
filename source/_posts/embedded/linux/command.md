@@ -61,7 +61,7 @@ drwxrwxr-x   3 hank hank   4096 8月  24 03:15 themes
 
 ## cd
 
-切换目录
+切换目录。
 
 - `/` 根目录
 - `.` 当前目录
@@ -78,7 +78,7 @@ drwxrwxr-x   3 hank hank   4096 8月  24 03:15 themes
 
 ## pwd
 
-查看当前路径
+查看当前路径。
 
 ```bash
 ➜  blog git:(master) ✗ pwd
@@ -87,7 +87,7 @@ drwxrwxr-x   3 hank hank   4096 8月  24 03:15 themes
 
 ## mkdir
 
-创建目录
+创建目录。
 
 - `-m` 创建目录的同时指定访问权限
 - `-p` 如果所创建目录的父目录不存在，则创建父目录
@@ -98,7 +98,7 @@ drwxrwxr-x   3 hank hank   4096 8月  24 03:15 themes
 
 ## rmdir
 
-删除空目录
+删除空目录。
 
 - `-p` 如果删除目录的父目录也为空，则删除父目录
 
@@ -114,7 +114,7 @@ sudo rmdir /workspace/linux
 
 ### rm
 
-删除目录和文件
+删除目录和文件。
 
 - `-f` 强制删除，无需用户确认
 - `-i` 删除前需要确认
@@ -159,7 +159,7 @@ rm：是否删除普通空文件 'file3'？ y
 
 ## touch
 
-创建空文件
+创建空文件。
 
 ```bash
 ➜  linux touch file1 file2 file3
@@ -172,11 +172,7 @@ rm：是否删除普通空文件 'file3'？ y
 
 ## echo
 
-输出一行文本
-
-Linux命令行中的输出重定向
-- `>` 输出到一个新文件
-- `>>` 输出到现有文件末尾，如果文件不存在则创建新文件
+输出一行文本。
 
 ```bash
 ➜  linux echo "Hello Hank" >> file
@@ -184,9 +180,14 @@ Linux命令行中的输出重定向
 Hello Hank
 ```
 
+> **输出重定向**是指将命令的标准输出重定向到指定文件中去。
+
+- `>` 输出到一个新文件。
+- `>>` 输出到现有文件末尾，如果文件不存在则创建新文件。
+
 ## file
 
-查看文件类型，以及二进制文件的详细信息（包括处理器体系结构）
+查看文件类型，以及二进制文件的详细信息（*包括处理器体系结构*）。
 
 ```bash
 ➜  blog git:(master) ✗ file *
@@ -205,7 +206,7 @@ themes:            directory
 
 ## more / less
 
-浏览文本文件，空格翻页，q退出
+浏览文本文件，*空格*翻页，*q*退出。
 
 ```bash
 ➜  blog git:(master) ✗ more index.html 
@@ -1264,9 +1265,61 @@ Size:       0
 Compressed: 150
 ```
 
+## df
 
+对文件进行逐行比较。
 
-## df / patch
+* `-c` 输出被拷贝的上下文和差异标记。
+
+```bash
+➜  diff -c test1.c test2.c
+*** test1.c	2017-09-11 04:12:28.000000000 +0800
+--- test2.c	2017-09-11 04:12:20.000000000 +0800
+***************
+*** 1,5 ****
+  #include <stdio.h>
+  
+  void main() {
+!   printf("Hello Hank!");
+  };
+\ 文件尾没有 newline 字符
+--- 1,5 ----
+  #include <stdio.h>
+  
+  void main() {
+!   printf("Hello Uinika!");
+  };
+\ 文件尾没有 newline 字符
+```
+
+* `-u` 在统一的上下文中输出差异内容。
+
+```bash
+➜  diff -u test1.c test2.c
+--- test1.c	2017-09-11 04:12:28.000000000 +0800
++++ test2.c	2017-09-11 04:12:20.000000000 +0800
+@@ -1,5 +1,5 @@
+ #include <stdio.h>
+ 
+ void main() {
+-  printf("Hello Hank!");
++  printf("Hello Uinika!");
+ };
+\ 文件尾没有 newline 字符
+```
+
+* `缺省参数` 显示前一个文件如何转换为后一个文件，常用于输出patch补丁。
+
+```bash
+➜  diff test1.c test2.c
+4c4
+<   printf("Hello Hank!");
+---
+>   printf("Hello Uinika!");
+```
+
+## patch
+
 
 
 ## man
