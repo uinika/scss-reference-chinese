@@ -6,6 +6,33 @@ categories: Note
 
 将Linux作为开发环境编写代码已经3年有余，在配置了大量**快捷键**、**辅助工具**、**开源字体**之后，日常开发已经完全离不开Linux，本文基于最新的**Linux mint 18.2**发行版，总结了自己在Linux下进行日常开发所经常使用到的命令。
 
+## tree
+
+以树形格式列出指定目录的内容，可以用来方便的在命令行中展示项目结构。
+
+* `-L` 需要显示的最大目录树深度。
+* `--dirsfirst` 优先显示目录。
+
+```
+➜  aves git:(master) tree -L 1 server  sources --dirsfirst
+server
+├── common
+├── dashboard
+├── login
+├── system
+└── app.js
+sources
+├── assets
+├── common
+├── dashboard
+├── demo
+├── layout
+├── login
+├── app.js
+└── index.html
+```
+<!-- more -->
+
 ## ls
 
 查看当前目录下的文件。
@@ -31,8 +58,6 @@ drwxrwxr-x   2 hank hank   4096 8月  24 03:15 scaffolds
 drwxrwxr-x   6 hank hank   4096 8月  24 03:15 source
 drwxrwxr-x   3 hank hank   4096 8月  24 03:15 themes
 ```
-
-<!-- more -->
 
 ## cd
 
@@ -1028,10 +1053,10 @@ drwxrwxr-x 2 hank hank  4096 9月  10 16:14 bundle
 
 ### 解压-xvf系列参数
 
-* `-xvf` 解包指定目录的文件。
-* `-zxvf` 打包后压缩为gzip格式，速度快压缩率低。
-* `-jxvf` 打包后压缩为bzip2格式，速度和压缩率适中。
-* `-Jxvf` 打包后压缩为xz格式，压缩率最高，但是速度较慢。
+* `-xvf` 解包tar格式文件到当前目录。
+* `-zxvf` 解包并解压缩gzip格式文件。
+* `-jxvf` 解包并解压缩解压bzip2格式文件。
+* `-Jxvf` 解包并解压缩解压xz格式文件。
 
 ```bash
 ➜  tar -xvf bundle.tar
@@ -1065,6 +1090,33 @@ drwxrwxr-x 2 hank hank  4096 9月  10 16:14 bundle
 ➜  ls
 bundle  bundle.tar  bundle.tar.bz2  bundle.tar.gz  bundle.tar.xz
 ```
+
+### 解压-C参数
+
+使用解压参数后添加`-C 目录`可以将文件解压至指定目录。
+
+```bash
+➜  ls
+bundle.tar.xz  test
+➜  tar -Jxvf bundle.tar.xz -C ./test
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tree
+├── bundle.tar.xz
+└── test
+    └── bundle
+        ├── file1
+        ├── file2
+        ├── file3
+        ├── file4
+        └── file5
+```
+
+> 指定的目录必须已经存在。
 
 ## zip / 7z / rar
 
