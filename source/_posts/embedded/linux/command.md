@@ -380,12 +380,34 @@ lrwxrwxrwx 1 hank hank 4 8月  31 02:22 shortcut -> file
 -rwxrwxrwx 1 root root 148100671 7月   1 15:05 config.atom.zip
 ```
 
-## ssh
+## ftp
 
-OpenSSH的SSH客户端，用于登陆远程主机并执行命令行。
+Internet文件传输协议，默认端口为**21**，因为存在诸多性能和安全性问题，目前正在逐步放弃使用。
 
 ```
-➜  ssh root@192.168.1.2  
+➜  ftp ftp1.linuxidc.com
+Connected to ftp1.linuxidc.com.
+220-BBSFTP Pro- [http://redcheek.net/bbsftp]
+220 Serv-U FTP Server v6.4 for WinSock ready...
+Name (ftp1.linuxidc.com:hank): 
+```
+
+> 新版本的Chrome已经不再支持`ftp://`作为前缀的资源路径。
+
+## ssh
+
+OpenSSH的SSH客户端实现，用于登陆远程主机并执行命令行，默认端口**22**，是一种加密的传输方式。
+
+```
+➜  ssh root@192.168.1.2
+```
+
+## telnet
+
+TELNET协议的用户接口，属于另外一种登陆远程主机的方式，默认端口为**23**，采用非加密的明文传输。
+
+```
+➜  telnet 192.168.1.2
 ```
 
 ## netstat
@@ -1015,40 +1037,40 @@ Linux打包（*将多个文件合并为大文件*）或压缩（*将大文件压
 * `-Jcvf` 打包后压缩为xz格式，压缩率最高，但是速度较慢。
 
 ```bash
-➜  tar -cvf bundle.tar ./bundle
-./bundle/
-./bundle/file1
-./bundle/file4
-./bundle/file5
-./bundle/file2
-./bundle/file3
-➜  tar -zcvf bundle.tar.gz ./bundle
-./bundle/
-./bundle/file1
-./bundle/file4
-./bundle/file5
-./bundle/file2
-./bundle/file3
-➜  tar -jcvf bundle.tar.bz2 ./bundle
-./bundle/
-./bundle/file1
-./bundle/file4
-./bundle/file5
-./bundle/file2
-./bundle/file3
-➜  tar -Jcvf bundle.tar.xz ./bundle
-./bundle/
-./bundle/file1
-./bundle/file4
-./bundle/file5
-./bundle/file2
-./bundle/file3
+➜  tar -cvf bundle.tar ./files
+./files/
+./files/file1
+./files/file4
+./files/file5
+./files/file2
+./files/file3
+➜  tar -zcvf bundle.tar.gz ./files
+./files/
+./files/file1
+./files/file4
+./files/file5
+./files/file2
+./files/file3
+➜  tar -jcvf bundle.tar.bz2 ./files
+./files/
+./files/file1
+./files/file4
+./files/file5
+./files/file2
+./files/file3
+➜  tar -Jcvf bundle.tar.xz ./files
+./files/
+./files/file1
+./files/file4
+./files/file5
+./files/file2
+./files/file3
 ➜  ls -al
-drwxrwxr-x 2 hank hank  4096 9月  10 16:14 bundle
--rw-rw-r-- 1 hank hank 10240 9月  10 18:06 bundle.tar
--rw-rw-r-- 1 hank hank   200 9月  10 18:06 bundle.tar.bz2
--rw-rw-r-- 1 hank hank   193 9月  10 18:06 bundle.tar.gz
--rw-rw-r-- 1 hank hank   224 9月  10 18:06 bundle.tar.xz
+-rw-rw-r-- 1 hank hank 10240 9月  10 21:27 bundle.tar
+-rw-rw-r-- 1 hank hank   195 9月  10 21:27 bundle.tar.bz2
+-rw-rw-r-- 1 hank hank   189 9月  10 21:27 bundle.tar.gz
+-rw-rw-r-- 1 hank hank   216 9月  10 21:27 bundle.tar.xz
+drwxrwxr-x 2 hank hank  4096 9月  10 19:21 files
 ```
 
 ### 解压-xvf系列参数
@@ -1201,6 +1223,46 @@ All OK
 ```
 
 ## 7zr
+
+即Windows中的开源高压缩率工具**7z**。
+
+- `a` 添加文件至压缩包。
+
+```bash
+➜  7zr a test
+
+7-Zip (A) [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
+p7zip Version 9.20 (locale=zh_CN.UTF-8,Utf16=on,HugeFiles=on,4 CPUs)
+Scanning
+Updating archive test.7z
+Compressing  test.7z
+Everything is Ok
+```
+
+- `x` 解压到完整路径。
+
+```bash
+➜  7zr x test.7z
+
+7-Zip (A) [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
+p7zip Version 9.20 (locale=zh_CN.UTF-8,Utf16=on,HugeFiles=on,4 CPUs)
+
+Processing archive: test.7z
+
+Extracting  test/file1
+Extracting  test/file2
+Extracting  test/file3
+Extracting  test/file4
+Extracting  test/file5
+Extracting  test
+
+Everything is Ok
+
+Folders: 1
+Files: 5
+Size:       0
+Compressed: 150
+```
 
 
 
