@@ -8,7 +8,7 @@ categories: Note
 
 ## tree
 
-以树形格式列出指定目录的内容，可以用来方便的在命令行中展示项目结构。
+以树形格式列出指定目录的内容，用来方便的在命令行中展示项目结构。
 
 * `-L` 需要显示的最大目录树深度。
 * `--dirsfirst` 优先显示目录。
@@ -1118,13 +1118,89 @@ bundle.tar.xz  test
 
 > 指定的目录必须已经存在。
 
-## zip / 7z / rar
+## zip / unzip
+
+压缩或者解压Windows下常用的**zip格式**压缩文件。
 
 ### zip
 
+压缩文件成为zip格式。
+
+```bash
+➜  zip bundle.zip ./bundle 
+  adding: bundle/ (stored 0%)
+➜  ls
+bundle  bundle.zip
+```
+
+### unzip
+
+解压zip格式的压缩文件。
+
+* `-d` 解压到指定目录。
+
+```bash
+➜  ls
+bundle.zip
+➜  unzip bundle.zip -d ./test
+Archive:  bundle.zip
+   creating: ./test/bundle/
+➜  tree
+├── bundle.zip
+└── test
+    └── bundle
+```
+
+## rar / unrar
+
+压缩或者解压Windows下常用的**rar格式**压缩文件。
+
 ### rar
 
-### 7z
+压缩指定文件为rar格式。
+
+* `a` 增加指定文件到rar压缩包当中。
+
+```bash
+➜  rar a test.rar ./bundle 
+
+RAR 5.30 beta 2   Copyright (c) 1993-2015 Alexander Roshal   4 Aug 2015
+Trial version             Type RAR -? for help
+Evaluation copy. Please register.
+Creating archive test.rar
+
+Adding    ./bundle/file1                                              OK 
+Adding    ./bundle/file4                                              OK 
+Adding    ./bundle/file5                                              OK 
+Adding    ./bundle/file2                                              OK 
+Adding    ./bundle/file3                                              OK 
+Adding    ./bundle                                                    0%
+Done
+➜  ls
+bundle  test.rar
+```
+
+### unrar
+
+解压rar格式的压缩包。
+
+* `e` 解压文件至当前目录。
+
+```bash
+➜  unrar e test.rar ./demo 
+
+UNRAR 5.30 beta 2 freeware      Copyright (c) 1993-2015 Alexander Roshal
+Extracting from test.rar
+
+Extracting  ./demo/file1                                              OK 
+Extracting  ./demo/file4                                              OK 
+Extracting  ./demo/file5                                              OK 
+Extracting  ./demo/file2                                              OK 
+Extracting  ./demo/file3                                              OK 
+All OK
+```
+
+## 7zr
 
 
 
