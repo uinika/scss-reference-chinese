@@ -978,16 +978,95 @@ hank     11203  8236  0 02:02 pts/1    00:00:00 grep --color=auto --exclude-dir=
 no crontab for hank
 ```
 
-## tar / 7z / rar / zip / gzip
+## tar
 
-打包（*将多个文件合并为大文件*）压缩（*将大文件压缩为体积更小的文件*）相关的命令。
+Linux打包（*将多个文件合并为大文件*）或压缩（*将大文件压缩为体积更小的文件*）文件的命令。
 
-### tar
+### 压缩-cvf系列参数
 
-将文件
+* `-cvf` 打包文件，需要压缩较多数量的文件时，将文件打包再进行压缩会更加高效。
+* `-zcvf` 打包后压缩为gzip格式，速度快压缩率低。
+* `-jcvf` 打包后压缩为bzip2格式，速度和压缩率适中。
+* `-Jcvf` 打包后压缩为xz格式，压缩率最高，但是速度较慢。
 
-### gzip
+```bash
+➜  tar -cvf bundle.tar ./bundle
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -zcvf bundle.tar.gz ./bundle
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -jcvf bundle.tar.bz2 ./bundle
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -Jcvf bundle.tar.xz ./bundle
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  ls -al
+drwxrwxr-x 2 hank hank  4096 9月  10 16:14 bundle
+-rw-rw-r-- 1 hank hank 10240 9月  10 18:06 bundle.tar
+-rw-rw-r-- 1 hank hank   200 9月  10 18:06 bundle.tar.bz2
+-rw-rw-r-- 1 hank hank   193 9月  10 18:06 bundle.tar.gz
+-rw-rw-r-- 1 hank hank   224 9月  10 18:06 bundle.tar.xz
+```
 
+### 解压-xvf系列参数
+
+* `-xvf` 解包指定目录的文件。
+* `-zxvf` 打包后压缩为gzip格式，速度快压缩率低。
+* `-jxvf` 打包后压缩为bzip2格式，速度和压缩率适中。
+* `-Jxvf` 打包后压缩为xz格式，压缩率最高，但是速度较慢。
+
+```bash
+➜  tar -xvf bundle.tar
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -zxvf bundle.tar.gz
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -jxvf bundle.tar.bz2
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  tar -Jxvf bundle.tar.xz
+./bundle/
+./bundle/file1
+./bundle/file4
+./bundle/file5
+./bundle/file2
+./bundle/file3
+➜  ls
+bundle  bundle.tar  bundle.tar.bz2  bundle.tar.gz  bundle.tar.xz
+```
+
+## zip / 7z / rar
 
 ### zip
 
