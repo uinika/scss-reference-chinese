@@ -4,9 +4,9 @@ tags: Web
 categories: Summary
 ---
 
-![](jquery/logo.png)
-
 伴随`Vue`、`Angular`、`React`等编译式前端框架的崛起，前端开发人员逐渐从繁琐的DOM操作当中解脱出来。但是在项目实践过程当中，依然有诸多问题需要通过直接与DOM对话来解决，虽然现代化浏览器已经支持等HTML5新特性，不过为了屏蔽各种浏览器原生API接口的差异化，最终依然需要借助`jQuery`来实现DOM操作。所以，`jQuery`这款诞生于2006年的库，依然在现代化前端开发当中扮演着重要角色，本文结合笔者近几年的实践经验，总结了使用`jQuery`过程当中容易被忽略的一些问题。
+
+![](jquery/logo.png)
 
 ## jQuery对象和DOM对象
 
