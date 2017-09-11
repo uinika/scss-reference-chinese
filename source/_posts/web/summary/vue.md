@@ -1002,8 +1002,155 @@ bus.$on('id-selected', function (id) {
 
 ### slot
 
+为了让组件可以组合，需要混合父组件的内容与子组件模板，此时可以在子组件中使用`<slot>`作为父组件内容的插槽。
+
+> 父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译。
+
+
+#### 匿名插槽
+
+当子组件只有一个没有属性的`<slot>`时，父组件全部内容片段将插入到插槽所在的DOM位置，并替换插槽标签本身。
+
+```html
+<!-- 子组件my-component的模板 -->
+<div>
+  <h2>Child</h2>
+  <slot>
+    父组件没有需要插入的内容时显示
+  </slot>
+</div>
+
+<!-- 父组件模板中使用my-component -->
+<div>
+  <h1>Parent</h1>
+  <child>
+    <p>Content 1</p>
+    <p>Content 2</p>
+  </child>
+</div>
+
+<!-- 渲染结果 -->
+<div>
+  <h1>Parent</h1>
+  <div>
+    <h2>Child</h2>
+    <p>Content 1</p>
+    <p>Content 2</p>
+  </div>
+</div>
+```
+
+> `<slot>`标签中的内容会在子组件作用域内编译，在父组件没有需要插入的内容时才会显示。
+
+#### 具名插槽
+
+`<slot>`元素可以使用`name`属性来配置如何分发内容。
+
+```html
+<!-- 子组件 -->
+<div id="app">
+  <header>
+    <slot name="header"></slot>
+  </header>
+  <main>
+    <slot></slot>
+  </main>
+  <footer>
+    <slot name="footer"></slot>
+  </footer>
+</div>
+
+<!-- 父组件 -->
+<app>
+  <div slot="header">Header</div>
+  <p>Content 1</p>
+  <p>Content 2</p>
+  <div slot="footer">Footer</div>
+</app>
+
+<!-- 渲染结果 -->
+<div id="app">
+  <header>
+    <div>Header</div>
+  </header>
+  <main>
+    <p>Content 1</p>
+    <p>Content 2</p>
+  </main>
+  <footer>
+    <p>Footer</p>
+  </footer>
+</div>
+```
+
+> 匿名slot会作为没有匹配内容的父组件片段的插槽。
+
+#### 作用域插槽
+
+子组件通过`props`传递数据给`<slot>`插槽，父组件使用带有`scope`属性的`<template>`来表示表示当前作用域插槽的模板，`scope`值对应的变量会接收子组件传递来的props对象。
+
+```html
+<!-- 子组件通过props传递数据给插槽 -->
+<div class="child">
+  <slot text="hello from child"></slot>
+</div>
+
+<!-- 父组件使用带有scope属性的<template> -->
+<div class="parent">
+  <child>
+    <template scope="props">
+      <span>hello from parent</span>
+      <span>{{ props.text }}</span>
+    </template>
+  </child>
+</div>
+
+<!-- 渲染结果 -->
+<div class="parent">
+  <div class="child">
+    <span>hello from parent</span>
+    <span>hello from child</span>
+  </div>
+</div>
+```
+
+### 动态组件
+
+通过使用`<component>`元素并动态绑定其`is`属性，可以让多个组件使用相同的Vue对象挂载点，并实现动态切换。
+
+```html
+<script>
+var vm = new Vue({
+  el: '#example',
+  data: {
+    currentView: 'home'
+  },
+  components: {
+    home: { /* ... */ },
+    posts: { /* ... */ },
+    archive: { /* ... */ }
+  }
+})
+</script>
+
+<component v-bind:is="currentView">
+  <!-- 组件在vm.currentview变化时改变！ -->
+</component>
+```
+
+如果需要将切换的组件保留在内存，保留其状态并避免重新渲染，可以使用Vue内置的`keep-alive`指令。
+
+```html
+<keep-alive>
+  <component :is="currentView">
+    <!-- 非活动组件将被缓存！ -->
+  </component>
+</keep-alive>
+```
 
 ## 动画
+
+
 
 
 ## 
