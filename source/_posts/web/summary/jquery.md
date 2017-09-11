@@ -286,23 +286,67 @@ $(function () {
 
 ## 延迟对象$.Deferred()
 
-Deferred()是一个工厂函数，用来建立新的deferred对象（deferred [dɪ'fɜ:d] adj.延缓的），该对象上可以注册多个回调函数队列，这些函数的执行依赖于任意同步或者异步函数的执行结果（`sucess`或`failure`）。该对象可以视为jQuery版本的Promise实现，可以更加优雅的解决JavaScript回调嵌套的问题。
+`Deferred()`是一个工厂函数，用来建立新的deferred对象（*deferred [dɪ'fɜ:d] adj.延缓的*），该对象上可以注册多个回调函数队列，这些函数的执行依赖于任意同步或者异步函数的执行结果（`sucess`或`failure`）。该对象可以视为jQuery版本的Promise实现，可以更加优雅的解决JavaScript回调嵌套的问题。
 
 >  jQuery的Deferred对象是基于[CommonJS Promises/A](http://wiki.commonjs.org/wiki/Promises/A)规范设计的。
 
-- deferred.notify()：触发Deferred上progress相关的回调函数。
+- `deferred.notify()` 触发Deferred上*progress*相关的回调函数。
 
-- deferred.resolve()：Resolve一个Deferred对象，并触发resolve状态相关的回调函数。
+- `deferred.resolve()` Resolve一个Deferred对象，并触发*resolve*状态相关的回调函数。
 
-- deferred.reject()：Reject一个Deferred对象，并触发reject状态相关的回调函数。
+- `deferred.reject()` Reject一个Deferred对象，并触发*reject*状态相关的回调函数。
 
-- deferred.progress()：该函数在Deferred对象生成progress通知时被调用。
+- `deferred.progress()` 该函数在Deferred对象生成*progress*通知时被调用。
 
-- deferred.done()：该函数在Deferred对象被resolve时调用。
+- `deferred.done()` 该函数在Deferred对象被*resolve*时调用。
 
-- deferred.fail()：该函数在Deferred对象被rejecte时调用。
+- `deferred.fail()` 该函数在Deferred对象被*rejecte*时调用。
 
-- deferred.then()：Deferred对象resolved、rejected、progress时，都会被触发的回调函数。
+- `deferred.catch()` 该函数在Deferred对象被*rejecte*时调用。
+
+- `deferred.then()` Deferred对象*resolved*、*rejected*、*progress*时，都会被触发的回调函数。
+
+- `deferred.promise()` 返回一个延迟的Promise对象。
+
+- `&.when()` 提供一种基于零个或多个Thenable对象执行回调函数的方式，其参数是一个代表异步事件的Deferred对象。
+
+- `$("selector").promise()` 返回一个Promise对象去观察所有绑定到集合、队列的确定类型行为是否已经完成。
+
+```javascript
+var deferred = $.Deferred();
+
+var demo = function (deferred) {
+  var task = function () {
+    deferred.resolve();
+    // deferred.notify();
+    // deferred.reject();
+  };
+  setTimeout(task, 2000);
+  return deferred;
+};
+
+$.when(demo(deferred))
+  .progress(function () {
+    console.info("progress");
+  })
+  .then(function () {
+    console.info("then");
+  })
+  .done(function () {
+    console.info("done");
+  })
+  .fail(function () {
+    console.info("fail");
+  })
+  .catch(function () {
+    console.info("catch");
+  });
+
+/*
+then
+done
+*/
+```
 
 > `$.ajax()`返回的就是一个deferred对象。
 
