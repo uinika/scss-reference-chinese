@@ -343,6 +343,7 @@ $.when(demo(deferred))
   });
 
 /*
+输出结果：
 then
 done
 */
