@@ -372,8 +372,28 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
 ## Filter
 
-避免使用filters扫描一个复杂对象的所有属性，应该用filters来筛选选择的属性，避免带来糟糕的性能问题。
+过滤输出给用户的表达式值，可用于`view`、`controller`、`service`。
 
+```javascript
+(function () {
+
+  angular.module("app.common")
+    .filter("trim", trim);
+
+  trim.$inject = ["$sce"];
+
+  function trim($sce) {
+    return function (input) {
+      if (typeof input === "string" && input)
+        input.replace(/\s/g, "")
+      return out;
+    }
+  };
+
+})();
+```
+
+> 最佳实践是只通过filter筛选指定的对象属性，而非扫描对象本身，避免带来糟糕的性能问题。
 
 ## 权限控制
 
