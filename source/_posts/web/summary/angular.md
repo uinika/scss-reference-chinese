@@ -36,7 +36,7 @@ categories: Summary
 
 ![](angular/structure-module.png "模块结构")
 
-## Index
+## Index索引页
 
 一个非常传统的index.html，但是内置了URL的配置模块，方便实施人员根据现场服务环境，对后端URL地址进行修改。但更好的实践是单独将其作为一个config.js文件外部引入，代价是需要调整打包策略，避免gulp对config.js进行代码混淆和压缩操作。
 
@@ -100,7 +100,7 @@ categories: Summary
 </html>
 ```
 
-## App
+## App启动点
 
 该文件是整个项目的程序入口点，gulp自动化压缩后会作为bundle.js文件最顶部的一段代码，因此这里开启Javascript严格模式后全局有效。每个js文件都使用立即调用函数表达式**IIFE**（*Immediately-Invoked Function Expression*）进行封装，防止局部变量泄露到全局。`run`和`config`代码块编写为函数名称进行引用，从而避免JS函数过度嵌套后，影响代码的可读性。
 
@@ -131,7 +131,7 @@ categories: Summary
 })();
 ```
 
-## Module
+## Module模块
 
 为了更直观的体现**Angular模块化**的概念，会将如下代码新建为单独的`a.module.js`文件，主要用于模块的依赖声明，以及嵌套路由配置。其中，路由使用了[ui-router](https://github.com/angular-ui/ui-router/wiki)提供的方案，父级路由使用`abstract`属性和`template:"<ui-view/>"`来实现与子路由的松耦合。
 
@@ -178,7 +178,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-## Controller
+## Controller控制器
 
 控制器中，通过`$inject`手动实现依赖注入，避免代码压缩合并后出现依赖丢失的情况。将`this`指针赋值给`vm`对象（view model），其它方法和属性都以子对象的形式挂载到vm下面，使其更加整洁和面向对象。
 
@@ -226,7 +226,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-## Service
+## Service服务
 
 主要用来放置数据操作和数据交互的逻辑，例如：*负责XHR请求、本地存储、内存存储和其它任何数据操作*。最后，Service通过返回一个对象来组织这些服务。通常情况下，项目每个模块只拥有一个controller，但是可以存在多个service，Angular的设计理念就是寄希望通过service来完成业务的复用，这一点主要继承了传统MVC的分层思想。
 
@@ -261,7 +261,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-## Directive
+## Directive指令
 
 指令的命名需要使用一个短小、唯一、具有描述性的前缀（*比例企业名称*），可以通过在指令配置对象中使用`controllerAs`属性，取得与控制器中vm同样的用法，
 
@@ -370,7 +370,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 })();
 ```
 
-## Filter
+## Filter过滤器
 
 过滤输出给用户的表达式值，可用于`view`、`controller`、`service`。
 
@@ -395,7 +395,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
 > 最佳实践是只通过filter筛选指定的对象属性，而非扫描对象本身，避免带来糟糕的性能问题。
 
-## 权限控制
+## JWT权限控制
 
 为了适配移动端浏览器，采用JWT（*JSON Web Token，一种JSON风格的轻量级的授权和身份认证规范*）作为前后端交互时的权限控制协议。主要是考虑前后端分离之后，在不借助cookie和session的场景下（*部分移动端浏览器未实现相关特性*），使浏览器端发起的每个HTTP请求都能正确携带权限信息，以便于服务器端进行有效行拦截。
 
@@ -484,39 +484,109 @@ Run和Config分别是Aangular模块加载的2个生命周期：
 1. **Config**：首先执行的是Config阶段，该阶段发生在provider注册和配置的时候，主要用于连接并注册好所有数据源，因此**provider**、**constant**都可以注入到Config代码块中，但是其它不确定是否初始化完成的服务不能注入进来。
 2. **run**：其次开始进入Run阶段，该阶段发生在injector创建完成之后，主要用于启动应用，是Angular中最接近C语言main方法的概念。为了避免在模块启动之后再进行配置操作，所以只允许注入**service**、**value**、**constant**。
 
+## $location的配置
+
+`$location`服务是Angular对浏览器原生`window.location`的封装，可以通过`$locationProvider`进行配置。
+
+```javascript
+$locationProvider.html5Mode(true).hashPrefix("*");
+```
+
+- **Hashbang模式**：`http://localhost:5008/#!/login?user=hank`
+- **HTML5模式**：`http://localhost:5008/login?user=hank`
+
+> Hashbang是指由`#!`构成的字符串，类UNIX系统会将Hashbang后内容作为解释器指令进行解析。
+
+## 跨控制器的事件交互
+
+当Angular当中同一张页面存在多个控制器时（*例如使用了嵌套路由*），可以通过scope的事件机制进行通信。
+
+- `$scope.$on(name, listener);` 监听给定类型的事件。
+- `$scope.$emit(name, args);` 向**上**派发事件，可以携带参数。
+- `$scope.$broadcast(name, args);` 向**下**派发事件，可以携带参数。
+
+```javascript
+// 事件广播
+$scope.$broadcast("SEARCH", vm.search.input);
+
+// 监听事件
+function activate() {
+  $scope.$on("SEARCH", function (event, data) {
+    vm.menu.fetch();
+  });
+};
+```
+
+> 事件相关的处理（*即`$on()`方法*），可以统一写在每个控制器的初始化方法`activate()`当中。
+
+## Angular的HTML模板编译步骤
+
+Angular中HTML模板的编译会经历下面3个步骤：
+
+1. $compile遍历DOM查找匹配的Angular指令。
+
+2. 当DOM上的所有指令被识别，`$compile`会按其`priority`属性的优先级进行排序，接下来指令的`compile`函数被执行（*每个compile函数都拥有1次修改DOM的机会*），每一条指令的`compile`函数都将返回一个`link`函数，这些函数最后会被合并到一个统一的链接函数当中。
+
+3. `$compile`通过这个被合并的链接函数，依次调用每个指令的`link`函数，注册监听器到HTML元素，以及在`scope`中设置`$watch`，最后完成`scope`和`template`的双向绑定。
+
+![](angular/two-way-data-binding.png)
+
+```javascript
+var $compile = ...; // injected into your code
+var scope = ...;
+var parent = ...; // DOM element where the compiled template can be appended
+
+var html = '<div ng-bind="exp"></div>';
+
+// Step 1: parse HTML into DOM element
+var template = angular.element(html);
+
+// Step 2: compile the template
+var linkFn = $compile(template);
+
+// Step 3: link the compiled template with the scope.
+var element = linkFn(scope);
+
+// Step 4: Append to DOM (optional)
+parent.appendChild(element);
+```
+
+> 上面是Angular官方文档中非常具有信息量的一段demo代码。
+
+## 指令complie()和link()区别
+
+将compile和link分为两个阶段主要是出于性能的考虑，让多次Model的变化只引发一次DOM结构的改变。
+
+- `compile()`：对HTML模板自身进行转换，仅在编译阶段执行一次。
+
+```javascript
+function compile(tElement, tAttrs, transclude) {
+  return {
+    pre: function preLink(scope, iElement, iAttrs, controller) { ... },
+    post: function postLink(scope, iElement, iAttrs, controller) { ... }
+  }
+  // or
+  return function postLink( ... ) { ... }
+}
+```
+
+- `link()`: 在View和Model之间进行动态关联，将会被执行多次，只能在未定义`compile`的场景下使用。
+
+```javascript
+function link(scope, iElement, iAttrs, controller, transcludeFn) {
+  link: {
+    pre: function preLink(scope, iElement, iAttrs, controller) { ... },
+    post: function postLink(scope, iElement, iAttrs, controller) { ... }
+  }
+  // or
+  link: function postLink( ... ) { ... }
+}
+```
+
 ## 如何理解Provider
 
 ## Factory和Service的区别
 
-## 脏数据检查机制
-
-## 跨控制器的事件交互
-
-$on $emit $broadcast
-
-## 指令的生命周期
-
-complie和link
-
-## $location的配置
-
-Hashbang模式
-HTML5模式
-
 ## 不可忽视的ngSanitize模块
 
-Filter
-Name	Description
-linky	
-Finds links in text input and turns them into html links. Supports http/https/ftp/mailto and plain email address links.
-
-Service
-Name	Description
-$sanitize	
-Sanitizes an html string by stripping all potentially dangerous tokens.
-
-Provider
-Name	Description
-$sanitizeProvider	
-Creates and configures $sanitize instance.
-
+## 脏数据检查机制
