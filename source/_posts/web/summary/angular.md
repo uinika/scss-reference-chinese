@@ -781,6 +781,40 @@ $q(function(resolve, reject) {
 });
 ```
 
-## 不容忽视的ngSanitize模块
+> 出于team逐步向ES6标准演进的考虑，这里推荐使用ES6原生风格的Promise写法。
 
+## 不容忽视的$sce服务
 
+$sce用于在Angular中提供严格的上下文转义（*SCE, Strict Contextual Escaping*）服务，从而避免XSS（*跨站脚本攻击*）, clickjacking（*点击劫持*）等安全性问题，$sce服务目前支持的上下文类型有5种。
+
+```javascript
+angular.module("customControl", ["ngSanitize"]).
+directive("contenteditable", ["$sce", function($sce) {
+  return {
+    restrict: "A",
+    require: "?ngModel",
+    link: function(scope, element, attrs, ngModel) {
+      if (!ngModel) return;
+
+      ngModel.$render = function() {
+        element.html($sce.getTrustedHtml(ngModel.$viewValue || ""));
+      };
+
+      element.on("blur keyup change", function() {
+        scope.$evalAsync(read);
+      });
+      read();
+
+      function read() {
+        var html = element.html();
+        if (attrs.stripBr && html === "<br>") {
+          html = "";
+        }
+        ngModel.$setViewValue(html);
+      }
+    }
+  };
+}]);
+```
+
+> 凡是项目中用来展示用户输入内容的位置，都需要通过$sce.getTrustedHtml()方法进行相应处理。
