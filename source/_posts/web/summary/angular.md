@@ -22,7 +22,7 @@ categories: Summary
 
 **虽然2016年上半年Angluar2已经展露头角，但是从技术成熟度的角度考量，还是最终决定使用Angular1.x。**
 
-截至到目前为止，前端小组的同学已经使用Angular近1年半的时间，其间经历了5个项目、1款产品的考验，积累了许多实践经验，仅在这里做一些总结和分享。
+截至到目前为止，前端小组的同学已经使用Angular近1年半的时间，其间经历了5个项目、2款产品的考验，积累了许多实践经验，仅在这里做一些总结和分享。
 
 > 2017年，Webpack2、Vue2、Angular4的相继发布，编译式的前端开发已经成为大势所趋，且单页面场景下Angular在性能和组件化解耦方面暴露出非常多不足，目前勤智的前端小组正在全面转向Vue2。
 
@@ -591,16 +591,25 @@ Angular增强了浏览器原生的事件循环（*event loop*）机制，将事�
 
 ![](angular/event-loop.png "事件循环")
 
-1. 调用`scope.$apply(stimulusFn)`进入Angular可执行上下文，作为参数的stimulusFn函数当中就是需要运行在Angular可执行上下文里的代码。
-2. stimulusFn()函数里通常会修改应用的状态。
-3. Angular进入$digest循环，$digest循环又分为$evalAsync队列和$watch列表2个较小的循环。$digest循环会迭代执行直到Model状态稳定下来，即$evalAsync队列为空并且$watch列表中检测不到任何变化的时候。
-4. $evalAsync队列，主要用来在浏览器视图执行前，调度任务
-5. $watch列表是一个在最后一次迭代之后，依然可能发生变化的表达式集合。一旦检测到变化发生，`$watch()`函数将会被调用，使用改变后的值对DOM进行更新。
+1. 调用`scope.$apply(stimulusFn)`进入Angular可执行上下文，作为参数的stimulusFn函数就是需要运行在Angular可执行上下文内的代码。
+2. Angular执行stimulusFn()函数，该函数通常会对应用状态进行修改。
+3. Angular进入$digest循环，$digest循环又分为$evalAsync队列和$watch列表2个较小的循环。$digest循环会迭代执行直到Model状态稳定下来，即$evalAsync队列为空且$watch列表中检测不到任何变化的时候。
+4. $evalAsync队列主要用来异步处理Angular执行上下文之外的任务（*例如基于当前scope对表达式进行异步渲染*），这一过程将会发生在浏览器视图渲染之前，从而避免视图闪烁。
+5. $watch列表是一个在最后一次迭代之后，依然可能发生变化的表达式集合。一旦检测到变化发生，`$watch()`函数将会被调用，并使用改变后的值对DOM进行更新。
 6. 当$digest循环结束后，执行流程离开Angular和JavaScript上下文。
 
-The $evalAsync queue is used to schedule work which needs to occur outside of current stack frame, but before the browser's view render. This is usually done with setTimeout(0), but the setTimeout(0) approach suffers from slowness and may cause view flickering since the browser renders the view after each event.
-
 ## 如何理解Provider
+
+Provider是一种可以由Angular进行依赖注入的服务，告诉injector如何去建立需要依赖注入的对象。
+
+$provide服务
+
+负责告诉Angular如何创造一个新的可注入的东西：即服务。服务会被叫做供应商的东西来定义，你可以使用$provide来创建一个供应商。你需要使用$provide中的provider()方法来定义一个供应商，同时你也可以通过要求$provide被注入到一个应用的config函数中来获得$provide服务。
+
+创建可以由Angular进行依赖注入的服务。
+Provider、Value、Factory、Service、Constant 
+
+![](angular/provider.png "$provide")
 
 ## Factory和Service的区别
 
