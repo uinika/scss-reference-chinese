@@ -529,7 +529,7 @@ Angular中HTML模板的编译会经历下面3个步骤：
 
 3. `$compile`通过这个被合并的链接函数，依次调用每个指令的`link`函数，注册监听器到HTML元素，以及在`scope`中设置`$watch`，最后完成`scope`和`template`的双向绑定。
 
-![](angular/two-way-data-binding.png)
+![](angular/two-way-data-binding.png "双向数据绑定")
 
 ```javascript
 var $compile = ...; // injected into your code
@@ -583,10 +583,14 @@ function link(scope, iElement, iAttrs, controller, transcludeFn) {
 }
 ```
 
+## 脏数据检查机制
+
+![](angular/event-loop.png "事件循环")
+
 ## 如何理解Provider
 
 ## Factory和Service的区别
 
-## 不可忽视的ngSanitize模块
+## 不容忽视的ngSanitize模块
 
-## 脏数据检查机制
+
