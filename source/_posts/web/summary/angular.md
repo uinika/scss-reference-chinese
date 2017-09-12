@@ -600,18 +600,20 @@ Angular增强了浏览器原生的事件循环（*event loop*）机制，将事�
 
 ## 如何理解Provider
 
-Provider是一种可以由Angular进行依赖注入的服务，告诉injector如何去建立需要依赖注入的对象。
-
-$provide服务
-
-负责告诉Angular如何创造一个新的可注入的东西：即服务。服务会被叫做供应商的东西来定义，你可以使用$provide来创建一个供应商。你需要使用$provide中的provider()方法来定义一个供应商，同时你也可以通过要求$provide被注入到一个应用的config函数中来获得$provide服务。
-
-创建可以由Angular进行依赖注入的服务。
-Provider、Value、Factory、Service、Constant 
+Provider用于创建可以由injector依赖注入的服务，Provider需要通过auto模块中的$provide服务进行创建，Provider拥有`provider()`、`value()`、`factory()`、`service()`、`constant()`、`decorator()`六种创建菜单。
 
 ![](angular/provider.png "$provide")
 
-## Factory和Service的区别
+1. `provider(name, provider)` 使用$injector注册一个**provider function**，该function是一个必须实现`$get`方法的构造函数。
+2. `constant(name, obj)` 使用$injector注册一个**constant service**，可以是任意数据类型，但不能被注入其它service。
+3. `value(name, obj)` 使用$injector注册一个**value service**，可以是任意数据类型。
+4. `factory(name, fn)` 注册**service factory**，调用后直接返回一个service实例。
+5. `service(name, Fn)` 注册**service constructor**，调用后会通过`new`关键字创建一个service实例。
+6. `decorator(name, decorFn)` 通过$injector注册一个**decorator function**，可以中断service的创建流程，重写或者修改服务的行为。
+
+
+## Angular当中的$q
+
 
 ## 不容忽视的ngSanitize模块
 
