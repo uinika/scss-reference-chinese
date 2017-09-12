@@ -4,6 +4,8 @@ tags: Web
 categories: Summary
 ---
 
+![](angular/angular.ico)
+
 ## 为什么是Angular，而非React
 
 早在2015年11月的时候，就已经开始尝试使用`webpack`+`babel`+`react`+`reflux`技术栈，但是团队对这种编译式前端开发的反馈并不友好，一方面 webpack1.x版本打包的效率仍然较差，每次保存操作后页面reload速度缓慢，比较影响开发过程中的心情愉悦指数。另一方面，team里的同学对于传统`jQuery`+`backbone`+`handlebar`+`requirejs`开发方式带有思维惯性，不太能接受JSX和ES6模块化的写法。
@@ -14,7 +16,7 @@ categories: Summary
 
 > 在React进入15.x版本之后，穿插使用其完成了一个称为[Saga](https://github.com/uinika/saga)的新项目，新增的context属性结合Redux使用，可以简化组件间通信不少的工作量。
 
-![](angular/angular.ico)
+<!-- more -->
 
 早在2013年beta版发布的时候，Angular就被视为一件神奇的事物，虽然双向绑定的性能问题一直遭到开发人员诟病，但Google从2013年至今一直给予比较完善的支持，形成了成熟的API文档的同时，也提供了大量的最佳实践原则。而Gulp这样基于事件流的前端自动化工具的兴起，简化了前、后端技术架构分离后，前端宿主环境的开发、打包、模拟数据的问题。
 
@@ -23,8 +25,6 @@ categories: Summary
 截至到目前为止，前端小组的同学已经使用Angular近1年半的时间，其间经历了5个项目、1款产品的考验，积累了许多实践经验，仅在这里做一些总结和分享。
 
 > 2017年，Webpack2、Vue2、Angular4的相继发布，编译式的前端开发已经成为大势所趋，且单页面场景下Angular在性能和组件化解耦方面暴露出非常多不足，目前勤智的前端小组正在全面转向Vue2。
-
-<!-- more -->
 
 ## 项目结构
 
@@ -553,7 +553,7 @@ parent.appendChild(element);
 
 > 上面是Angular官方文档中非常具有信息量的一段demo代码。
 
-## 指令complie()和link()区别
+## 指令complie()和link()的区别
 
 将compile和link分为两个阶段主要是出于性能的考虑，让多次Model的变化只引发一次DOM结构的改变。
 
@@ -583,9 +583,22 @@ function link(scope, iElement, iAttrs, controller, transcludeFn) {
 }
 ```
 
-## 脏数据检查机制
+## $digest循环
+
+Angular增强了浏览器原生的事件循环（*event loop*）机制，将事件循环分为**JavaScript原生**和**Angular可执行上下文**两部分，只有进入Angular可执行上下文才能够使用双向数据绑定、异常处理、属性观察等特性。
+
+可以在JavaScript中通过`$apply()`方法进入到Angular可执行上下文，在大多数`controller`、`service`当中`$apply()`已经被隐式的调用，只有在整合第3方类库需要自定义事件时才会显式使用`$apply()`。
 
 ![](angular/event-loop.png "事件循环")
+
+1. 调用`scope.$apply(stimulusFn)`进入Angular可执行上下文，作为参数的stimulusFn函数当中就是需要运行在Angular可执行上下文里的代码。
+2. stimulusFn()函数里通常会修改应用的状态。
+3. Angular进入$digest循环，$digest循环又分为$evalAsync队列和$watch列表2个较小的循环。$digest循环会迭代执行直到Model状态稳定下来，即$evalAsync队列为空并且$watch列表中检测不到任何变化的时候。
+4. $evalAsync队列，主要用来在浏览器视图执行前，调度任务
+5. $watch列表是一个在最后一次迭代之后，依然可能发生变化的表达式集合。一旦检测到变化发生，`$watch()`函数将会被调用，使用改变后的值对DOM进行更新。
+6. 当$digest循环结束后，执行流程离开Angular和JavaScript上下文。
+
+The $evalAsync queue is used to schedule work which needs to occur outside of current stack frame, but before the browser's view render. This is usually done with setTimeout(0), but the setTimeout(0) approach suffers from slowness and may cause view flickering since the browser renders the view after each event.
 
 ## 如何理解Provider
 
