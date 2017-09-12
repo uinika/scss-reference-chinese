@@ -180,7 +180,7 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
 ## Controller控制器
 
-控制器中，通过`$inject`手动实现依赖注入，避免代码压缩合并后出现依赖丢失的情况。将`this`指针赋值给`vm`对象（view model），其它方法和属性都以子对象的形式挂载到vm下面，使其更加整洁和面向对象。
+控制器中，通过`$inject属性注解`手动实现依赖注入，避免代码压缩合并后出现依赖丢失的情况。将`this`指针赋值给`vm`对象（view model），其它方法和属性都以子对象的形式挂载到vm下面，使其更加整洁和面向对象。
 
 由于Angular会自动绑定未在HTML中声明的属性，因此约定将所有双向绑定属性声明到vm对象当中，且通过赋予其默认值来表达所属数据类型。
 
@@ -536,7 +536,7 @@ var $compile = ...; // injected into your code
 var scope = ...;
 var parent = ...; // DOM element where the compiled template can be appended
 
-var html = '<div ng-bind="exp"></div>';
+var html = "<div ng-bind="exp"></div>";
 
 // Step 1: parse HTML into DOM element
 var template = angular.element(html);
@@ -598,22 +598,188 @@ Angular增强了浏览器原生的事件循环（*event loop*）机制，将事�
 5. $watch列表是一个在最后一次迭代之后，依然可能发生变化的表达式集合。一旦检测到变化发生，`$watch()`函数将会被调用，并使用改变后的值对DOM进行更新。
 6. 当$digest循环结束后，执行流程离开Angular和JavaScript上下文。
 
+综上所述，$digest循环作为Angular的脏值检查机制，繁重的实现过程造成其性能开销较大。因此，视图层绑定数据时，最佳实践原则是尽量使用`::`一次性绑定，以便减少不必要的$digest循环。
+
+```html
+<span>{{::username}}</span>
+```
+
 ## 如何理解Provider
 
-Provider用于创建可以由injector依赖注入的服务，Provider需要通过auto模块中的$provide服务进行创建，Provider拥有`provider()`、`value()`、`factory()`、`service()`、`constant()`、`decorator()`六种创建菜单。
+Provider用于创建可以由injector依赖注入的服务，Provider需要通过auto模块中的$provide服务进行创建，Provider拥有`provider()`、`value()`、`factory()`、`service()`、`constant()`、`decorator()`六种创建方式。
 
 ![](angular/provider.png "$provide")
 
-1. `provider(name, provider)` 使用$injector注册一个**provider function**，该function是一个必须实现`$get`方法的构造函数。
-2. `constant(name, obj)` 使用$injector注册一个**constant service**，可以是任意数据类型，但不能被注入其它service。
-3. `value(name, obj)` 使用$injector注册一个**value service**，可以是任意数据类型。
-4. `factory(name, fn)` 注册**service factory**，调用后直接返回一个service实例。
-5. `service(name, Fn)` 注册**service constructor**，调用后会通过`new`关键字创建一个service实例。
-6. `decorator(name, decorFn)` 通过$injector注册一个**decorator function**，可以中断service的创建流程，重写或者修改服务的行为。
+1. `provider(name, provider)` 该方式必须实现一个`$get`方法，是其它Provide创建方式的核心（*不包括Constant*）。
 
+```javascript
+var app = angular.module("app", []);
+ 
+app.provider("movie", function () {
+  var version;
+  return {
+    setVersion: function (value) {
+      version = value;
+    },
+    // 实现$get方法
+    $get: function () {
+      return {
+        title: "The Matrix" + " " + version
+      }
+    }
+  }
+});
+
+// 注入到config中不能直接写movie，而需要使用驼峰命名法movieProvider
+app.config(function (movieProvider) {
+  movieProvider.setVersion("Reloaded");
+});
+
+app.controller("ctrl", function (movie) {
+  expect(movie.title).toEqual("The Matrix Reloaded");
+});
+```
+
+2. `constant(name, obj)` 定义常量，可以被注入到任何地方，但是不能被decorator装饰，也不能被注入其它service。
+
+```javascript
+var app = angular.module("app", []);
+ 
+app.config(function ($provide) {
+  $provide.constant("movieTitle", "The Matrix");
+});
+
+// 完整写法 
+app.controller("ctrl", function (movieTitle) {
+  expect(movieTitle).toEqual("The Matrix");
+});
+
+// 语法糖
+app.constant("movieTitle", "The Matrix");
+```
+
+3. `value(name, obj)` 可以是任意数据类型，不能被注入到config，但可以被decorator装饰。
+
+```javascript
+var app = angular.module("app", []);
+ 
+app.config(function ($provide) {
+  // 完整写法
+  $provide.value("movieTitle", "The Matrix")
+});
+ 
+app.controller("ctrl", function (movieTitle) {
+  expect(movieTitle).toEqual("The Matrix");
+});
+
+// 语法糖
+app.value("movieTitle", "The Matrix");
+```
+
+4. `factory(name, fn)` 创建可注入的普通函数，可以return任意值，实质是只拥有$get方法的provider。
+
+```javascript
+var app = angular.module("app", []);
+ 
+app.config(function ($provide) {
+  // 正常写法
+  $provide.factory("movie", function () {
+    return {
+      title: "The Matrix"
+    }
+  });
+});
+ 
+app.controller("ctrl", function (movie) {
+  expect(movie.title).toEqual("The Matrix");
+});
+
+// 语法糖
+app.factory("movie", function () {
+  return {
+    title: "The Matrix"
+  }
+});
+```
+
+5. `service(name, Fn)` 创建可注入的构造函数，调用时会通过`new`关键字，可以不用return任何值，它在AngularJS中是单例的。
+
+```javascript
+var app = angular.module("app" ,[]);
+ 
+app.config(function ($provide) {
+  // 正常写法
+  $provide.service("movie", function () {
+    this.title = "The Matrix";
+  });
+});
+ 
+app.controller("ctrl", function (movie) {
+  expect(movie.title).toEqual("The Matrix");
+});
+
+// 语法糖
+app.service("movie", function () {
+  this.title = "The Matrix";
+});
+```
+
+6. `decorator(name, decorFn)` 用来装饰其他provider，可以中断服务的创建流程，然后重写或者修改服务的行为。
+
+```javascript
+var app = angular.module("app", []);
+ 
+app.value("movieTitle", "The Matrix");
+ 
+app.config(function ($provide) {
+  $provide.decorator("movieTitle", function ($delegate) {
+    return $delegate + " - starring Keanu Reeves";
+  });
+});
+ 
+app.controller("myController", function (movieTitle) {
+  expect(movieTitle).toEqual("The Matrix - starring Keanu Reeves");
+});
+```
+
+> 不能装饰Constant，因为Constant并非通过provider()创建。
 
 ## Angular当中的$q
 
+一个promises/deferred对象的Promises/A+兼容实现，受到[Kris Kowal"s Q](https://github.com/kriskowal/q)启发但并未实现全部功能，$q能够以如下2种流行的方式进行使用。
+
+1. Kris Kowal"s Q或者jQuery的Deferred对象：首先通过`$q.defer()`创建一个deferred对象，然后通过deferred对象的promise属性转换为Promise对象。
+
+```javascript
+function asyncGreet(name) {
+  var deferred = $q.defer();
+
+  setTimeout(function() {
+    deferred.notify("About to greet " + name + ".");
+    if (okToGreet(name)) {
+      deferred.resolve("Hello, " + name + "!");
+    } else {
+      deferred.reject("Greeting " + name + " is not allowed.");
+    }
+  }, 1000);
+
+  return deferred.promise;
+}
+```
+
+2. 类似ES6原生Promise的方式：$q作为构造函数，接收`resolver()`函数作为第1个参数，`$q(resolver)`将会返回一个新建的Promise对象。
+ 
+```javascript
+$q(function(resolve, reject) {
+  setTimeout(function() {
+    if (okToGreet(name)) {
+      resolve("Hello, " + name + "!");
+    } else {
+      reject("Greeting " + name + " is not allowed.");
+    }
+  }, 1000);
+});
+```
 
 ## 不容忽视的ngSanitize模块
 
