@@ -674,11 +674,12 @@ Provider用于创建可以由injector依赖注入的服务，Provider需要通�
   TestController.$inject = ["message", "CONSTANT", "value", "factory", "service"];
 
   function TestController(message, CONSTANT, value, factory, service) {
-    console.info(message.infomation); // controller中调用provider
-    console.info(CONSTANT); // controller中调用constant
-    console.info(value); // controller中调用value
-    console.info(factory.reminder); // controller内调用factory
-    console.info(service.warning); // controller内调用service
+    // controller当中调用各个provider
+    console.info(message.infomation);
+    console.info(CONSTANT);
+    console.info(value);
+    console.info(factory.reminder);
+    console.info(service.warning);
   };
 
   /**
