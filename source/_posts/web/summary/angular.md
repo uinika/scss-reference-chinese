@@ -272,20 +272,20 @@ Angular module中的路由配置是整份前端代码的切割点，通过它完
 
   /**
    * @type directive
-   * @name wiserv-scroll
-   * @param wiserv-scroll-offset
+   * @name uinika-scroll
+   * @param uinika-scroll-offset
    * @description auto resize base on overflow-y
    */
   angular.module("app.common")
-    .directive("wiservScroll", wiservScroll);
+    .directive("uinikaScroll", uinikaScroll);
 
-  wiservScroll.$inject = ["$window", "$document"];
+  uinikaScroll.$inject = ["$window", "$document"];
 
-  function wiservScroll($window, $document) {
+  function uinikaScroll($window, $document) {
     return {
       restrict: "ACE",
       scope: {
-        offset: "@wiservScrollOffset"
+        offset: "@uinikaScrollOffset"
       },
       link: function link(scope, element, attrs) {
         var _window = $($window);
@@ -437,7 +437,7 @@ function config($qProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
         var token = sessionStorage.token;
         if (token) {
           config.headers = _.assign({}, {
-            "Authorization": "Wiserv " + token
+            "Authorization": "uinika " + token
           }, config.headers)
         };
         return config;
@@ -447,7 +447,7 @@ function config($qProvider, $stateProvider, $urlRouterProvider, $httpProvider) {
           if (response.data && response.data.head && typeof response.data === "object") {
             if (result.data.head.status === 202) {
               sessionStorage.message = "登录超时，请重新登录！";
-              $location.url("/wiserv");
+              $location.url("/uinika");
             };
           };
         });
@@ -470,7 +470,7 @@ function run($rootScope) {
     function (event, toState, toParams, fromState, fromParams) {
       if (toState.name !== "login") {
         if (!sessionStorage.token) {
-          window.location.href = "/wiserv";
+          window.location.href = "/uinika";
         };
       };
     });
@@ -740,7 +740,6 @@ Provider用于创建可以由injector依赖注入的服务，Provider需要通�
   // module上定义decorator
   module.decorator("value", decorator);
   decorator.$inject = ["$delegate"];
-
   function decorator($delegate) {
     return $delegate + " with Decorator!!";
   };
@@ -814,11 +813,11 @@ $sce用于在Angular中提供严格的上下文转义（*SCE, Strict Contextual 
 (function () {
 
   angular.module("app.common")
-    .filter("wiservTrustHtml", wiservTrustHtml);
+    .filter("uinikaTrustHtml", uinikaTrustHtml);
 
-  wiservTrustHtml.$inject = ["$sce"];
+  uinikaTrustHtml.$inject = ["$sce"];
 
-  function wiservTrustHtml($sce) {
+  function uinikaTrustHtml($sce) {
     return function (val) {
       return $sce.trustAsHtml(val);
     };
