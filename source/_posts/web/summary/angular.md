@@ -12,11 +12,11 @@ categories: Summary
 
 对于React的组件化思想，我个人是非常赞同的，但是比较遗憾的地方在于facebook并未提供出解决组件间通讯的官方实现，其Virtual DOM与Webpack.sourcemap结合使用后，debug变成一件非常困难的事情，并未在实际开发中体现其性能和效率上的优势。且因为社区驱动的reflux、redux的存在，又为开发带来了额外的复杂度。
 
+<!-- more -->
+
 **更具有决定因素的是，截至在2015年底，React依然是0.14.x版本，框架自身还处于不断成熟的过程中，API也一直在调整和变化。**
 
 > 在React进入15.x版本之后，穿插使用其完成了一个称为[Saga](https://github.com/uinika/saga)的新项目，新增的context属性结合Redux使用，可以简化组件间通信不少的工作量。
-
-<!-- more -->
 
 早在2013年beta版发布的时候，Angular就被视为一件神奇的事物，虽然双向绑定的性能问题一直遭到开发人员诟病，但Google从2013年至今一直给予比较完善的支持，形成了成熟的API文档的同时，也提供了大量的最佳实践原则。而Gulp这样基于事件流的前端自动化工具的兴起，简化了前、后端技术架构分离后，前端宿主环境的开发、打包、模拟数据的问题。
 
@@ -611,138 +611,161 @@ Provider用于创建可以由injector依赖注入的服务，Provider需要通�
 ![](angular/provider.png "$provide")
 
 1. `provider(name, provider)` 该方式必须实现一个`$get`方法，是其它Provide创建方式的核心（*不包括Constant*）。
+2. `constant(name, obj)` 定义常量，可以被注入到任何地方，但是不能被decorator装饰，也不能被注入其它service。
+3. `value(name, obj)` 可以是任意数据类型，不能被注入到config，但可以被decorator装饰。
+4. `factory(name, fn)` 创建可注入的普通函数，可以return任意值，实质是只拥有$get方法的provider。
+5. `service(name, Fn)` 创建可注入的构造函数，调用时会通过`new`关键字，可以不用return任何值，它在AngularJS中是单例的。
+6. `decorator(name, decorFn)` 用来装饰其他provider，可以中断服务的创建流程，然后重写或者修改服务的行为。但Constant不能被装饰，因为Constant并非provider()创建。
 
 ```javascript
-var app = angular.module("app", []);
- 
-app.provider("movie", function () {
-  var version;
-  return {
-    setVersion: function (value) {
-      version = value;
-    },
-    // 实现$get方法
-    $get: function () {
+(function () {
+
+  var module = angular.module("app.test", [])
+    .config(testConfig)
+    .controller("TestController", TestController);
+
+  /* Config */
+  testConfig.$inject = ["$provide"];
+
+  function testConfig($provide) {
+
+    // 模块上定义provider
+    var provider = $provide.provider("message", function () {
+      var message;
       return {
-        title: "The Matrix" + " " + version
+        setMessage: function (infomation) {
+          message = infomation;
+        },
+        $get: function () {
+          return {
+            infomation: "This is a " + message
+          }
+        }
+      }
+    });
+    provider.setMessage("Provider!"); // 设置Provider需要返回的消息
+
+    // config中定义factory
+    $provide.factory("factory", function () {
+      return {
+        reminder: "This is a Factory!"
+      }
+    });
+    // config中定义service
+    $provide.service("service", function () {
+      this.warning = "This is a Service!";
+    });
+
+    // config中定义constant
+    $provide.constant("CONSTANT", "This is a Constant!");
+    // config中定义value
+    $provide.value("value", "This is a Value!");
+
+    // config上定义decorator
+    $provide.decorator("value", decorator);
+    decorator.$inject = ["$delegate"]; // $delegate是需要被修饰服务的实例，即上面语句中声明的value
+    function decorator($delegate) {
+      return $delegate + " with Decorator!!"; // 对value进行修饰
+    };
+
+  };
+
+  /* Controller */
+  TestController.$inject = ["message", "CONSTANT", "value", "factory", "service"];
+
+  function TestController(message, CONSTANT, value, factory, service) {
+    console.info(message.infomation); // controller中调用provider
+    console.info(CONSTANT); // controller中调用constant
+    console.info(value); // controller中调用value
+    console.info(factory.reminder); // controller内调用factory
+    console.info(service.warning); // controller内调用service
+  };
+
+  /**
+   * This is a Provider!
+   * This is a Constant!
+   * This is a Value! with Decorator!!
+   * This is a Factory!
+   * This is a Service!
+   */
+
+})();
+```
+
+除了在config当中通过`$provide`定义provider之外，还可以通过module上提供的语法糖方法更加方便的建立provider，出于代码松耦合以及分块编写的考虑，这里推荐使用语法糖的方式去提供provider。
+
+```javascript
+(function () {
+
+  var module = angular.module("app.test", [])
+    .config(testConfig)
+    .controller("TestController", TestController);
+
+  testConfig.$inject = ["$provide", "messageProvider"];
+
+  function testConfig($provide, messageProvider) {
+    messageProvider.setMessage("Provider!"); // provider可以被注入到config中
+  };
+
+  // module上定义provider
+  module.provider("message", function () {
+    var message;
+    return {
+      setMessage: function (infomation) {
+        message = infomation;
+      },
+      $get: function () {
+        return {
+          infomation: "This is a " + message
+        }
       }
     }
-  }
-});
+  });
 
-// 注入到config中不能直接写movie，而需要使用驼峰命名法movieProvider
-app.config(function (movieProvider) {
-  movieProvider.setVersion("Reloaded");
-});
-
-app.controller("ctrl", function (movie) {
-  expect(movie.title).toEqual("The Matrix Reloaded");
-});
-```
-
-2. `constant(name, obj)` 定义常量，可以被注入到任何地方，但是不能被decorator装饰，也不能被注入其它service。
-
-```javascript
-var app = angular.module("app", []);
- 
-app.config(function ($provide) {
-  $provide.constant("movieTitle", "The Matrix");
-});
-
-// 完整写法 
-app.controller("ctrl", function (movieTitle) {
-  expect(movieTitle).toEqual("The Matrix");
-});
-
-// 语法糖
-app.constant("movieTitle", "The Matrix");
-```
-
-3. `value(name, obj)` 可以是任意数据类型，不能被注入到config，但可以被decorator装饰。
-
-```javascript
-var app = angular.module("app", []);
- 
-app.config(function ($provide) {
-  // 完整写法
-  $provide.value("movieTitle", "The Matrix")
-});
- 
-app.controller("ctrl", function (movieTitle) {
-  expect(movieTitle).toEqual("The Matrix");
-});
-
-// 语法糖
-app.value("movieTitle", "The Matrix");
-```
-
-4. `factory(name, fn)` 创建可注入的普通函数，可以return任意值，实质是只拥有$get方法的provider。
-
-```javascript
-var app = angular.module("app", []);
- 
-app.config(function ($provide) {
-  // 正常写法
-  $provide.factory("movie", function () {
+  // module上定义factory
+  module.factory("factory", function () {
     return {
-      title: "The Matrix"
+      reminder: "This is a Factory!"
     }
   });
-});
- 
-app.controller("ctrl", function (movie) {
-  expect(movie.title).toEqual("The Matrix");
-});
 
-// 语法糖
-app.factory("movie", function () {
-  return {
-    title: "The Matrix"
-  }
-});
-```
-
-5. `service(name, Fn)` 创建可注入的构造函数，调用时会通过`new`关键字，可以不用return任何值，它在AngularJS中是单例的。
-
-```javascript
-var app = angular.module("app" ,[]);
- 
-app.config(function ($provide) {
-  // 正常写法
-  $provide.service("movie", function () {
-    this.title = "The Matrix";
+  // module上定义service
+  module.service("service", function () {
+    this.warning = "This is a Service!";
   });
-});
- 
-app.controller("ctrl", function (movie) {
-  expect(movie.title).toEqual("The Matrix");
-});
 
-// 语法糖
-app.service("movie", function () {
-  this.title = "The Matrix";
-});
+  module.constant("CONSTANT", "This is a Constant!"); // module上定义constant
+  module.value("value", "This is a Value!"); // module上定义value
+
+  // module上定义decorator
+  module.decorator("value", decorator);
+  decorator.$inject = ["$delegate"];
+
+  function decorator($delegate) {
+    return $delegate + " with Decorator!!";
+  };
+
+  TestController.$inject = ["message", "CONSTANT", "value", "factory", "service"];
+
+  function TestController(message, CONSTANT, value, factory, service) {
+    // controller当中调用各个provider
+    console.info(message.infomation);
+    console.info(CONSTANT);
+    console.info(value);
+    console.info(factory.reminder);
+    console.info(service.warning);
+  };
+
+  /**
+   * This is a Provider!
+   * This is a Constant!
+   * This is a Value! with Decorator!!
+   * This is a Factory!
+   * This is a Service!
+   */
+
+})();
 ```
-
-6. `decorator(name, decorFn)` 用来装饰其他provider，可以中断服务的创建流程，然后重写或者修改服务的行为。
-
-```javascript
-var app = angular.module("app", []);
- 
-app.value("movieTitle", "The Matrix");
- 
-app.config(function ($provide) {
-  $provide.decorator("movieTitle", function ($delegate) {
-    return $delegate + " - starring Keanu Reeves";
-  });
-});
- 
-app.controller("myController", function (movieTitle) {
-  expect(movieTitle).toEqual("The Matrix - starring Keanu Reeves");
-});
-```
-
-> 不能装饰Constant，因为Constant并非通过provider()创建。
 
 ## Angular当中的$q
 
@@ -788,33 +811,20 @@ $q(function(resolve, reject) {
 $sce用于在Angular中提供严格的上下文转义（*SCE, Strict Contextual Escaping*）服务，从而避免XSS（*跨站脚本攻击*）, clickjacking（*点击劫持*）等安全性问题，$sce服务目前支持的上下文类型有5种。
 
 ```javascript
-angular.module("customControl", ["ngSanitize"]).
-directive("contenteditable", ["$sce", function($sce) {
-  return {
-    restrict: "A",
-    require: "?ngModel",
-    link: function(scope, element, attrs, ngModel) {
-      if (!ngModel) return;
+(function () {
 
-      ngModel.$render = function() {
-        element.html($sce.getTrustedHtml(ngModel.$viewValue || ""));
-      };
+  angular.module("app.common")
+    .filter("wiservTrustHtml", wiservTrustHtml);
 
-      element.on("blur keyup change", function() {
-        scope.$evalAsync(read);
-      });
-      read();
+  wiservTrustHtml.$inject = ["$sce"];
 
-      function read() {
-        var html = element.html();
-        if (attrs.stripBr && html === "<br>") {
-          html = "";
-        }
-        ngModel.$setViewValue(html);
-      }
-    }
+  function wiservTrustHtml($sce) {
+    return function (val) {
+      return $sce.trustAsHtml(val);
+    };
   };
-}]);
+
+})();
 ```
 
-> 凡是项目中用来展示用户输入内容的位置，都需要通过$sce.getTrustedHtml()方法进行相应处理。
+> 最佳实践原则，项目中所有用户可以自由进行编辑的位置，都需要通过`$sce`进行无害化处理。
