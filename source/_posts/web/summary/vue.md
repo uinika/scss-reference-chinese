@@ -79,7 +79,7 @@ var vm = new Vue({
 ```html
 <!-- 不使用计算属性 -->
 <div id="example">
-  {{ message.split('').reverse().join('') }}
+  {{ message.split("").reverse().join("") }}
 </div>
 
 <!-- 将表达式抽象到计算属性 -->
@@ -90,13 +90,13 @@ var vm = new Vue({
 
 <script>
   var vm = new Vue({
-    el: '#example',
+    el: "#example",
     data: {
-      message: 'Hello'
+      message: "Hello"
     },
     computed: {
       reversedMessage: function () {
-        return this.message.split('').reverse().join('')
+        return this.message.split("").reverse().join("")
       }
     }
   })
@@ -114,11 +114,11 @@ computed: {
   fullName: {
     // getter
     get: function () {
-      return this.firstName + ' ' + this.lastName
+      return this.firstName + " " + this.lastName
     },
     // setter
     set: function (newValue) {
-      var names = newValue.split(' ')
+      var names = newValue.split(" ")
       this.firstName = names[0]
       this.lastName = names[names.length - 1]
     }
@@ -126,7 +126,7 @@ computed: {
 }
 ... ... ...
 // 下面语句触发setter方法，firstName和lastName也会被相应更新
-vm.fullName = 'John Doe'
+vm.fullName = "John Doe"
 </script>
 ```
 
@@ -142,15 +142,15 @@ vm.fullName = 'John Doe'
 
 <script>
   var watchExampleVM = new Vue({
-    el: '#watch-example',
+    el: "#watch-example",
     data: {
-      question: '',
-      answer: 'I cannot give you an answer until you ask a question!'
+      question: "",
+      answer: "I cannot give you an answer until you ask a question!"
     },
     watch: {
       // 如果question发生改变，该函数就会运行
       question: function (newQuestion) {
-        this.answer = 'Waiting for you to stop typing...'
+        this.answer = "Waiting for you to stop typing..."
         this.getAnswer()
       }
     },
@@ -158,18 +158,18 @@ vm.fullName = 'John Doe'
       // _.debounce是lodash当中限制操作频率的函数
       getAnswer: _.debounce(
         function () {
-          if (this.question.indexOf('?') === -1) {
-            this.answer = 'Questions usually contain a question mark. ;-)'
+          if (this.question.indexOf("?") === -1) {
+            this.answer = "Questions usually contain a question mark. ;-)"
             return
           }
-          this.answer = 'Thinking...'
+          this.answer = "Thinking..."
           var vm = this
-          axios.get('https://yesno.wtf/api')
+          axios.get("https://yesno.wtf/api")
             .then(function (response) {
               vm.answer = _.capitalize(response.data.answer)
             })
             .catch(function (error) {
-              vm.answer = 'Error! Could not reach the API. ' + error
+              vm.answer = "Error! Could not reach the API. " + error
             })
         },
         // 这是用户停止输入等待的毫秒数
@@ -190,14 +190,14 @@ vm.fullName = 'John Doe'
 // mixin对象
 var mixin = {
   created: function () {
-    console.log('混合对象的钩子被调用')
+    console.log("混合对象的钩子被调用")
   },
   methods: {
     foo: function () {
-      console.log('foo')
+      console.log("foo")
     },
     conflicting: function () {
-      console.log('from mixin')
+      console.log("from mixin")
     }
   }
 }
@@ -206,14 +206,14 @@ var mixin = {
 var vm = new Vue({
   mixins: [mixin],
   created: function () {
-    console.log('组件钩子被调用')
+    console.log("组件钩子被调用")
   },
   methods: {
     bar: function () {
-      console.log('bar')
+      console.log("bar")
     },
     conflicting: function () {
-      console.log('from self')
+      console.log("from self")
     }
   }
 })
@@ -238,7 +238,7 @@ vm.conflicting() // => "from self"
 
 <script>
 render: function (createElement) {
-  return createElement('h1', this.blogTitle)
+  return createElement("h1", this.blogTitle)
 }
 </script>
 ```
@@ -248,10 +248,10 @@ render: function (createElement) {
 通过render()函数实现虚拟DOM比较麻烦，因此可以使用Babel插件`babel-plugin-transform-vue-jsx`在render()函数中应用JSX语法。
 
 ```javascript
-import AnchoredHeading from './AnchoredHeading.vue'
+import AnchoredHeading from "./AnchoredHeading.vue"
 
 new Vue({
-  el: '#demo',
+  el: "#demo",
   render (h) {
     return (
       <AnchoredHeading level={1}>
@@ -267,7 +267,7 @@ new Vue({
 即无状态（*没有data*）无实例（*没有this上下文*）的组件，渲染开销较小，且不会出现在`Vue devtools`当中。
 
 ```javascript
-Vue.component('my-component', {
+Vue.component("my-component", {
   functional: true,
   // 通过提供context参数为没有实例的函数组件提供上下文信息
   render: function (createElement, context) {},
@@ -311,7 +311,7 @@ Vue.mixin({
 })
 
 new Vue({
-  myOption: 'hello!'
+  myOption: "hello!"
 })
 
 // => "hello!"
@@ -322,7 +322,7 @@ new Vue({
 Vue允许注册自定义指令，用于对底层DOM进行操作。
 
 ```javascript
-Vue.directive('focus', {
+Vue.directive("focus", {
   bind: function() {
     // 指令第一次绑定到元素时调用，只会调用一次，可以用来执行一些初始化操作。
   },
@@ -374,7 +374,7 @@ Vue可以通过定义过滤器，进行一些常见的文本格式化，可以�
   new Vue({
     filters: {
       capitalize: function (value) {
-        if (!value) return ''
+        if (!value) return ""
         value = value.toString()
         return value.charAt(0).toUpperCase() + value.slice(1)
       }
@@ -387,7 +387,7 @@ Vue可以通过定义过滤器，进行一些常见的文本格式化，可以�
 
 ```html
 <span>{{ message | filterA | filterB }}</span>
-<span>{{ message | filterA('arg1', arg2) }}</span>
+<span>{{ message | filterA("arg1", arg2) }}</span>
 ```
 
 ### Vue.use(plugin)
@@ -400,7 +400,7 @@ MyPlugin.install = function (Vue, options) {
   Vue.myGlobalMethod = function () {}
 
   // 2. 添加全局资源
-  Vue.directive('my-directive', {
+  Vue.directive("my-directive", {
     bind (el, binding, vnode, oldVnode) {}
   })
 
@@ -467,13 +467,13 @@ vm = {
 
 ![](vue/lifecycle.png "组件的生命周期")
 
-> 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch('a', newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
+> 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch("a", newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
 
 > 使用jQuery对DOM的操作可以放置在`Mounted`属性上进行，即Vue组件已经完成在DOM上挂载的时候。
 
 ## 数据绑定
 
-Vue视图层通过[Mustache](http://mustache.github.io/)`['mʌstæʃ]`语法与Vue实例中的data属性进行双向绑定，但是也可以通过内置指令`v-once`完成一个单向的绑定，再或者通过`v-html`指令将绑定的字符串输出为HTML，虽然这样很容易招受XSS攻击。
+Vue视图层通过[Mustache](http://mustache.github.io/)`["mʌstæʃ]`语法与Vue实例中的data属性进行双向绑定，但是也可以通过内置指令`v-once`完成一个单向的绑定，再或者通过`v-html`指令将绑定的字符串输出为HTML，虽然这样很容易招受XSS攻击。
 
 ```html
 <span>Message: {{ result }}</span>
@@ -505,7 +505,7 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
     hasError: false,
     classObject: {
       active: true,
-      'text-danger': false
+      "text-danger": false
     }
   }
   ... ...
@@ -515,7 +515,7 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 <div v-bind:class="classObject"></div>
 
 <!-- 直接绑定class到对象的属性 -->
-<div class="static" v-bind:class="{ active: isActive, 'text-danger': hasError }"></div>
+<div class="static" v-bind:class="{ active: isActive, "text-danger": hasError }"></div>
 
 <!-- 渲染结果 -->
 <div class="static active"></div>
@@ -528,8 +528,8 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 <script>
   ... ...
   data: {
-    activeClass: 'active',
-    errorClass: 'text-danger'
+    activeClass: "active",
+    errorClass: "text-danger"
   }
   ... ...
 </script>
@@ -541,7 +541,7 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 <div class="active text-danger"></div>
 
 <!-- 使用三目运算符，始终添加errorClass，只在isActive为true时添加activeClass -->
-<div v-bind:class="[isActive ? activeClass : '', errorClass]"></div>
+<div v-bind:class="[isActive ? activeClass : "", errorClass]"></div>
 
 <!-- 在数组中使用对象可以避免三目运算符的繁琐 -->
 <div v-bind:class="[{ active: isActive }, errorClass]"></div>
@@ -552,8 +552,8 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 ```html
 <!-- 声明一个组件 -->
 <script>
-  Vue.component('my-component', {
-    template: '<p class="foo bar">Hi</p>',
+  Vue.component("my-component", {
+    template: "<p class="foo bar">Hi</p>",
     data: {
       isActive: true
     },
@@ -582,8 +582,8 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
   ... ...
   data: {
     styleObject: {
-      color: 'red',
-      fontSize: '13px'
+      color: "red",
+      fontSize: "13px"
     },
     styleHeight: {
       height: 10rem;
@@ -614,9 +614,9 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 
 ```html
 <span>{{ number + 1 }}</span>
-<button>{{ ok ? 'YES' : 'NO' }}</button>
-<p>{{ message.split('').reverse().join('') }}</p>
-<div v-bind:id="'list-' + id"></div>
+<button>{{ ok ? "YES" : "NO" }}</button>
+<p>{{ message.split("").reverse().join("") }}</p>
+<div v-bind:id=""list-" + id"></div>
 
 <!-- 这是语句，不是表达式 -->
 {{ var a = 1 }}
@@ -688,9 +688,9 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 ></html>
 
 <!-- 根据表达式的true和false来决定是否渲染元素 -->
-<div v-if="type === 'A'">A</div>
-<div v-else-if="type === 'B'">B</div>
-<div v-else-if="type === 'C'">C</div>
+<div v-if="type === "A"">A</div>
+<div v-else-if="type === "B"">B</div>
+<div v-else-if="type === "C"">C</div>
 <div v-else>Not A/B/C</div>
 
 <!-- 动态地绑定属性或prop到表达式 -->
@@ -732,13 +732,13 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 
 ```javascript
 // 注册组件，传入一个扩展过的构造器
-Vue.component('my-component', Vue.extend({ ... }))
+Vue.component("my-component", Vue.extend({ ... }))
 
 // 注册组件，传入一个option对象(自动调用Vue.extend)
-Vue.component('my-component', { ... })
+Vue.component("my-component", { ... })
 
 // 获取注册的组件(始终返回构造器)
-var MyComponent = Vue.component('my-component')
+var MyComponent = Vue.component("my-component")
 ```
 
 下面代码创建了一个Vue实例，并将自定义组件`my-component`挂载至HTML当中。
@@ -746,13 +746,13 @@ var MyComponent = Vue.component('my-component')
 ```html
 <script>
   // 注册自定义组件
-  Vue.component('my-component', {
-    template: '<div>A custom component!</div>'
+  Vue.component("my-component", {
+    template: "<div>A custom component!</div>"
   })
 
   // 创建Vue根实例
   new Vue({
-    el: '#example'
+    el: "#example"
   })
 </script>
 
@@ -788,8 +788,8 @@ var MyComponent = Vue.component('my-component')
 `Vue.component()`传入的data属性不能是对象，而必须是函数。这样做的目的是避免组件在相同模板的多个位置被复用时，仅仅返回对象会造成组件间的数据被相互污染，而通过函数每次都返回全新的data对象能很好的规避这个问题。
 
 ```javascript
-Vue.component('simple-counter', {
-  template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+Vue.component("simple-counter", {
+  template: "<button v-on:click="counter += 1">{{ counter }}</button>",
   data: function () {
     return {
       a: "",
@@ -810,11 +810,11 @@ Vue.component('simple-counter', {
 虽然每个组件的作用域都是独立的，但是可以通过`props属性`向子组件传递数据，这是一种**单向数据流**的表现形式。
 
 ```javascript
-Vue.component('child', {
+Vue.component("child", {
   // 声明props
-  props: ['message'],
+  props: ["message"],
   // 和data属性一样，prop也可以在vm通过this.message进行引用
-  template: '<span>{{ message }}</span>'
+  template: "<span>{{ message }}</span>"
 })
 ```
 
@@ -827,9 +827,9 @@ Vue.component('child', {
 ```html
 <!-- camelCase in JavaScript -->
 <script>
-Vue.component('child', {
-  props: ['myMessage'],
-  template: '<span>{{ myMessage }}</span>'
+Vue.component("child", {
+  props: ["myMessage"],
+  template: "<span>{{ myMessage }}</span>"
 })
 <script>
 
@@ -863,7 +863,7 @@ Vue.component('child', {
 可以为组件的props指定验证规则，如果传入数据不符合要求，Vue会发出相应警告，这样可以有效提高组件的健壮性。
 
 ```javascript
-Vue.component('example', {
+Vue.component("example", {
   props: {
     // 基础类型检测
     propA: Number,
@@ -883,7 +883,7 @@ Vue.component('example', {
     propE: {
       type: Object,
       default: function () {
-        return { message: 'hello' }
+        return { message: "hello" }
       }
     },
     // 自定义验证函数
@@ -934,8 +934,8 @@ Vue.component('example', {
 </div>
 
 <script>
-  Vue.component('button-counter', {
-    template: '<button v-on:click="incrementCounter">{{ counter }}</button>',
+  Vue.component("button-counter", {
+    template: "<button v-on:click="incrementCounter">{{ counter }}</button>",
     data: function () {
       return {
         counter: 0
@@ -945,12 +945,12 @@ Vue.component('example', {
       // 子组件事件
       incrementCounter: function () {
         this.counter += 1
-        this.$emit('increment') //向父组件冒泡事件
+        this.$emit("increment") //向父组件冒泡事件
       }
     },
   })
   new Vue({
-    el: '#counter-event-example',
+    el: "#counter-event-example",
     data: {
       total: 0
     },
@@ -980,7 +980,7 @@ Vue中的props本质是不能进行双向绑定的，以防止破坏单向数据
 <!-- 使用.sync修饰符 -->
 <comp :foo.sync="bar"></comp>
 
-<!-- 被自动扩展为如下形式，该组件的子组件会通过this.$emit('update:foo', newValue)显式触发更新事件 -->
+<!-- 被自动扩展为如下形式，该组件的子组件会通过this.$emit("update:foo", newValue)显式触发更新事件 -->
 <comp :foo="bar" @update:foo="val => bar = val"></comp>
 ```
 
@@ -991,9 +991,9 @@ Vue中的props本质是不能进行双向绑定的，以防止破坏单向数据
 ```javascript
 var bus = new Vue()
 // 触发组件A中的事件
-bus.$emit('id-selected', 1)
+bus.$emit("id-selected", 1)
 // 在组件B监听事件
-bus.$on('id-selected', function (id) {
+bus.$on("id-selected", function (id) {
   ... ... ...
 })
 ```
@@ -1121,9 +1121,9 @@ bus.$on('id-selected', function (id) {
 ```html
 <script>
 var vm = new Vue({
-  el: '#example',
+  el: "#example",
   data: {
-    currentView: 'home'
+    currentView: "home"
   },
   components: {
     home: { /* ... */ },
@@ -1148,9 +1148,154 @@ var vm = new Vue({
 </keep-alive>
 ```
 
-## 动画
 
+## Vuex状态管理
 
+Vuex是专门为Vue应用程序提供的状态管理模式，每个Vuex应用的核心是`store`（*仓库*），即包含了应用`state`（*状态*）的容器，每个应用仅包含一个`store`实例。
 
+![](vue/vuex.png "Vuex执行流程")
 
-## 
+Vuex的`state`存储是响应式的，即`store`中的`state`发生变化时，相应组件也会得到更新，修改`store`当中`state`的唯一途径是提交`mutations`。
+
+```javascript
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  }
+})
+
+store.commit("increment") // 通过store.state来获取状态对象
+
+console.log(store.state.count) // 通过store.commit()改变状态
+```
+
+### State
+
+从`store`当中获取`state`最简单的方法是在计算属性中返回指定`state`，每当`state`发生改变的时候都会重新执行计算属性，并且更新关联的DOM。
+
+```javascript
+const Counter = {
+  template: `<div>{{ count }}</div>`,
+  computed: {
+    count () {
+      return store.state.count
+    }
+  }
+}
+```
+
+Vuex提供`store`选项，将`state`从根组件**注入**到每个子组件中，从而避免频繁`import store`。
+
+```javascript
+// 父组件中注册store属性
+const app = new Vue({
+  el: "#app",
+  store: store,
+  components: { Counter },
+  template: `
+    <div class="app">
+      <counter></counter>
+    </div>`
+})
+
+// 子组件，store会注入到子组件，子组件可通过this.$store进行访问
+const Counter = {
+  template: `<div>{{ count }}</div>`,
+  computed: {
+    count () {
+      return this.$store.state.count
+    }
+  }
+}
+```
+
+Vuex提供`mapState()`辅助函数，避免使用多个`state`的时候，也要去声明多个计算属性。
+
+```javascript
+// 在单独构建的版本中辅助函数为 Vuex.mapState
+import { mapState } from "vuex"
+
+export default {
+  computed: mapState({
+    count: state => state.count,
+    // 传递字符串参数"count"等同于`state => state.count`
+    countAlias: "count",
+    countPlusLocalState (state) {
+      return state.count + this.localCount
+    }
+  })
+}
+
+// 当计算属性名称与state子节点名称相同时，可以向mapState传递一个字符串数组
+computed: mapState([
+  "count" // 映射this.count到store.state.count
+])
+```
+
+`mapState()`函数返回一个包含有`state`相关计算属性的对象，这里可以通过ES6的对象展开运算符`...`将该对象与Vue组件本身的`computed`属性进行合并。
+
+```javascript
+computed: {
+  localComputed () {},
+  ...mapState({})
+}
+```
+
+Vuex允许在`store`中定义`getters`（*可视为store的计算属性*），`getters`的返回值会根据其依赖被缓存，只有当依赖值发生了改变才会被重新计算。该方法接收`state`作为第1个参数，其它`getters`作为第2个参数。可以直接通过在`store`上调用`getters`来获取指定的计算值。
+
+```javascript
+const store = new Vuex.Store({
+  state: {
+    todos: [
+      { id: 1, text: "...", done: true },
+      { id: 2, text: "...", done: false }
+    ]
+  },
+  getters: {
+    doneTodos: (state, getters) => {
+      return state.todos.filter(todo => todo.done)
+    }
+  }
+})
+
+// 获取doneTodos = [{ id: 1, text: "...", done: true }]
+store.getters.doneTodos
+```
+
+这样就可以方便的根据`store`中现有的`state`派生出新的`state`，从而避免需要在多个组件中复用时造成代码冗余。
+
+```javascript
+computed: {
+  doneTodosCount () {
+    // 现在可以方便的在其它组件中使用上面store中定义的doneTodos
+    return this.$store.getters.doneTodosCount
+  }
+}
+```
+
+Vuex提供的`mapGetters()`辅助函数将`store`中的`getters`映射到局部计算属性。
+
+```javascript 
+import { mapGetters } from "vuex"
+
+export default {
+  computed: {
+    // 使用对象展开运算符将getters混入computed计算属性
+    ...mapGetters([
+      "doneTodosCount",
+      doneCount: "doneTodosCount" // 映射store.getters.doneTodosCount到别名this.doneCount
+    ])
+  }
+}
+```
+
+### Mutations
+
+### Actions
+
+### Module
