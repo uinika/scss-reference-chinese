@@ -1,5 +1,5 @@
 ---
-title: Vue2新特性两三事儿
+title: Vue2技术栈归纳与精粹
 tags: Web
 categories: Summary
 ---
