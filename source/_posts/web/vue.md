@@ -1487,6 +1487,8 @@ actions: {
 
 ### Module
 
+
+
 ### 严格模式
 
 严格模式下，如果state变化不是由`mutation()`函数引起，将会抛出错误。只需要在创建`store`的时候传入`strict: true`即可开启严格模式。
@@ -1501,7 +1503,7 @@ const store = new Vuex.Store({
 
 ```javascript
 const store = new Vuex.Store({
-  strict: process.env.NODE_ENV !== 'production'
+  strict: process.env.NODE_ENV !== "production"
 })
 ```
 
@@ -1509,6 +1511,127 @@ const store = new Vuex.Store({
 
 ### 总结
 
-1. 应用层级的状态应该集中到单个 store 对象中。
-2. 提交 mutation 是更改状态的唯一方法，并且这个过程是同步的。
-3. 异步逻辑都应该封装到 action 里面。
+1. 应用层级的状态应该集中到**单个store对象**中。
+2. 提交`mutation`是更改状态的唯一方法，并且这个过程是**同步**的。
+3. **异步**逻辑都应该封装到`action`里面。
+
+
+## CSS模块化
+
+[CSS Modules](https://github.com/css-modules/css-modules)用于模块化组合CSS，[vue-loader](https://vue-loader.vuejs.org/en/features/css-modules.html)提供了与CSS模块的良好集成。
+
+在单文件组件`.vue`的`<style>`标签上添加`module`属性即可打开CSS模块化特性。
+
+```html
+<style module>
+.red {
+  color: red;
+}
+.bold {
+  font-weight: bold;
+}
+</style>
+```
+
+CSS模块会向Vue组件中注入名为`$style`计算属性，从而实现在组件的`<template/>`中使用动态的`class`属性进行绑定。
+
+```html
+<template>
+  <p :class="$style.red">
+    This should be red
+  </p>
+</template>
+```
+
+## 动画
+
+Vue提供`<transition>`和`<transition-group>`两个内置组件来为Vue提供过渡效果。
+
+### transition内置组件
+
+作为单个组件的过渡效果，不会渲染额外DOM元素。只是将模板内容包裹在其中，简单的运用过渡行为。可以在使用`v-if`、`v-show`、`动态组件`、`组件根节点`的场景下为其添加entering/leaving动画效果。
+
+```html
+<div id="demo">
+  <button v-on:click="show = !show">
+    Toggle
+  </button>
+  <transition name="fade">
+    <p v-if="show">hello</p>
+  </transition>
+</div>
+
+<script>
+new Vue({
+  el: "#demo",
+  data: {
+    show: true
+  }
+})
+</script>
+
+<style>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s
+}
+.fade-enter, .fade-leave-to {
+  opacity: 0
+}
+</style>
+```
+
+entering/leaving的动画效果一共涉及6次class切换，具体生命周期如下图。
+
+![](vue/transition.png "Vue组件动画的class属性生命周期")
+
+### transition-group内置组件
+
+为多个组件提供过渡效果，默认会渲染出一个真实的`<span>`元素，可以通过`tag`属性配置被渲染的元素，其内嵌元素必须提供一个唯一的`key`属性值。
+
+```html
+<div id="list-demo" class="demo">
+  <button v-on:click="add">Add</button>
+  <button v-on:click="remove">Remove</button>
+  <transition-group name="list" tag="p">
+    <span v-for="item in items" v-bind:key="item" class="list-item">
+      {{ item }}
+    </span>
+  </transition-group>
+</div>
+
+<script>
+new Vue({
+  el: "#list-demo",
+  data: {
+    items: [1,2,3,4,5,6,7,8,9],
+    nextNum: 10
+  },
+  methods: {
+    randomIndex: function () {
+      return Math.floor(Math.random() * this.items.length)
+    },
+    add: function () {
+      this.items.splice(this.randomIndex(), 0, this.nextNum++)
+    },
+    remove: function () {
+      this.items.splice(this.randomIndex(), 1)
+    },
+  }
+})
+</script>
+
+<style>
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>
+```
+
