@@ -1296,7 +1296,7 @@ export default {
 
 ### Mutations
 
-修改store中的state的唯一方法是提交mutation，mutations（*`[mjuː"teɪʃ(ə)n]` 变化*）类似于自定义事件，拥有一个字符串事件类型和一个回调函数（*接受state作为参数，是对state进行修改的位置*）。
+修改store中的state的唯一方法是提交mutation（*[mjuː"teɪʃ(ə)n] n.变化*），mutations类似于自定义事件，拥有一个字符串事件类型和一个回调函数（*接受state作为参数，是对state进行修改的位置*）。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1316,7 +1316,7 @@ const store = new Vuex.Store({
 store.commit("increment")
 ```
 
-可以通过store的commit()方法触发指定的mutations，也可以通过store.commit()向mutation传递参数。
+可以通过store的`commit()`方法触发指定的mutations，也可以通过`store.commit()`向mutation传递参数。
 
 ```javascript
 // commit()
@@ -1333,7 +1333,7 @@ mutations: {
 }
 ```
 
-mutation事件类型可以使用常量，同时将应用中包含的常量都放在单独的文件中，更加一目了然。
+mutation事件类型可以使用常量，可以将应用中包含的常量都放在单独文件，便于管理以及防止出现重复。
 
 ```javascript
 // mutation-types.js
@@ -1374,7 +1374,7 @@ export default {
 
 ### Actions
 
-Action用来提交mutation，且Action中可以包含异步操作。Action函数接受一个与store实例具有相同方法和属性的context对象，因此可以通过调用`context.commit`提交一个mutation，或者通过`context.state`和`context.getters`来获取state、getters。
+Action用来提交mutation，且Action中可以包含异步操作。Action函数接受一个与store实例具有相同方法和属性的`context`对象，因此可以通过调用`context.commit`提交一个mutation，或者通过`context.state`和`context.getters`来获取state、getters。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1388,25 +1388,127 @@ const store = new Vuex.Store({
   },
   actions: {
     increment (context) {
-      context.commit('increment')
+      context.commit("increment")
     }
   }
 })
 ```
 
-生产环境下，可能通过ES6的解构参数来简化代码。
+生产环境下，可以通过ES6的解构参数来简化代码。
 
 ```javascript
 actions: {
+  // 直接向action传递commit方法
   increment ({ commit }) {
-    commit('increment')
+    commit("increment")
   }
 }
 ```
 
-Action通过`store.dispatch()`方法进行分发，**mutation**当中只能进行**同步**操作，而**action**内部可以进行**异步**的操作。
+Action通过`store.dispatch()`方法进行分发，**mutation**当中只能进行**同步**操作，而**action**内部可以进行**异步**的操作。下面是一个购物车的例子，代码中分发了多个mutations，并进行了异步API操作。
+
+```javascript
+actions: {
+  checkout ({ commit, state }, products) {
+    // 把当前购物车的物品备份起来
+    const savedCartItems = [...state.cart.added]
+    // 发出结账请求，然后清空购物车
+    commit(types.CHECKOUT_REQUEST)
+    // 购物Promise分别接收成功和失败的回调
+    shop.buyProducts(
+      products,
+      // 成功操作
+      () => commit(types.CHECKOUT_SUCCESS),
+      // 失败操作
+      () => commit(types.CHECKOUT_FAILURE, savedCartItems)
+    )
+  }
+}
+```
+
+组件中可以使用`this.$store.dispatch("xxx")`分发action，或者使用`mapActions()`将组件的`methods`映射为`store.dispatch`（*需要在根节点注入`store`*）。
+
+```javascript
+import { mapActions } from "vuex"
+
+export default {
+  methods: {
+    ...mapActions([
+      "increment" // 映射this.increment()为this.$store.dispatch("increment")
+    ]),
+    ...mapActions({
+      add: "increment" // 映射this.add()为this.$store.dispatch("increment")
+    })
+  }
+}
+```
+
+`store.dispatch`可以处理`action`回调函数当中返回的`Promise`，并且`store.dispatch`本身仍然返回一个`Promise`。
 
 
+```javascript
+actions: {
+  // 定义一个返回Promise对象的actionA
+  actionA ({ commit }) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        commit("someMutation") // 触发mutation
+        resolve()
+      }, 1000)
+    })
+  },
+  // 也可以在actionB中分发actionA
+  actionB ({ dispatch, commit }) {
+    return dispatch("actionA").then(() => {
+      commit("someOtherMutation") // 触发另外一个mutation
+    })
+  }
+}
 
+// 现在可以分发actionA
+store.dispatch("actionA").then(() => {
+  ... ... ...
+})
+```
+
+可以体验通过ES7的异步处理特性`async`/`await`来组合action。
+
+```javascript
+actions: {
+  async actionA ({ commit }) {
+    commit("gotData", await getData())
+  },
+  async actionB ({ dispatch, commit }) {
+    await dispatch("actionA") //等待actionA完成
+    commit("gotOtherData", await getOtherData())
+  }
+}
+```
 
 ### Module
+
+### 严格模式
+
+严格模式下，如果state变化不是由`mutation()`函数引起，将会抛出错误。只需要在创建`store`的时候传入`strict: true`即可开启严格模式。
+
+```javascript
+const store = new Vuex.Store({
+  strict: true
+})
+```
+
+不要在生产环境下启用严格模式，因为它会深度检测不合法的state变化，从而造成不必要的性能损失，我们可以通过在构建工具中增加如下判断避免这种情况。
+
+```javascript
+const store = new Vuex.Store({
+  strict: process.env.NODE_ENV !== 'production'
+})
+```
+
+> 严格模式下，在属于Vuex的state上使用v-model指令会抛出错误，此时需要手动绑定value并监听input、change事件，并在事件回调中手动提交action。另外一种实现方式是直接重写计算属性的get和set方法。
+
+### 总结
+
+1. 应用层级的状态应该集中到单个 store 对象中。
+2. 提交 mutation 是更改状态的唯一方法，并且这个过程是同步的。
+3. 异步逻辑都应该封装到 action 里面。
