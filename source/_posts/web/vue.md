@@ -1487,6 +1487,78 @@ actions: {
 
 ### Module
 
+整个应用使用单一状态树的情况下，所有state都会集中到一个store对象，因此store可能变得非常臃肿。因此，Vuex允许将store切割成模块（*module*），每个模块拥有自己的`state`、`mutation`、`action`、`getter`、甚至是嵌套的子模块。
+
+```javascript
+const moduleA = {
+  state: {},
+  mutations: {},
+  actions: {},
+  getters: {}
+}
+
+const moduleB = {
+  state: {},
+  mutations: {},
+  actions: {}
+}
+
+const store = new Vuex.Store({
+  modules: {
+    a: moduleA,
+    b: moduleB
+  }
+})
+
+store.state.a // moduleA的状态
+store.state.b // moduleB的状态
+```
+
+module内部的`mutations()`和`getters()`接收的第1个参数是模块的局部状态对象。
+
+```javascript
+const moduleA = {
+  state: { count: 0 },
+  mutations: {
+    increment (state) {
+      // 这里的state是模块的局部状态
+      state.count++
+    }
+  },
+  getters: {
+    doubleCount (state) {
+      return state.count * 2
+    }
+  }
+}
+```
+
+模块内部action当中，可以通过`context.state`获取局部状态，以及`context.rootState`获取全局状态。
+
+```javascript
+const moduleA = {
+  // ...
+  actions: {
+    incrementIfOddOnRootSum ({ state, commit, rootState }) {
+      if ((state.count + rootState.count) % 2 === 1) {
+        commit('increment')
+      }
+    }
+  }
+}
+```
+
+模块内部的`getters()`方法，可以通过其第3个参数接收到全局状态。
+
+```javascript
+const moduleA = {
+  getters: {
+    sumWithRootCount (state, getters, rootState) {
+      return state.count + rootState.count
+    }
+  }
+}
+```
 
 
 ### 严格模式
