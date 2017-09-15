@@ -1296,6 +1296,117 @@ export default {
 
 ### Mutations
 
+修改store中的state的唯一方法是提交mutation，mutations（*`[mjuː"teɪʃ(ə)n]` 变化*）类似于自定义事件，拥有一个字符串事件类型和一个回调函数（*接受state作为参数，是对state进行修改的位置*）。
+
+```javascript
+const store = new Vuex.Store({
+  state: {
+    count: 1
+  },
+  mutations: {
+    // 触发类型为increment的mutation时下面函数被调用
+    increment (state) {
+      // 变更状态
+      state.count++
+    }
+  }
+})
+
+// 触发mutation
+store.commit("increment")
+```
+
+可以通过store的commit()方法触发指定的mutations，也可以通过store.commit()向mutation传递参数。
+
+```javascript
+// commit()
+store.commit({
+  type: "increment",
+  amount: 10
+})
+
+// store
+mutations: {
+  increment (state, payload) {
+    state.count += payload.amount
+  }
+}
+```
+
+mutation事件类型可以使用常量，同时将应用中包含的常量都放在单独的文件中，更加一目了然。
+
+```javascript
+// mutation-types.js
+export const SOME_MUTATION = "SOME_MUTATION"
+// store.js
+import Vuex from "vuex"
+import { SOME_MUTATION } from "./mutation-types"
+
+const store = new Vuex.Store({
+  state: { ... },
+  mutations: {
+    // 我们可以使用ES6风格的计算属性命名功能来使用一个常量作为函数名
+    [SOME_MUTATION] (state) {
+      // mutate state
+    }
+  }
+})
+```
+
+> `mutation()`必须是同步函数，因为devtool无法追踪回调函数中对`state`进行的异步修改。
+
+Vue组件可以使用`this.$store.commit("xxx")`提交mutation，或者使用`mapMutations()`将Vue组件中的`methods`映射为`store.commit`调用（*需要在根节点注入`store`*）。
+
+```javascript
+import { mapMutations } from "vuex"
+
+export default {
+  methods: {
+    ...mapMutations([
+      "increment" // 映射this.increment()为this.$store.commit("increment")
+    ]),
+    ...mapMutations({
+      add: "increment" // 映射this.add()为this.$store.commit("increment")
+    })
+  }
+}
+```
+
 ### Actions
+
+Action用来提交mutation，且Action中可以包含异步操作。Action函数接受一个与store实例具有相同方法和属性的context对象，因此可以通过调用`context.commit`提交一个mutation，或者通过`context.state`和`context.getters`来获取state、getters。
+
+```javascript
+const store = new Vuex.Store({
+  state: {
+    count: 0
+  },
+  mutations: {
+    increment (state) {
+      state.count++
+    }
+  },
+  actions: {
+    increment (context) {
+      context.commit('increment')
+    }
+  }
+})
+```
+
+生产环境下，可能通过ES6的解构参数来简化代码。
+
+```javascript
+actions: {
+  increment ({ commit }) {
+    commit('increment')
+  }
+}
+```
+
+Action通过`store.dispatch()`方法进行分发，**mutation**当中只能进行**同步**操作，而**action**内部可以进行**异步**的操作。
+
+
+
 
 ### Module
