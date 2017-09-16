@@ -18,6 +18,80 @@ Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框�
 
 * **双向绑定**：
 
+Vue遍历data对象上的所有属性，并通过[Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)将这些属性转换为getter/setter（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，最终触发Vue组件的`render()`函数重新渲染组件。
+
+![](vue/data.png "响应式绑定的生命周期")
+
+与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter转化，所以data对象上的属性必须在实例化前存在才可以让Vue正确的进行转换。
+
+```javascript
+var vm = new Vue({
+  data:{
+    a:1
+  }
+})
+vm.a = 1  // 响应的
+vm.b = 2 // 非响应的
+```
+
+因此，Vue不允许在已经实例化的组件上添加新的动态根级响应属性（*即直接挂载在data下的属性*），但是可以使用`Vue.set(object, key, value)`方法添加响应式属性。
+
+```javascript
+Vue.set(vm.someObject, 'b', 2)
+
+// vm.$set()实例方法是全局Vue.set()的别名
+this.$set(this.someObject,'b',2)
+
+// 使用Object.assign()或_.extend()也可以添加响应式属性，但是需要创建一个包含原对象属性和新属性的对象，从而有效的触发watch()
+this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
+```
+
+Vue对DOM的更新是异步的，观察到数据变化后Vue将开启一个队列，缓冲在同一事件循环（*Vue的event loop被称为**tick** [tɪk] n.标记，记号*）中发生的所有数据改变。如果同一个watcher被多次触发，只会被推入一次到这个队列。
+
+> Vue内部会通过原生JavaScript的`Promise.then`、`MutationObserver`、`setTimeout(fn, 0)`来执行异步队列当中的watcher。
+
+在需要人为操作DOM的场景下，为了在Vue响应数据变化之后再更新DOM，可以手动调用`Vue.nextTick(callback)`，并将DOM操作逻辑放置在callback回调函数中，从而确保数据在完成响应式更新之后再操作DOM。
+
+```html
+<div id="example">{{message}}</div>
+
+<script>
+var vue = new Vue({
+  el: '#example',
+  data: {
+    message: '123'
+  }
+})
+vue.message = 'new message' // 更改数据
+vue.$el.textContent === 'new message' // false
+vue.nextTick(function () {
+  vm.$el.textContent === 'new message' // true
+})
+</script>
+
+<script>
+Vue.component('example', {
+  template: '<span>{{ message }}</span>',
+  data: function () {
+    return {
+      message: '没有更新'
+    }
+  },
+  methods: {
+    updateMessage: function () {
+      this.message = '更新完成'
+      console.log(this.$el.textContent) // 没有更新
+      this.$nextTick(function () {
+        console.log(this.$el.textContent) // 更新完成
+      })
+    }
+  }
+})
+</script>
+```
+
+
+
 
 * **虚拟DOM**：Vue通过建立Virtual DOM（*VNode*）来追踪真实DOM发生的变化。
 
