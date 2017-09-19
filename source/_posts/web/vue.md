@@ -12,11 +12,13 @@ Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框�
 
 ## Vue与Angular的比较
 
-* **组件化**：Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
+### 组件化
+
+Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
 
 ![](vue/components.png "组件化")
 
-* **双向绑定与响应式绑定**：
+### 双向绑定与响应式绑定
 
 Vue遍历data对象上的所有属性，并通过[Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)将这些属性转换为getter/setter（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，最终触发Vue组件的`render()`函数重新渲染组件。
 
@@ -92,7 +94,9 @@ Vue.component("example", {
 </script>
 ```
 
-**虚拟DOM**：Vue通过建立Virtual DOM（*VNode*）来追踪真实DOM发生的变化。
+### 虚拟DOM
+
+Vue通过建立Virtual DOM（*VNode*）来追踪真实DOM发生的变化。
 
 
 ## Vue对象的选项
