@@ -14,6 +14,39 @@ sudo ntfsfix /dev/sda3
 sudo ntfsfix /dev/sda4
 ```
 
+## VSCode
+
+```javascript
+{
+  "workbench.statusBar.visible": false,
+  "workbench.activityBar.visible": true,
+  "editor.tabSize": 2,
+  "editor.fontSize": 12,
+  "editor.fontFamily": "Source Code Pro, Consolas, Ubuntu mono",
+  "window.zoomLevel": 0,
+  "beautify.tabSize": 2,
+  "editor.dragAndDrop": false,
+  "window.openFilesInNewWindow": "on",
+  "explorer.openEditors.visible": 0,
+  "editor.lineHeight": 19,
+  "typescript.check.tscVersion": false,
+  "window.menuBarVisibility": "toggle",
+  "workbench.welcome.enabled": false,
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 100,
+  "editor.minimap.enabled": false,
+  "workbench.iconTheme": "material-icon-theme",
+  "workbench.colorTheme": "Monokai",
+  "editor.renderWhitespace": "boundary",
+  "vsicons.dontShowNewVersionMessage": true,
+  "material-icon-theme.showUpdateMessage": false,
+  "emmet.syntaxProfiles": {
+    "vue-html": "html",
+    "vue": "html"
+  }
+}
+```
+
 <!-- more -->
 
 ## DEB Packages
@@ -167,39 +200,6 @@ include /home/hank/nginx.conf
     listen 1987;
     root D:\manual\vuejs;
   }
-```
-
-## VSCode
-
-```javascript
-{
-  "workbench.statusBar.visible": false,
-  "workbench.activityBar.visible": true,
-  "editor.tabSize": 2,
-  "editor.fontSize": 12,
-  "editor.fontFamily": "Source Code Pro, Consolas, Ubuntu mono",
-  "window.zoomLevel": 0,
-  "beautify.tabSize": 2,
-  "editor.dragAndDrop": false,
-  "window.openFilesInNewWindow": "on",
-  "explorer.openEditors.visible": 0,
-  "editor.lineHeight": 19,
-  "typescript.check.tscVersion": false,
-  "window.menuBarVisibility": "toggle",
-  "workbench.welcome.enabled": false,
-  "editor.wordWrap": "on",
-  "editor.wordWrapColumn": 100,
-  "editor.minimap.enabled": false,
-  "workbench.iconTheme": "material-icon-theme",
-  "workbench.colorTheme": "Monokai",
-  "editor.renderWhitespace": "boundary",
-  "vsicons.dontShowNewVersionMessage": true,
-  "material-icon-theme.showUpdateMessage": false,
-  "emmet.syntaxProfiles": {
-    "vue-html": "html",
-    "vue": "html"
-  }
-}
 ```
 
 ## Atom Plugins
