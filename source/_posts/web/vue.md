@@ -18,13 +18,15 @@ Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`C
 
 ![](vue/components.png "组件化")
 
+Angular在1.6.x版本开始提供`component()`方法和`Component Router`来提供组件化开发的体验，但是依然需要依赖于`controller`和`service`的划分，实质上依然没有摆脱MVC纵向分层思想的桎梏。
+
 ### 双向绑定与响应式绑定
 
-Vue遍历data对象上的所有属性，并通过[Object.defineProperty()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)将这些属性转换为getter/setter（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，最终触发Vue组件的`render()`函数重新渲染组件。
+Vue遍历data对象上的所有属性，并通过原生`Object.defineProperty()`方法将这些属性转换为`getter/setter`（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，最终触发Vue组件的`render()`函数重新渲染组件。
 
 ![](vue/data.png "响应式绑定的生命周期")
 
-与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter转化，所以data对象上的属性必须在实例化前存在才可以让Vue正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的属性，属于真正意义上的双向绑定。
+与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter转化，所以data对象上的属性必须在实例化前存在才可以让Vue正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的属性，属于真正意义上的**双向绑定**。
 
 ```javascript
 var vm = new Vue({
@@ -96,7 +98,33 @@ Vue.component("example", {
 
 ### 虚拟DOM
 
-Vue通过建立Virtual DOM（*VNode*）来追踪真实DOM发生的变化。
+**Vritual DOM**这个概念最先由React引入，是一种DOM对象差异化比较方案，即将DOM对象抽象成为Vritual DOM对象（*即render()函数渲染的结果*），然后通过差异算法对Vritual DOM进行对比并返回差异，最后通过一个补丁算法将返回的差异对象应用在真实DOM结点。
+
+Vue当中的Virtual DOM对象被称为**VNode**（*`template`当中的内容会被编译为render()函数，而render()函数接收一个createElement()函数，并最终返回一个VNode对象*），补丁算法来自于另外一个开源项目[snabbdom](https://github.com/snabbdom/snabbdom)，即将真实的DOM操作映射成对虚拟DOM的操作，通过减少对真实DOM的操作次数来提升性能。
+
+```bash 
+➜  vdom git:(dev) tree
+├── create-component.js
+├── create-element.js
+├── create-functional-component.js
+├── helpers
+│   ├── extract-props.js
+│   ├── get-first-component-child.js
+│   ├── index.js
+│   ├── is-async-placeholder.js
+│   ├── merge-hook.js
+│   ├── normalize-children.js
+│   ├── resolve-async-component.js
+│   └── update-listeners.js
+├── modules
+│   ├── directives.js
+│   ├── index.js
+│   └── ref.js
+├── patch.js
+└── vnode.js
+```
+
+VNode的设计出发点与Angular的`$digest`循环类似，都是通过**减少对真实DOM的操作次数来提升性能**，但是Vue的实现更加轻量化，摒弃了Angular为了实现双向绑定而提供的`$apply()`、`$eval()`封装函数，有选择性的实现了Angular当中`$compile()`、`$watch()`类似功能。
 
 
 ## Vue对象的选项
