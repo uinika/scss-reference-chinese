@@ -1339,10 +1339,7 @@ components: {
 
 ### 组件递归
 
-当Vue组件递归调用自身时，需要在创建组件时添加`name`选项。
-
-当你利用Vue.component全局注册了一个组件，全局的 ID 作为组件的 name 选项，被自动设置.
-
+当局部注册的Vue组件递归调用自身时，需要在创建组件时添加`name`选项，全局注册的组件则可以省略该属性，因为Vue会自动进行添加。
 
 ```javascript
 // 局部注册
@@ -1354,23 +1351,45 @@ new Vue({
 
 // 全局注册
 Vue.component("my-component", {
-  name: "my-component",
+  // name: "my-component", 可以省略name属性
   template: "<div><my-component></my-component></div>"
 })
 ```
 
-> 组件递归出现死循环时，会提示`max stack size exceeded`错误，所以需要确保递归操作都拥有一个终止条件（比如使用v-if并返回false）。
+> 组件递归出现死循环时，会提示`max stack size exceeded`错误，所以需要确保递归操作都拥有一个终止条件（*比如使用v-if并返回false*）。
 
+
+### 组件的循环引用
 
 
 ### 组件模板
 
+- 可以在Vue组件上使用`inline-template`属性，组件会将内嵌的HTML内容作为组件本身的模板进行渲染，而非将其作为`slot`分发的内容。
+
+```html
+<my-component inline-template>
+  <div>
+    <p>These are compiled as the component"s own template.</p>
+    <p>Not parent"s transclusion content.</p>
+  </div>
+</my-component>
+```
+
+- 也可以通过在`<script>`标签内使用`type="text/x-template"`和`id`属性来定义一个内嵌模板。
+
+```html
+<script type="text/x-template" id="hello-world-template">
+  <p>Hello hello hello</p>
+</script>
+
+<script>
+Vue.component("hello-world", {
+  template: "#hello-world-template"
+})
+</script>
+```
 
 
-
-
-
------
 
 
 
