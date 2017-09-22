@@ -566,6 +566,23 @@ vm = {
 }
 ```
 
+### $refs属性
+
+为子组件指定`ref`属性之后，可以通过父组件的`$refs`实例属性进行访问 。
+
+```html
+<div id="parent">
+  <user-profile ref="profile"></user-profile>
+</div>
+
+<script>
+var parent = new Vue({ el: "#parent" })
+var child = parent.$refs.profile // 访问子组件
+</script>
+```
+
+> $refs会在组件渲染完毕后填充，是非响应式的，仅作为需要直接访问子组件的应急方案，因此要**避免在模板或计算属性中使用$refs**。
+
 
 ## 生命周期
 
@@ -1254,6 +1271,109 @@ var vm = new Vue({
   </component>
 </keep-alive>
 ```
+
+### 组件异步加载
+
+Vue允许将组件定义为工厂函数，从而异步的解析组件定义。Vue只会在组件渲染时才触发工厂函数，并将结果缓存起来用于后续渲染。定义组件的工厂函数接收resolve（*接收到从服务器下载的Vue组件options时被调用*）和reject（*当远程Vue组件options加载失败时调用*）回调函数作为参数。
+
+```javascript
+Vue.component("async-example", function (resolve, reject) {
+  setTimeout(function () {
+    // 将组件定义传递到resolve回调函数当中
+    resolve({
+      template: "<div>I am async!</div>"
+    })
+  }, 1000)
+})
+```
+
+可以结合Webpack提供的代码切割功能，将Vue组件的options对象提取到单独JavaScript文件，从而实现异步的按需加载。
+
+```javascript
+// 使用webpack的require()来进行异步代码块切割
+Vue.component("async-webpack-example", function (resolve) {
+  require(["./my-async-component"], resolve)
+})
+
+// 使用webpack的import()来进行异步代码块切割
+Vue.component(
+  "async-webpack-example", () => import("./my-async-component")
+)
+```
+
+从Vue 2.3.0版本开始，可以通过下面的方式来定义一个异步组件。
+
+```javascript
+const AsyncWebpackExample = () => ({
+  component: import("./MyComp.vue"), // 需要加载的组件
+  loading: LoadingComp, // loading时渲染的组件
+  error: ErrorComp, // 出错时渲染的组件
+  delay: 200, // 渲染loading组件前的等待时间（默认：200ms）
+  timeout: 3000 // 最长等待时间，超出则渲染error组件（默认：Infinity）
+})
+```
+
+> 在路由组件上使用这种写法，需要使用vue-router的2.4.0以上版本。
+
+### 组件命名约定
+
+JavaScript中命名组件组件时可以使用`kebab-case`、`camelCase`、`PascalCase`，但HTML模板中只能使用`kebab-case`格式。
+
+```html
+<kebab-cased-component></kebab-cased-component>
+<camel-cased-component></camel-cased-component>
+<pascal-cased-component></pascal-cased-component>
+<!-- 也可以通过自关闭方式使用组件 -->
+<kebab-cased-component />
+
+<script>
+components: {
+  "kebab-cased-component": {},
+  "camelCasedComponent": {},
+  "PascalCasedComponent": {}
+}
+</script>
+```
+
+> 推荐JavaScript中通过`PascalCase`方式声明组件， HTML中则通过`kebab-case`方式使用组件。
+
+### 组件递归
+
+当Vue组件递归调用自身时，需要在创建组件时添加`name`选项。
+
+当你利用Vue.component全局注册了一个组件，全局的 ID 作为组件的 name 选项，被自动设置.
+
+
+```javascript
+// 局部注册
+new Vue({
+  el: "#my-component",
+  name: "my-component",
+  template: "<div><my-component></my-component></div>"
+})
+
+// 全局注册
+Vue.component("my-component", {
+  name: "my-component",
+  template: "<div><my-component></my-component></div>"
+})
+```
+
+> 组件递归出现死循环时，会提示`max stack size exceeded`错误，所以需要确保递归操作都拥有一个终止条件（比如使用v-if并返回false）。
+
+
+
+### 组件模板
+
+
+
+
+
+
+-----
+
+
+
 
 
 ## Vuex状态管理
