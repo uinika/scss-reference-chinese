@@ -1315,6 +1315,37 @@ const AsyncWebpackExample = () => ({
 
 > 在路由组件上使用这种写法，需要使用vue-router的2.4.0以上版本。
 
+### 组件的循环引用
+
+循环引用，即两个组件互相引用对方，例如下面代码中`tree-folder`、`tree-folder-contents`两个组件同时成为了对方的父或子节点，如果使用Webpack模块化管理工具`requiring`/`importing`组件的时候，会报出`Failed to mount component: template or render function not defined.`的错误。
+
+```html
+
+<template>
+  <p>
+    <span>{{ folder.name }}</span>
+    <tree-folder-contents :children="folder.children"/>
+  </p>
+</template>
+
+<template>
+  <ul>
+    <li v-for="child in children">
+      <tree-folder v-if="child.children" :folder="child"/>
+      <span v-else>{{ child.name }}</span>
+    </li>
+  </ul>
+</template>
+```
+
+因为`tree-folder`、`tree-folder-contents`相互引用对方之后，无法确定组件加载的先后顺序陷入死循环，所以需要事先指明webpack组件加载的优先级。解决上面例子中Vue组件循环引用的问题，可以在`tree-folder`组件的`beforeCreate()`生命周期函数内注册引发问题的`tree-folder-contents`组件。
+
+```javascript
+beforeCreate: function () {
+  this.$options.components.TreeFolderContents = require("./tree-folder-contents.vue").default
+}
+```
+
 ### 组件命名约定
 
 JavaScript中命名组件组件时可以使用`kebab-case`、`camelCase`、`PascalCase`，但HTML模板中只能使用`kebab-case`格式。
@@ -1357,38 +1388,6 @@ Vue.component("my-component", {
 ```
 
 > 组件递归出现死循环时，会提示`max stack size exceeded`错误，所以需要确保递归操作都拥有一个终止条件（*比如使用v-if并返回false*）。
-
-
-### 组件的循环引用
-
-循环引用，即两个组件互相引用对方，例如下面代码中`tree-folder`、`tree-folder-contents`两个组件同时成为了对方的父或子节点，如果使用Webpack模块化管理工具`requiring`/`importing`组件的时候，会报出`Failed to mount component: template or render function not defined.`的错误。
-
-```html
-
-<template>
-  <p>
-    <span>{{ folder.name }}</span>
-    <tree-folder-contents :children="folder.children"/>
-  </p>
-</template>
-
-<template>
-  <ul>
-    <li v-for="child in children">
-      <tree-folder v-if="child.children" :folder="child"/>
-      <span v-else>{{ child.name }}</span>
-    </li>
-  </ul>
-</template>
-```
-
-因为`tree-folder`、`tree-folder-contents`互相引用对方以后，无法确定模块加载的先后顺序从而陷入死循环，所以需要事先指明webpack组件加载的优先级。要解决Vue组件循环引用的问题，可以在`tree-folder`组件的`beforeCreate()`生命周期函数中注册引发问题的`tree-folder-contents`组件。
-
-```javascript
-beforeCreate: function () {
-  this.$options.components.TreeFolderContents = require('./tree-folder-contents.vue').default
-}
-```
 
 ### 组件模板
 
