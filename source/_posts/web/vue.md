@@ -1420,7 +1420,7 @@ Vuex是专门为Vue应用程序提供的状态管理模式，每个Vuex应用的
 
 ![](vue/vuex.png "Vuex执行流程")
 
-Vuex的`state`存储是响应式的，即`store`中的`state`发生变化时，相应组件也会得到更新，修改`store`当中`state`的唯一途径是提交`mutations`。
+Vuex的`state`是响应式的，即`store`中的`state`发生变化时，相应组件也会得到更新，修改`store`当中`state`的唯一途径是提交`mutations`。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1434,14 +1434,14 @@ const store = new Vuex.Store({
   }
 })
 
-store.commit("increment") // 通过store.state来获取状态对象
+store.commit("increment")       // 通过store.state来获取状态对象
 
-console.log(store.state.count) // 通过store.commit()改变状态
+console.log(store.state.count)  // 通过store.commit()改变状态
 ```
 
 ### State
 
-从`store`当中获取`state`最简单的方法是在计算属性中返回指定`state`，每当`state`发生改变的时候都会重新执行计算属性，并且更新关联的DOM。
+从`store`当中获取`state`的最简单办法是在计算属性中返回指定的`state`，每当`state`发生改变的时候都会重新执行计算属性，并且更新关联的DOM。
 
 ```javascript
 const Counter = {
@@ -1479,7 +1479,7 @@ const Counter = {
 }
 ```
 
-Vuex提供`mapState()`辅助函数，避免使用多个`state`的时候，也要去声明多个计算属性。
+Vuex提供`mapState()`辅助函数，避免使用多个`state`的场景下，多次去声明计算属性。
 
 ```javascript
 // 在单独构建的版本中辅助函数为 Vuex.mapState
@@ -1511,7 +1511,7 @@ computed: {
 }
 ```
 
-Vuex允许在`store`中定义`getters`（*可视为store的计算属性*），`getters`的返回值会根据其依赖被缓存，只有当依赖值发生了改变才会被重新计算。该方法接收`state`作为第1个参数，其它`getters`作为第2个参数。可以直接通过在`store`上调用`getters`来获取指定的计算值。
+Vuex允许在`store`中定义`getters`（*可视为store的计算属性*），`getters`的返回值会根据其依赖被缓存，只有当依赖值发生了改变才会被重新计算。该方法接收`state`作为第1个参数，其它`getters`作为第2个参数。可以直接在`store`上调用`getters`来获取指定的计算值。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1532,7 +1532,7 @@ const store = new Vuex.Store({
 store.getters.doneTodos
 ```
 
-这样就可以方便的根据`store`中现有的`state`派生出新的`state`，从而避免需要在多个组件中复用时造成代码冗余。
+这样就可以方便的根据`store`中现有的`state`派生出新的`state`，从而避免在多个组件中复用时造成代码冗余。
 
 ```javascript
 computed: {
@@ -1569,10 +1569,9 @@ const store = new Vuex.Store({
     count: 1
   },
   mutations: {
-    // 触发类型为increment的mutation时下面函数被调用
+    // 触发类型为increment的mutation时被调用
     increment (state) {
-      // 变更状态
-      state.count++
+      state.count++ // 变更状态
     }
   }
 })
@@ -1603,6 +1602,7 @@ mutation事件类型可以使用常量，可以将应用中包含的常量都放
 ```javascript
 // mutation-types.js
 export const SOME_MUTATION = "SOME_MUTATION"
+
 // store.js
 import Vuex from "vuex"
 import { SOME_MUTATION } from "./mutation-types"
@@ -1710,7 +1710,6 @@ export default {
 
 `store.dispatch`可以处理`action`回调函数当中返回的`Promise`，并且`store.dispatch`本身仍然返回一个`Promise`。
 
-
 ```javascript
 actions: {
   // 定义一个返回Promise对象的actionA
@@ -1786,8 +1785,7 @@ const moduleA = {
   state: { count: 0 },
   mutations: {
     increment (state) {
-      // 这里的state是模块的局部状态
-      state.count++
+      state.count++ // 这里的state是模块的局部状态
     }
   },
   getters: {
