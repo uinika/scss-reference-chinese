@@ -1018,7 +1018,7 @@ Vue.component("example", {
 });
 ```
 
->  `props`会在组件实例创建之前进行校验。
+> `props`会在组件实例创建之前进行校验。
 
 #### 组件的非props属性
 
@@ -1035,7 +1035,7 @@ Vue.component("example", {
 <input type="date" data-3d-date-picker="true" class="form-control date-picker-theme-dark">
 ```
 
-> 父组件传递给子组件的属性可能会覆盖子组件本身的属性，从而对子组件造成破坏和污染。
+> 父组件传递给子组件的属性可能会覆盖子组件本身的属性，因而会对子组件造成破坏和污染。
 
 ### 事件
 
@@ -1071,6 +1071,7 @@ Vue.component("example", {
       }
     },
   })
+
   new Vue({
     el: "#counter-event-example",
     data: {
@@ -1096,7 +1097,7 @@ Vue.component("example", {
 
 * `.sync`修饰符
 
-Vue中的props本质是不能进行响应式绑定的，以防止破坏单向数据流，造成多个子组件对父组件状态形成污染。但是生产环境下，props响应式绑定的需求是切实存在的。因此，Vue将`.sync`修饰符封装为糖衣语法，父组件在子组件的props使用该修饰符后，父组件会为props自动绑定`v-on`事件，子组件则在监听到props变化时向父组件`$emit`更新事件，从而让父组件的props能够与子组件进行同步。
+Vue中的`props`本质是不能进行响应式绑定的，以防止破坏单向数据流，造成多个子组件对父组件状态形成污染。但是生产环境下，`props`响应式绑定的需求是切实存在的。因此，Vue将`.sync`修饰符封装为糖衣语法，父组件在子组件的props使用该修饰符后，父组件会为props自动绑定`v-on`事件，子组件则在监听到props变化时向父组件`$emit`更新事件，从而让父组件的`props`能够与子组件进行同步。
 
 ```html
 <!-- 使用.sync修饰符 -->
@@ -1108,7 +1109,7 @@ Vue中的props本质是不能进行响应式绑定的，以防止破坏单向数
 
 * 平行组件通信
 
-非父子关系的组件进行通信时，可以使用一个空的Vue实例作为中央事件总线。
+非父子关系的组件进行通信时，可以使用一个**空**的Vue实例作为**中央事件总线**。
 
 ```javascript
 var bus = new Vue()
@@ -1124,10 +1125,9 @@ bus.$on("id-selected", function (id) {
 
 ### slot
 
-为了让组件可以组合，需要混合父组件的内容与子组件模板，此时可以在子组件中使用`<slot>`作为父组件内容的插槽。
+可以将父组件的内容混入到子组件的模板当中，此时可以在子组件中使用`<slot>`作为父组件内容的插槽。
 
-> 父组件模板的内容在父组件作用域内编译；子组件模板的内容在子组件作用域内编译。
-
+> 父组件模板的内容在父组件作用域内编译，子组件模板的内容在子组件作用域内编译。
 
 #### 匿名插槽
 
@@ -1162,11 +1162,11 @@ bus.$on("id-selected", function (id) {
 </div>
 ```
 
-> `<slot>`标签中的内容会在子组件作用域内编译，在父组件没有需要插入的内容时才会显示。
+> `<slot>`标签中的内容会在子组件作用域内编译，并在父组件没有需要插入的内容时才会显示。
 
 #### 具名插槽
 
-`<slot>`元素可以使用`name`属性来配置如何分发内容。
+可以通过`<slot>`元素的`name`属性来配置如何分发内容。
 
 ```html
 <!-- 子组件 -->
@@ -1238,7 +1238,7 @@ bus.$on("id-selected", function (id) {
 
 ### 动态组件
 
-通过使用`<component>`元素并动态绑定其`is`属性，可以让多个组件使用相同的Vue对象挂载点，并实现动态切换。
+使用`<component>`元素并动态绑定其`is`属性，可以让多个组件使用相同的Vue对象挂载点，并实现动态切换。
 
 ```html
 <script>
@@ -1260,7 +1260,7 @@ var vm = new Vue({
 </component>
 ```
 
-如果需要将切换的组件保留在内存，保留其状态并避免重新渲染，可以使用Vue内置的`keep-alive`指令。
+如果需要将切换的组件保持在内存，保留其状态并且避免重新渲染，可以使用Vue内置的`keep-alive`指令。
 
 ```html
 <keep-alive>
@@ -1272,7 +1272,7 @@ var vm = new Vue({
 
 ### 组件异步加载
 
-Vue允许将组件定义为工厂函数，从而异步的解析组件定义。Vue只会在组件渲染时才触发工厂函数，并将结果缓存起来用于后续渲染。定义组件的工厂函数接收resolve（*接收到从服务器下载的Vue组件options时被调用*）和reject（*当远程Vue组件options加载失败时调用*）回调函数作为参数。
+Vue允许将组件定义为工厂函数，从而异步的解析组件定义。Vue只会在组件渲染时才触发工厂函数，并将结果缓存起来用于后续渲染。定义组件的工厂函数将会接收resolve（*接收到从服务器下载的Vue组件options时被调用*）和reject（*当远程Vue组件options加载失败时调用*）回调函数作为参数。
 
 ```javascript
 Vue.component("async-example", function (resolve, reject) {
@@ -1285,7 +1285,7 @@ Vue.component("async-example", function (resolve, reject) {
 })
 ```
 
-可以结合Webpack提供的代码切割功能，将Vue组件的options对象提取到单独JavaScript文件，从而实现异步的按需加载。
+可以结合Webpack提供的**代码切割**功能，将Vue组件的options对象提取到单独JavaScript文件，从而实现异步的按需加载。
 
 ```javascript
 // 使用webpack的require()来进行异步代码块切割
@@ -1303,11 +1303,11 @@ Vue.component(
 
 ```javascript
 const AsyncWebpackExample = () => ({
-  component: import("./MyComp.vue"), // 需要加载的组件
-  loading: LoadingComp, // loading时渲染的组件
-  error: ErrorComp, // 出错时渲染的组件
-  delay: 200, // 渲染loading组件前的等待时间（默认：200ms）
-  timeout: 3000 // 最长等待时间，超出则渲染error组件（默认：Infinity）
+  component: import("./MyComp.vue"),   // 需要加载的组件
+  loading: LoadingComp,                // loading时渲染的组件
+  error: ErrorComp,                    // 出错时渲染的组件
+  delay: 200,                          // 渲染loading组件前的等待时间（默认：200ms）
+  timeout: 3000                        // 最长等待时间，超出则渲染error组件（默认：Infinity）
 })
 ```
 
@@ -1315,10 +1315,9 @@ const AsyncWebpackExample = () => ({
 
 ### 组件的循环引用
 
-循环引用，即两个组件互相引用对方，例如下面代码中`tree-folder`、`tree-folder-contents`两个组件同时成为了对方的父或子节点，如果使用Webpack模块化管理工具`requiring`/`importing`组件的时候，会报出`Failed to mount component: template or render function not defined.`的错误。
+循环引用，即两个组件互相引用对方，例如下面代码中`tree-folder`、`tree-folder-contents`两个组件同时成为了对方的父或子节点，如果使用Webpack模块化管理工具`requiring`/`importing`组件的时候，会报出`Failed to mount component: template or render function not defined.`错误。
 
 ```html
-
 <template>
   <p>
     <span>{{ folder.name }}</span>
@@ -1825,7 +1824,6 @@ const moduleA = {
   }
 }
 ```
-
 
 ### 严格模式
 
