@@ -385,22 +385,22 @@ Vue.component("my-component", {
 ## Vue对象全局API
 
 ```javascript
-Vue.extend(options) //通过继承一个option对象来创建一个Vue实例。
-Vue.nextTick([callback, context]) //在下次DOM更新循环结束之后执行延迟回调。
-Vue.set(target, key, value) // 设置对象的属性，如果是响应式对象，会触发视图更新。
-Vue.delete(target, key) // 删除对象的属性，如果是响应式对象，会触发视图更新。
-Vue.directive(id, [definition]) // 注册或获取全局指令。
-Vue.filter(id, [definition]) // 注册或获取全局过滤器。
-Vue.component(id, [definition]) // 注册或获取全局组件。
-Vue.use(plugin) // 安装Vue插件。
-Vue.mixin(mixin) // 全局注册一个mixin对象。
-Vue.compile(template) // 在render函数中编译模板字符串。
-Vue.version // 提供当前使用Vue的版本号。
+Vue.extend(options)                 // 通过继承一个option对象来创建一个Vue实例。
+Vue.nextTick([callback, context])   // 在下次DOM更新循环结束之后执行延迟回调。
+Vue.set(target, key, value)         // 设置对象的属性，如果是响应式对象，将会触发视图更新。
+Vue.delete(target, key)             // 删除对象的属性，如果是响应式对象，将会触发视图更新。
+Vue.directive(id, [definition])     // 注册或获取全局指令。
+Vue.filter(id, [definition])        // 注册或获取全局过滤器。
+Vue.component(id, [definition])     // 注册或获取全局组件。
+Vue.use(plugin)                     // 安装Vue插件。
+Vue.mixin(mixin)                    // 全局注册一个mixin对象。
+Vue.compile(template)               // 在render函数中编译模板字符串。
+Vue.version                         // 提供当前使用Vue的版本号。
 ```
 
 ### Vue.mixin(mixin)
 
-使用全局mixins将会影响到所有之后创建的Vue实例。
+使用全局mixins将会影响到所有**之后创建**的Vue实例。
 
 ```javascript
 // 为自定义选项myOption注入一个处理器。
@@ -463,7 +463,7 @@ Vue.directive("focus", {
 
 ### Vue.filter(id, [definition])
 
-Vue可以通过定义过滤器，进行一些常见的文本格式化，可以用于mustache插值和v-bind表达式当中，使用时通过管道符`|`添加在JavaScript表达式尾部。
+Vue可以通过定义过滤器，进行一些常见的文本格式化，可以用于mustache插值和v-bind表达式当中，使用时通过管道符`|`添加在表达式尾部。
 
 ```html
 <!-- in mustaches -->
@@ -495,7 +495,7 @@ Vue可以通过定义过滤器，进行一些常见的文本格式化，可以�
 
 ### Vue.use(plugin)
 
-Vue通过插件来添加一些全局功能，Vue插件都会重写其`install()`方法，该方法第1个参数是`Vue构造器`, 第2个参数是可选的`option对象`:
+Vue通过插件来添加一些全局功能，Vue插件都会覆写其`install()`方法，该方法第1个参数是`Vue构造器`, 第2个参数是可选的`option对象`:
 
 ```javascript
 MyPlugin.install = function (Vue, options) {
@@ -517,7 +517,7 @@ MyPlugin.install = function (Vue, options) {
 }
 ```
 
-通过全局方法`Vue.use()`使用指定插件，使用时可以传入一个选项对象。
+通过全局方法`Vue.use()`使用指定插件，使用的时候也可以传入一个option对象。
 
 ```javascript
 Vue.use(MyPlugin, {someOption: true})
@@ -566,7 +566,7 @@ vm = {
 
 ### $refs属性
 
-为子组件指定`ref`属性之后，可以通过父组件的`$refs`实例属性进行访问 。
+**子**组件指定`ref`属性之后，可以通过**父**组件的`$refs`实例属性对其进行访问 。
 
 ```html
 <div id="parent">
@@ -588,9 +588,9 @@ var child = parent.$refs.profile // 访问子组件
 
 ![](vue/lifecycle.png "组件的生命周期")
 
-> 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch("a", newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`会是`undefined`。
+> 不要在Vue实例的属性和回调上使用箭头函数，比如`created: () => console.log(this.a)`或`vm.$watch("a", newValue => this.myMethod())`。因为箭头函数的this与父级上下文绑定，并不指向Vue实例本身，所以前面代码中的`this.a`或`this.myMethod`将会是`undefined`。
 
-> 使用jQuery对DOM的操作可以放置在`Mounted`属性上进行，即Vue组件已经完成在DOM上挂载的时候。
+> 通过jQuery对DOM进行的操作可以放置在`Mounted`属性上进行，即当Vue组件已经完成在DOM上挂载的时候。
 
 
 ## 数据绑定
@@ -612,7 +612,7 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 
 ### 绑定HTML的class和style
 
-操作class与style是前端数据绑定的常见需求，Vue通过`v-bind:class`和`v-bind:style`指令有针对性的对这两种操作进行了增强。
+直接操作`class`与`style`属性是前端开发当中的常见需求，Vue通过`v-bind:class`和`v-bind:style`指令有针对性的对这两种操作进行了增强。
 
 #### v-bind:class
 
@@ -723,11 +723,11 @@ Mustache不能用于HTML属性，此时需要借助于`v-bind`指令。
 <div v-bind:style="[styleHeight, styleWidth]"></div>
 ```
 
-使用`v-bind:style`时Vue会自动添加prefix前缀，常见的prefix前缀如下：
+使用`v-bind:style`时Vue会自动添加*prefix前缀*，常见的prefix前缀如下：
 
 * `-webkit-` Chrome、Safari、新版Opera、所有iOS浏览器(包括iOS版Firefox)，几乎所有WebKit内核浏览器。
 * `-moz-` 针对Firefox浏览器。
-* `-o-` 使用WebKit内核前的老版本Opera。
+* `-o-` 未使用WebKit内核的老版本Opera。
 * `-ms-` 微软的IE以及Edge浏览器。
 
 ### 使用JavaScript表达式
@@ -743,7 +743,7 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 <!-- 这是语句，不是表达式 -->
 {{ var a = 1 }}
 
-<!-- 流控制也不会生效，请使用三元表达式 -->
+<!-- if流程控制属于多个表达式，因此不会生效，但可以使用三元表达式 -->
 {{ if (ok) { return message } }}
 ```
 
@@ -769,7 +769,7 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 
 ## 内置指令
 
-带有`v-`前缀，当表达式的值改变时，响应式的将其影响作用于DOM。指令可以接收后面以`:`表示的**参数**（*被指令内部的arg属性接收*），或者以`.`开头的**修饰符**（*指定该指令以特殊方式绑定*）。
+带有`v-`前缀，当表达式值发生变化时，会响应式的将影响作用于DOM。指令可以接收后面以`:`表示的**参数**（*被指令内部的arg属性接收*），或者以`.`开头的**修饰符**（*指定该指令以特殊方式绑定*）。
 
 ```html
 <p v-if="seen">Hello world!</p>
@@ -780,7 +780,7 @@ Vue对于所有数据绑定都提供了JavaScript表达式支持，但是每个�
 <!-- 绑定属性 -->
 <a v-on:click="doSomething">
 
-<!-- .prevent 修饰符告诉 v-on 指令对于触发的事件调用 event.preventDefault() -->
+<!-- .prevent修饰符会告诉v-on指令对于触发的事件调用event.preventDefault() -->
 <form v-on:submit.prevent="onSubmit"></form>
 ```
 
@@ -796,7 +796,7 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 <a @click="doSomething"></a>
 ```
 
-目前，Vue2.4.2版本当中提供了如下内置指令：
+目前，Vue在*2.4.2*版本当中提供了如下的内置指令：
 
 ```html
 <html
@@ -856,7 +856,7 @@ Vue为`v-bind`和`v-on`这两个常用的指令提供了简写形式`:`和`@`。
 // 注册组件，传入一个扩展过的构造器
 Vue.component("my-component", Vue.extend({ ... }))
 
-// 注册组件，传入一个option对象(自动调用Vue.extend)
+// 注册组件，传入一个option对象（会自动调用Vue.extend）
 Vue.component("my-component", { ... })
 
 // 获取注册的组件(始终返回构造器)
@@ -891,7 +891,7 @@ var MyComponent = Vue.component("my-component")
 
 - is属性
 
-浏览器解析完HTML之后才会渲染Vue表达式，但是诸如`<ul> <ol> <table> <select>`限制了能被其包裹的HTML元素，而`<option>`只能出现在某些HTML元素内部，造成Vue表达式可能不会被正确的渲染。因此，Vue提供了`is`作为属性的别名来解决这个问题。
+浏览器解析完HTML之后才会渲染Vue表达式，但是诸如`<ul> <ol> <table> <select>`限制了可以被包裹的HTML元素，而`<option>`只能出现在某些HTML元素内部，造成Vue表达式可能不会被正确的渲染。因此，Vue提供`is`作为属性别名来解决该问题。
 
 ```html
 <!-- 不正确的方式 -->
@@ -907,7 +907,7 @@ var MyComponent = Vue.component("my-component")
 
 - data必须是函数
 
-`Vue.component()`传入的data属性不能是对象，而必须是函数。这样做的目的是避免组件在相同模板的多个位置被复用时，仅仅返回对象会造成组件间的数据被相互污染，而通过函数每次都返回全新的data对象能很好的规避这个问题。
+`Vue.component()`传入的data属性不能是对象，而必须是函数。这样做的目的是避免组件在相同模板的多个位置被复用时，仅仅返回对象会造成组件间的数据被相互污染，而通过函数每次都返回全新的data对象能完美的规避这个问题。
 
 ```javascript
 Vue.component("simple-counter", {
@@ -929,7 +929,7 @@ Vue.component("simple-counter", {
 
 ### props
 
-虽然每个组件的作用域都是独立的，但是可以通过`props属性`向子组件传递数据，这是一种**单向数据流**的表现形式。
+虽然每个组件的作用域都是独立的，但是可以通过`props属性`向子组件传递数据，这是一种**单向数据流**的体现形式。
 
 ```javascript
 Vue.component("child", {
