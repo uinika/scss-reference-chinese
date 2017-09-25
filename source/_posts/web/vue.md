@@ -14,7 +14,7 @@ Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框�
 
 ### 组件化
 
-Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件完成功能复用、作用域控制，组件对外只提供props和state，并采用Vuex完成组件间的通信和同步。
+Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件的拼装来完成功能的复用、作用域控制。每个组件只提供`props`作为单一接口，并采用Vuex进行`state tree`的管理，从而便捷的实现组件间的通信与同步。
 
 ![](vue/components.png "组件化")
 
@@ -26,7 +26,7 @@ Vue遍历data对象上的所有属性，并通过原生`Object.defineProperty()`
 
 ![](vue/data.png "响应式绑定的生命周期")
 
-与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter转化，所以data对象上的属性必须在实例化前存在才可以让Vue正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的属性，属于真正意义上的**双向绑定**。
+与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter处理，所以data对象上的属性必须在实例化之前存在，Vue才能够正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的对象属性，属于真正意义上的**双向绑定**。
 
 ```javascript
 var vm = new Vue({
@@ -43,18 +43,18 @@ vm.b = 2 // 非响应的
 ```javascript
 Vue.set(vm.someObject, "b", 2)
 
-// vm.$set()实例方法是全局Vue.set()的别名
+// vm.$set()实例方法是Vue.set()全局方法的别名
 this.$set(this.someObject,"b",2)
 
-// 使用Object.assign()或_.extend()也可以添加响应式属性，但是需要创建一个包含原对象属性和新属性的对象，从而有效的触发watch()
+// 使用Object.assign()或_.extend()也可以添加响应式属性，但是需要创建同时包含原属性、新属性的对象，从而有效触发watch()方法
 this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
 ```
 
-Vue对DOM的更新是异步的，观察到数据变化后Vue将开启一个队列，缓冲在同一事件循环（*Vue的event loop被称为**tick** [tɪk] n.标记，记号*）中发生的所有数据改变。如果同一个watcher被多次触发，只会被推入一次到这个队列。
+Vue对DOM的更新是异步的，观察到数据变化后Vue将开启一个队列，缓冲在同一事件循环（*Vue的event loop被称为**tick** [tɪk] n.标记，记号*）中发生的所有数据变化。如果同一个watcher被多次触发，只会被推入一次到这个队列。
 
 > Vue内部会通过原生JavaScript的`Promise.then`、`MutationObserver`、`setTimeout(fn, 0)`来执行异步队列当中的watcher。
 
-在需要人为操作DOM的场景下，为了在Vue响应数据变化之后再更新DOM，可以手动调用`Vue.nextTick(callback)`，并将DOM操作逻辑放置在callback回调函数中，从而确保数据在完成响应式更新之后再操作DOM。
+在需要人为操作DOM的场景下，为了在Vue响应数据变化之后再更新DOM，可以手动调用`Vue.nextTick(callback)`，并将DOM操作逻辑放置在callback回调函数中，从而确保响应式更新完成之后再进行DOM操作。
 
 ```html
 <div id="example">{{message}}</div>
