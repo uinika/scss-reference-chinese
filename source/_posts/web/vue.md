@@ -14,7 +14,7 @@ Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框�
 
 ### 组件化
 
-Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件的拼装来完成功能的复用、作用域控制。每个组件只提供`props`作为单一接口，并采用Vuex进行`state tree`的管理，从而便捷的实现组件间的通信与同步。
+Angular的设计思想照搬了Java Web开发当中MVC分层的概念，通过`Controller`切割并控制页面作用域，然后通过`Service`来实现复用，是一种对页面进行**纵向**分层的解耦思想。而Vue允许开发人员将页面抽象为若干独立的组件，即将页面DOM结构进行**横向**切割，通过组件的拼装来完成功能的复用、作用域控制。每个组件只提供`props`作为单一接口，并采用Vuex进行`state tree`的管理，从而便捷的实现组件间状态的通信与同步。
 
 ![](vue/components.png "组件化")
 
@@ -22,11 +22,11 @@ Angular在1.6.x版本开始提供`component()`方法和`Component Router`来提�
 
 ### 双向绑定与响应式绑定
 
-Vue遍历data对象上的所有属性，并通过原生`Object.defineProperty()`方法将这些属性转换为`getter/setter`（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，最终触发Vue组件的`render()`函数重新渲染组件。
+Vue遍历data对象上的所有属性，并通过原生`Object.defineProperty()`方法将这些属性转换为`getter/setter`（*只支持IE9及以上浏览器*）。Vue内部通过这些getter/setter追踪依赖，在属性被修改时触发相应变化，从而完成模型到视图的双向绑定。每个Vue组件实例化时，都会自动调用`$watch()`遍历自身的data属性，并将其记录为依赖项，当这些依赖项的setter被触发时会通知watcher重新计算新值，然后触发Vue组件的`render()`函数重新渲染组件。
 
 ![](vue/data.png "响应式绑定的生命周期")
 
-与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter处理，所以data对象上的属性必须在实例化之前存在，Vue才能够正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的对象属性，属于真正意义上的**双向绑定**。
+与Aangular双向数据绑定不同，Vue组件不能检测到实例化后data属性的添加、删除，因为Vue组件在实例化时才会对属性执行getter/setter处理，所以data对象上的属性必须在实例化之前存在，Vue才能够正确的进行转换。因而，Vue提供的并非真正意义上的双向绑定，更准确的描述应该是**单向绑定，响应式更新**，而Angular即可以通过`$scope`影响view上的数据绑定，也可以通过视图层操作`$scope`上的对象属性，属于真正意义上的**视图与模型的双向绑定**。
 
 ```javascript
 var vm = new Vue({
@@ -44,13 +44,13 @@ vm.b = 2 // 非响应的
 Vue.set(vm.someObject, "b", 2)
 
 // vm.$set()实例方法是Vue.set()全局方法的别名
-this.$set(this.someObject,"b",2)
+this.$set(this.someObject, "b",2)
 
 // 使用Object.assign()或_.extend()也可以添加响应式属性，但是需要创建同时包含原属性、新属性的对象，从而有效触发watch()方法
 this.someObject = Object.assign({}, this.someObject, { a: 1, b: 2 })
 ```
 
-Vue对DOM的更新是异步的，观察到数据变化后Vue将开启一个队列，缓冲在同一事件循环（*Vue的event loop被称为**tick** [tɪk] n.标记，记号*）中发生的所有数据变化。如果同一个watcher被多次触发，只会被推入一次到这个队列。
+Vue对DOM的更新是异步的，观察到数据变化后Vue将开启一个队列，缓冲在同一事件循环（*Vue的event loop被称为**tick** [tɪk] n.标记，记号*）中发生的所有数据变化。如果同一个watcher被多次触发，只会向这个队列中推入一次。
 
 > Vue内部会通过原生JavaScript的`Promise.then`、`MutationObserver`、`setTimeout(fn, 0)`来执行异步队列当中的watcher。
 
@@ -124,7 +124,7 @@ Vue当中的Virtual DOM对象被称为**VNode**（*`template`当中的内容会�
 └── vnode.js
 ```
 
-VNode的设计出发点与Angular的`$digest`循环类似，都是通过**减少对真实DOM的操作次数来提升性能**，但是Vue的实现更加轻量化，摒弃了Angular为了实现双向绑定而提供的`$apply()`、`$eval()`封装函数，有选择性的实现了Angular当中`$compile()`、`$watch()`类似功能。
+VNode的设计出发点与Angular的`$digest`循环类似，都是通过**减少对真实DOM的操作次数来提升性能**，但是Vue的实现更加轻量化，摒弃了Angular为了实现双向绑定而提供的`$apply()`、`$eval()`封装函数，有选择性的实现Angular中`$compile()`、`$watch()`类似的功能。
 
 
 ## Vue对象的选项
@@ -175,11 +175,11 @@ var vm = new Vue({
 });
 ```
 
-> Vue实例通常使用`vm`（View Model）变量来命名。
+> Vue实例通常使用`vm`（*View Model*）变量来命名。
 
 ### 属性计算computed
 
-在HTML模板表达式中放置太多业务逻辑，会让模板过重且难以维护。因此，可以考虑将模板中比较复杂的表达式拆分到computed属性当中。
+在HTML模板表达式中放置太多业务逻辑，会让模板过重且难以维护。因此，可以考虑将模板中比较复杂的表达式拆分到computed属性当中进行计算。
 
 ```html
 <!-- 不使用计算属性 -->
@@ -210,7 +210,7 @@ var vm = new Vue({
 
 > 计算属性只在相关依赖发生改变时才会重新求值，这意味只要上面例子中的message没有发生改变，多次访问reversedMessage计算属性总会返回之前的计算结果，而不必再次执行函数，这是computed和method的一个重要区别。
 
-计算属性默认只拥有getter方法，但是可以自定义一个setter方法。
+计算属性默认只拥有**getter**方法，但是可以自定义一个**setter**方法。
 
 ```html
 <script>
@@ -285,7 +285,7 @@ vm.fullName = "John Doe"
 </script>
 ```
 
-> 使用watch属性的灵活性在于，当监测到数据变化的时候，可以做一些设置中间状态之类的处理。
+> 使用watch属性的灵活性在于，当监测到数据变化的时候，可以做一些设置中间状态之类的过渡处理。
 
 ### 混合属性mixins
 
@@ -330,13 +330,13 @@ vm.bar() // => "bar"
 vm.conflicting() // => "from self"
 ```
 
-> 同名组件的option对象属性会被合并为数组依次调用，其中mixin对象里的属性会被首先调用。如果组件option对象的属性值是一个对象，则mixin中的属性会被忽略掉。
+> 同名组件option对象的属性会被合并为数组依次进行调用，其中mixin对象里的属性会被首先调用。如果组件option对象的属性值是一个对象，则mixin中的属性会被忽略掉。
 
 ### 渲染函数render()
 
 用来创建VNode，该函数接收`createElement()`方法作为第1个参数，该方法调用后会返回一个虚拟DOM（*即VNode*）。
 
-下面两种情况下，Vue都会自动保持页面的更新，即便`blogTitle`发生变化。
+直接使用表达式，或者在`render()`函数内通过`createElement()`进行手动渲染，Vue都会自动保持`blogTitle`属性的响应式更新。
 
 ```html
 <h1>{{ blogTitle }}</h1>
@@ -348,7 +348,7 @@ render: function (createElement) {
 </script>
 ```
 
-> 如果组件是一个函数组件，render()还会接收一个context参数，为没有实例的函数组件提供上下文信息。
+> 如果组件是一个函数组件，render()还会接收一个context参数，以便为没有实例的函数组件提供上下文信息。
 
 通过render()函数实现虚拟DOM比较麻烦，因此可以使用Babel插件`babel-plugin-transform-vue-jsx`在render()函数中应用JSX语法。
 
@@ -380,8 +380,6 @@ Vue.component("my-component", {
   props: {}
 })
 ```
-
-> 实际上，Vue当中的模板都被编译为了render()函数。
 
 
 ## Vue对象全局API
