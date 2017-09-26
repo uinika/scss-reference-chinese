@@ -1560,7 +1560,7 @@ export default {
 
 ### Mutations
 
-修改store中的state的唯一方法是提交mutation（*[mjuː"teɪʃ(ə)n] n.变化*），mutations类似于自定义事件，拥有一个字符串事件类型和一个回调函数（*接受state作为参数，是对state进行修改的位置*）。
+修改store中的state的唯一方法是提交mutation（*[mjuː"teɪʃ(ə)n] n.变化*），mutations类似于自定义事件，拥有一个字符串事件类型和一个回调函数（*接收state作为参数，是对state进行修改的位置*）。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1596,7 +1596,7 @@ mutations: {
 }
 ```
 
-mutation事件类型可以使用常量，可以将应用中包含的常量都放在单独文件，便于管理以及防止出现重复。
+mutation事件类型建议使用常量，并且将这些常量放置在单独文件，便于管理和防止重复。
 
 ```javascript
 // mutation-types.js
@@ -1609,7 +1609,7 @@ import { SOME_MUTATION } from "./mutation-types"
 const store = new Vuex.Store({
   state: { ... },
   mutations: {
-    // 我们可以使用ES6风格的计算属性命名功能来使用一个常量作为函数名
+    // 可以通过ES6的计算属性命名特性去使用常量作为函数名
     [SOME_MUTATION] (state) {
       // mutate state
     }
@@ -1674,17 +1674,14 @@ Action通过`store.dispatch()`方法进行分发，**mutation**当中只能进�
 ```javascript
 actions: {
   checkout ({ commit, state }, products) {
-    // 把当前购物车的物品备份起来
-    const savedCartItems = [...state.cart.added]
-    // 发出结账请求，然后清空购物车
-    commit(types.CHECKOUT_REQUEST)
+    
+    const savedCartItems = [...state.cart.added]  // 把当前购物车的物品备份起来
+    commit(types.CHECKOUT_REQUEST)                // 发出结账请求，然后清空购物车
     // 购物Promise分别接收成功和失败的回调
     shop.buyProducts(
       products,
-      // 成功操作
-      () => commit(types.CHECKOUT_SUCCESS),
-      // 失败操作
-      () => commit(types.CHECKOUT_FAILURE, savedCartItems)
+      () => commit(types.CHECKOUT_SUCCESS),                  // 成功操作
+      () => commit(types.CHECKOUT_FAILURE, savedCartItems)   // 失败操作
     )
   }
 }
@@ -1698,10 +1695,10 @@ import { mapActions } from "vuex"
 export default {
   methods: {
     ...mapActions([
-      "increment" // 映射this.increment()为this.$store.dispatch("increment")
+      "increment"       // 映射this.increment()为this.$store.dispatch("increment")
     ]),
     ...mapActions({
-      add: "increment" // 映射this.add()为this.$store.dispatch("increment")
+      add: "increment"  // 映射this.add()为this.$store.dispatch("increment")
     })
   }
 }
