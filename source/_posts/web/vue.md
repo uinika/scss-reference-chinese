@@ -1416,11 +1416,11 @@ Vue.component("hello-world", {
 
 ## Vuex状态管理
 
-Vuex是专门为Vue应用程序提供的状态管理模式，每个Vuex应用的核心是`store`（*仓库*），即包含了应用`state`（*状态*）的容器，每个应用仅包含一个`store`实例。
+Vuex是专门为Vue应用程序提供的状态管理模式，每个Vuex应用的核心是`store`（*仓库*），即装载应用程序`state`（*状态*）的容器，每个应用通常只拥有一个`store`实例。
 
 ![](vue/vuex.png "Vuex执行流程")
 
-Vuex的`state`是响应式的，即`store`中的`state`发生变化时，相应组件也会得到更新，修改`store`当中`state`的唯一途径是提交`mutations`。
+Vuex的`state`是响应式的，即`store`中的`state`发生变化时，相应组件也会进行更新，修改`store`当中`state`的唯一途径是提交`mutations`。
 
 ```javascript
 const store = new Vuex.Store({
@@ -1537,8 +1537,7 @@ store.getters.doneTodos
 ```javascript
 computed: {
   doneTodosCount () {
-    // 现在可以方便的在其它组件中使用上面store中定义的doneTodos
-    return this.$store.getters.doneTodosCount
+    return this.$store.getters.doneTodos // 现在可以方便的在Vue组件使用store中定义的doneTodos
   }
 }
 ```
