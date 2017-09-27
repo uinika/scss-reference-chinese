@@ -1848,7 +1848,7 @@ const store = new Vuex.Store({
 
 ## CSS模块化
 
-[CSS Modules](https://github.com/css-modules/css-modules)用于模块化组合CSS，[vue-loader](https://vue-loader.vuejs.org/en/features/css-modules.html)提供了与CSS模块的良好集成。
+[CSS Modules](https://github.com/css-modules/css-modules)用于模块化组合CSS，[vue-loader](https://vue-loader.vuejs.org/en/features/css-modules.html)已经集成了CSS模块化特性。
 
 在单文件组件`.vue`的`<style>`标签上添加`module`属性即可打开CSS模块化特性。
 
@@ -1876,17 +1876,27 @@ CSS模块会向Vue组件中注入名为`$style`计算属性，从而实现在组
 
 ## 动画
 
-Vue提供`<transition>`和`<transition-group>`两个内置组件来为Vue提供过渡效果。
+Vue在插入、更新、移除**DOM**的时候，提供了如下几种方式去展现过渡效果。
 
-### transition内置组件
+1. 在CSS过渡和动画中应用class。
+2. 钩子过渡函数中直接操作DOM。
+3. 使用CSS、JavaScript动画库，如[Animate.css](https://daneden.github.io/animate.css/)、[Velocity.js](http://velocityjs.org/)。
 
-作为单个组件的过渡效果，不会渲染额外DOM元素。只是将模板内容包裹在其中，简单的运用过渡行为。可以在使用`v-if`、`v-show`、`动态组件`、`组件根节点`的场景下为其添加entering/leaving动画效果。
+### transition
+
+Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡动画效果，可以在条件渲染和展示（*使用`v-if`和`v-show`*）、动态组件、展示组件根节点的情形下进行渲染。
+
+#### 自动切换的class类名
+
+使用过滤效果会切换并应用下图中的6种class类名。
+
+![](vue/transition.png "test")
+
+可以使用`<transition/>`的`name`属性来自动生成过渡class类名，例如下面例子中的`name: 'fade'`将自动拓展为`.fade-enter`，`.fade-enter-active`等，`name`属性缺省的情况下默认类名为`v`。
 
 ```html
 <div id="demo">
-  <button v-on:click="show = !show">
-    Toggle
-  </button>
+  <button v-on:click="show = !show"> Toggle </button>
   <transition name="fade">
     <p v-if="show">hello</p>
   </transition>
@@ -1894,7 +1904,7 @@ Vue提供`<transition>`和`<transition-group>`两个内置组件来为Vue提供�
 
 <script>
 new Vue({
-  el: "#demo",
+  el: '#demo',
   data: {
     show: true
   }
@@ -1911,58 +1921,94 @@ new Vue({
 </style>
 ```
 
-entering/leaving的动画效果一共涉及6次class切换，具体生命周期如下图。
+#### 自定义CSS类名
 
-![](vue/transition.png "Vue组件动画的class属性生命周期")
-
-### transition-group内置组件
-
-为多个组件提供过渡效果，默认会渲染出一个真实的`<span>`元素，可以通过`tag`属性配置被渲染的元素，其内嵌元素必须提供一个唯一的`key`属性值。
+结合`Animate.css`使用时，可以在`<transition/>`当中通过以下属性自定义class类名。
 
 ```html
-<div id="list-demo" class="demo">
-  <button v-on:click="add">Add</button>
-  <button v-on:click="remove">Remove</button>
-  <transition-group name="list" tag="p">
-    <span v-for="item in items" v-bind:key="item" class="list-item">
-      {{ item }}
-    </span>
-  </transition-group>
-</div>
+<transition
+  enter-class = "animated"
+  enter-active-class = "animated"
+  enter-to-class = "animated"
+  leave-class = "animated"
+  leave-active-class = "animated"
+  leave-to-class = "animated">
+</transition>
+```
+
+#### 自定义JavaScript钩子
+
+结合`Velocity.js`使用时，通过v-on在属性中设置钩子函数。
+
+```html
+<transition
+  v-on:before-enter="beforeEnter"
+  v-on:enter="enter"
+  v-on:after-enter="afterEnter"
+  v-on:enter-cancelled="enterCancelled"
+  v-on:before-leave="beforeLeave"
+  v-on:leave="leave"
+  v-on:after-leave="afterLeave"
+  v-on:leave-cancelled="leaveCancelled">
+</transition>
 
 <script>
-new Vue({
-  el: "#list-demo",
-  data: {
-    items: [1,2,3,4,5,6,7,8,9],
-    nextNum: 10
-  },
-  methods: {
-    randomIndex: function () {
-      return Math.floor(Math.random() * this.items.length)
-    },
-    add: function () {
-      this.items.splice(this.randomIndex(), 0, this.nextNum++)
-    },
-    remove: function () {
-      this.items.splice(this.randomIndex(), 1)
-    },
-  }
-})
+// ...
+methods: {
+  beforeEnter: function (el) {},
+  enter: function (el, done) { done() },
+  afterEnter: function (el) {},
+  enterCancelled: function (el) {},
+  beforeLeave: function (el) {},
+  leave: function (el, done) { done() },
+  afterLeave: function (el) {},
+  leaveCancelled: function (el) {} // 仅用于v-show
+}
 </script>
+```
 
-<style>
-.list-item {
-  display: inline-block;
-  margin-right: 10px;
-}
-.list-enter-active, .list-leave-active {
-  transition: all 1s;
-}
-.list-enter, .list-leave-to {
-  opacity: 0;
-  transform: translateY(30px);
-}
-</style>
+#### 显式设置过渡持续时间
+
+可以使用`<transition>`上的`duration属性`设置一个以毫秒为单位的显式过渡持续时间。
+
+```html
+<transition :duration="1000"> Hank </transition>
+
+<!-- 可以分别定制进入、移出的持续时间 -->
+<transition :duration="{ enter: 500, leave: 800 }"> Hank </transition>
+```
+
+#### 组件首次渲染时的过渡
+
+通过`<transition>`上的`appear属性`设置组件节点首次被渲染时的过渡动画。
+
+```html
+<!-- 自定义CSS类名 -->
+<transition
+  appear
+  appear-class="custom-appear-class"
+  appear-to-class="custom-appear-to-class"
+  appear-active-class="custom-appear-active-class">
+</transition>
+
+<!-- 自定义JavaScript钩子 -->
+<transition
+  appear
+  v-on:before-appear="customBeforeAppearHook"
+  v-on:appear="customAppearHook"
+  v-on:after-appear="customAfterAppearHook"
+  v-on:appear-cancelled="customAppearCancelledHook">
+</transition>
+```
+
+#### Vue组件的key属性
+
+key属性主要用在Vue虚拟DOM算法中去区分新旧VNodes，不显式使用`key`的时候，Vue会使用性能最优的自动比较算法。显式的使用`key`，则会基于`key`的变化重新排列元素顺序，并移除不存在`key`的元素。具有相同父元素的子元素必须有独特的`key`，因为重复的`key`会造成渲染错误。
+
+```html
+<ul>
+  <!-- 最常见的用法是在使用v-for的时候 -->
+  <li v-for="item in items" :key="item.id">...</li>
+</ul>
 ```
 
