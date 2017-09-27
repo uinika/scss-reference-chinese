@@ -4,7 +4,7 @@ tags: Web
 categories: Summary
 ---
 
-Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框架**，即可以结合webpack进行编译式前端开发，也适用基于gulp、grunt等自动化工具直接挂载至window。经历2个小型项目的初步尝试之后，正在和勤智前端团队的小伙伴一起，将前端架构逐步从Angular切换至Vue。为了帮助team里小伙伴们更加快速的上手，所以专门组织了本次training，一方面为大家讲解Vue2带来的各种有趣特性，另一方面聊聊与之前使用Angular的相似与异同。
+Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框架**，即可以结合webpack进行编译式前端开发，也适用基于gulp、grunt等自动化工具直接挂载至`全局window`使用。经历2个小型项目的初步尝试之后，正在和勤智前端团队的小伙伴一起，将前端架构逐步从Angular切换至Vue。为了帮助team里小伙伴们更加快速的上手，所以专门组织了本次training，一方面为大家讲解Vue2带来的各种有趣特性，另一方面聊聊与之前使用Angular的相似与异同。
 
 ![](vue/logo.png)
 
@@ -364,20 +364,6 @@ new Vue({
       </AnchoredHeading>
     )
   }
-})
-```
-
-### 函数化组件functional
-
-即无状态（*没有data*）无实例（*没有this上下文*）的组件，渲染开销较小，且不会出现在`Vue devtools`当中。
-
-```javascript
-Vue.component("my-component", {
-  functional: true,
-  // 通过提供context参数为没有实例的函数组件提供上下文信息
-  render: function (createElement, context) {},
-  // Props可选
-  props: {}
 })
 ```
 
@@ -1234,6 +1220,20 @@ bus.$on("id-selected", function (id) {
     <span>hello from child</span>
   </div>
 </div>
+```
+
+### 函数化组件
+
+即无状态（*没有data*）无实例（*没有this上下文*）的组件，渲染开销较小，且不会出现在`Vue devtools`当中。
+
+```javascript
+Vue.component("my-component", {
+  functional: true,
+  // 通过提供context参数为没有实例的函数组件提供上下文信息
+  render: function (createElement, context) {},
+  // Props可选
+  props: {}
+})
 ```
 
 ### 动态组件
