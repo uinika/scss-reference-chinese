@@ -1921,7 +1921,7 @@ CSS模块会向Vue组件中注入名为`$style`计算属性，从而实现在组
 
 ## 动画
 
-Vue在插入、更新、移除**DOM**的时候，提供了如下几种方式去展现过渡效果。
+Vue在插入、更新、移除**DOM**的时候，提供了如下几种方式去展现进入（*entering*）和离开（*leaving*）的过渡效果。
 
 1. 在CSS过渡和动画中应用class。
 2. 钩子过渡函数中直接操作DOM。
@@ -1933,7 +1933,7 @@ Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡�
 
 #### 自动切换的class类名
 
-使用过渡效果会切换并应用下图中的六种class类名。
+在组件或HTML进入（*entering*）和离开（*leaving*）的过渡效果当中，Vue将会自动切换并应用下图中的六种class类名。
 
 ![](vue/transition.png "过渡效果自动切换的class")
 
