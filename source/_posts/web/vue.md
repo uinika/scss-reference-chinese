@@ -2178,5 +2178,59 @@ new Vue({
 
 ### transition-group组件
 
-`<transition-group>`用来设置多个HTML元素或Vue组件的过渡效果，不同于`<transition>`，该组件默认会被渲染为一个真实的`<span>`元素，但是开发人员也可以通过`<transition-group>`组件的`tag`属性更换为其它合法的HTML元素。`<transition-group>`组件内部的元素总是要提供唯一的`key`属性值。
+`<transition-group>`用来设置多个HTML元素或Vue组件的过渡效果，不同于`<transition>`，该组件默认会被渲染为一个真实的`<span>`元素，但是开发人员也可以通过`<transition-group>`组件的`tag`属性更换为其它合法的HTML元素。`<transition-group>`组件内部的元素必须要提供唯一的`key`属性值。
 
+```html
+<div id="list-demo" class="demo">
+  <button v-on:click="add">Add</button>
+  <button v-on:click="remove">Remove</button>
+  <transition-group name="list" tag="p">
+    <span v-for="item in items" v-bind:key="item" class="list-item">
+      {{ item }}
+    </span>
+  </transition-group>
+</div>
+
+<script>
+new Vue({
+  el: '#list-demo',
+  data: {
+    items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
+    nextNum: 10
+  },
+  methods: {
+    randomIndex: function () {
+      return Math.floor(Math.random() * this.items.length)
+    },
+    add: function () {
+      this.items.splice(this.randomIndex(), 0, this.nextNum++)
+    },
+    remove: function () {
+      this.items.splice(this.randomIndex(), 1)
+    },
+  }
+})
+</script>
+
+<style>
+.list-item {
+  display: inline-block;
+  margin-right: 10px;
+}
+.list-enter-active, .list-leave-active {
+  transition: all 1s;
+}
+.list-enter, .list-leave-to {
+  opacity: 0;
+  transform: translateY(30px);
+}
+</style>
+```
+
+#### 排序过渡
+
+`<transition-group>`实现的列表过渡效果在添加、移除某个HTML元素时，相临的其它HTML元素会瞬间移动至新位置，这个过程并非平滑的过渡。为了解决这个问题，`<transition-group>`提供了`move`特性去覆盖移动过渡期间所使用的CSS类，即可以通过`name`属性手动进行设置，也可以通过`move-class`属性进行配置。
+
+
+
+#### 交错过渡
