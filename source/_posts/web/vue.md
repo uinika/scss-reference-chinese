@@ -1937,7 +1937,7 @@ Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡�
 
 ![](vue/transition.png "过渡效果自动切换的class")
 
-可以使用`<transition/>`的`name`属性来自动生成过渡class类名，例如下面例子中的`name: 'fade'`将自动拓展为`.fade-enter`，`.fade-enter-active`等，`name`属性缺省的情况下默认类名为`v`。
+可以使用`<transition/>`的`name`属性来自动生成过渡class类名，例如下面例子中的`name: "fade"`将自动拓展为`.fade-enter`，`.fade-enter-active`等，`name`属性缺省的情况下默认类名为`v`。
 
 ```html
 <div id="demo">
@@ -1949,7 +1949,7 @@ Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡�
 
 <script>
 new Vue({
-  el: '#demo',
+  el: "#demo",
   data: {
     show: true
   }
@@ -2092,7 +2092,7 @@ Vue中具有相同名称的元素切换时，需要通过关键字`key`作为标
 
 <!-- 设置动态的key属性来实现 -->
 <transition>
-  <button v-bind:key="isEditing"> {{ isEditing ? 'Save' : 'Edit' }} </button>
+  <button v-bind:key="isEditing"> {{ isEditing ? "Save" : "Edit" }} </button>
 </transition>
 ```
 
@@ -2101,9 +2101,9 @@ Vue中具有相同名称的元素切换时，需要通过关键字`key`作为标
 ```html
 <!-- 多个v-if实现的多元素过渡 -->
 <transition>
-  <button v-if="docState === 'saved'" key="saved"> Edit </button>
-  <button v-if="docState === 'edited'" key="edited"> Save </button>
-  <button v-if="docState === 'editing'" key="editing"> Cancel </button>
+  <button v-if="docState === "saved"" key="saved"> Edit </button>
+  <button v-if="docState === "edited"" key="edited"> Save </button>
+  <button v-if="docState === "editing"" key="editing"> Cancel </button>
 </transition>
 
 <!-- 通过动态key属性可以大幅简化模板代码 -->
@@ -2116,9 +2116,9 @@ Vue中具有相同名称的元素切换时，需要通过关键字`key`作为标
 computed: {
   buttonMessage: function () {
     switch (this.docState) {
-      case 'saved': return 'Edit'
-      case 'edited': return 'Save'
-      case 'editing': return 'Cancel'
+      case "saved": return "Edit"
+      case "edited": return "Save"
+      case "editing": return "Cancel"
     }
   }
 }
@@ -2136,16 +2136,16 @@ computed: {
 
 <script>
 new Vue({
-  el: '#transition-components-demo',
+  el: "#transition-components-demo",
   data: {
-    view: 'v-a'
+    view: "v-a"
   },
   components: {
-    'v-a': {
-      template: '<div>Component A</div>'
+    "v-a": {
+      template: "<div>Component A</div>"
     },
-    'v-b': {
-      template: '<div>Component B</div>'
+    "v-b": {
+      template: "<div>Component B</div>"
     }
   }
 })
@@ -2163,16 +2163,16 @@ new Vue({
 
 #### 选择HTML元素或Vue组件的过渡模式
 
-`<transition>`的默认进入（*enter*）和离开（*leave*）行为同时发生，所以当多个需要切换显示的HTML元素或Vue组件处于相同位置的时候，这种同时生效的进入和离开过渡不能满足所有需求，Vue可以通过`<transition>`组件的`mode`属性来选择如下过渡模式。
+`<transition>`的默认进入（*enter*）和离开（*leave*）行为同时发生，所以当多个需要切换显示的HTML元素或Vue组件处于相同位置的时候，这种同时生效的进入和离开过渡不能满足所有需求，Vue可以通过`<transition-gruop>`组件的`mode`属性来选择如下过渡模式。
 
 - `in-out`：新元素先进行过渡，完成之后当前显示的元素再过渡离开。
 - `out-in`：当前显示的元素先进行过渡，完成之后新元素再过渡进入。
 
 ```html
 <transition name="fade" mode="out-in">
-  <button v-if="docState === 'saved'" key="saved"> Edit </button>
-  <button v-if="docState === 'edited'" key="edited"> Save </button>
-  <button v-if="docState === 'editing'" key="editing"> Cancel </button>
+  <button v-if="docState === "saved"" key="saved"> Edit </button>
+  <button v-if="docState === "edited"" key="edited"> Save </button>
+  <button v-if="docState === "editing"" key="editing"> Cancel </button>
 </transition>
 ```
 
@@ -2193,7 +2193,7 @@ new Vue({
 
 <script>
 new Vue({
-  el: '#list-demo',
+  el: "#list-demo",
   data: {
     items: [1, 2, 3, 4, 5, 6, 7, 8, 9],
     nextNum: 10
@@ -2227,10 +2227,41 @@ new Vue({
 </style>
 ```
 
-#### 排序过渡
+`<transition-group>`实现的列表过渡效果在添加、移除某个HTML元素时，相临的其它HTML元素会瞬间移动至新位置，这个过程并非平滑的过渡。为解决这个问题，`<transition-group>`提供*v-move*特性去覆盖**移动过渡期间**所使用的CSS类名。开启该特性，即可以通过`name`属性手动设置（*下面例子中的`name="flip-list"`与`.flip-list-move`*），也可以直接使用`move-class`属性。
 
-`<transition-group>`实现的列表过渡效果在添加、移除某个HTML元素时，相临的其它HTML元素会瞬间移动至新位置，这个过程并非平滑的过渡。为了解决这个问题，`<transition-group>`提供了`move`特性去覆盖移动过渡期间所使用的CSS类，即可以通过`name`属性手动进行设置，也可以通过`move-class`属性进行配置。
+```html
+<div id="flip-list-demo" class="demo">
+  <button v-on:click="shuffle">Shuffle</button>
+  <transition-group name="flip-list" tag="ul">
+    <li v-for="item in items" v-bind:key="item">
+      {{ item }}
+    </li>
+  </transition-group>
+</div>
 
+<script>
+new Vue({
+  el: "#flip-list-demo",
+  data: {
+    items: [1,2,3,4,5,6,7,8,9]
+  },
+  methods: {
+    shuffle: function () {
+      this.items = _.shuffle(this.items)
+    }
+  }
+})
+</script>
 
+<style>
+.flip-list-move {
+  transition: transform 1s;
+}
+<style>
+```
 
-#### 交错过渡
+可以通过**响应式**的绑定`<transition>`和`<transition-gruop>`上的name属性，从而能够根据组件自身的状态实现具有动态性的过渡效果。
+
+```html
+<transition v-bind:name="transitionName"></transition>
+```
