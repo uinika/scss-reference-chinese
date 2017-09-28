@@ -1,7 +1,7 @@
 ---
 title: jQuery那些容易被忽略的问题
-tags: Web
-categories: Summary
+tags: JavaScript
+categories: Web
 ---
 
 ![](jquery/logo.png)

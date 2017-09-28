@@ -1,7 +1,7 @@
 ---
 title: Angular1.x最佳实践总结
-tags: Web
-categories: Summary
+tags: JavaScript
+categories: Web
 ---
 
 ![](angular/angular.ico)

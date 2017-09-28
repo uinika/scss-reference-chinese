@@ -1,7 +1,7 @@
 ---
 title: Webpack深度剖析
-tags: Web
-categories: Summary
+tags: JavaScript
+categories: Web
 ---
 
 ![](webpack/logo.png)

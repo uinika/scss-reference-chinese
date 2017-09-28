@@ -1,7 +1,7 @@
 ---
 title: CSS2典型布局概述
 tags: CSS
-categories: Note
+categories: Web
 ---
 
 层叠样式表（*Cascading Stylesheet*）简称**CSS**，用于指定浏览器所渲染的样式（*如颜色、定位、装饰*）。

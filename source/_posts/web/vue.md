@@ -1,7 +1,7 @@
 ---
 title: Vue2技术栈归纳与精粹
-tags: Web
-categories: Summary
+tags: JavaScript
+categories: Web
 ---
 
 Vue是一款**高度封装的**、**开箱即用的**、**一栈式的前端框架**，即可以结合webpack进行编译式前端开发，也适用基于gulp、grunt等自动化工具直接挂载至`全局window`使用。经历2个小型项目的初步尝试之后，正在和勤智前端团队的小伙伴一起，将前端架构逐步从Angular切换至Vue。为了帮助team里小伙伴们更加快速的上手，所以专门组织了本次training，一方面为大家讲解Vue2带来的各种有趣特性，另一方面聊聊与之前使用Angular的相似与异同。
