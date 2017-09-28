@@ -1845,12 +1845,57 @@ const store = new Vuex.Store({
 2. 提交`mutation`是更改状态的唯一方法，并且这个过程是**同步**的。
 3. **异步**逻辑都应该封装到`action`里面。
 
+## Webpack Vue Loader
 
-## CSS模块化
+[vue-loader](https://vue-loader.vuejs.org/en/)是由Vue开源社区提供的Webpack加载器，用来将`.vue`后缀的单文件组件转换为JavaScript模块，每个`.vue`单文件组件可以包括以下部分：
 
-[CSS Modules](https://github.com/css-modules/css-modules)用于模块化组合CSS，[vue-loader](https://vue-loader.vuejs.org/en/features/css-modules.html)已经集成了CSS模块化特性。
+1. 一个`<template>`。
+2. 一个`<script>`。
+3. 多个`<style>`。
 
-在单文件组件`.vue`的`<style>`标签上添加`module`属性即可打开CSS模块化特性。
+```html
+<template>只能有1个</template>
+
+<script>只能有1个</script>
+
+<style>可以有多个</style>
+<style>可以有多个</style>
+<style>可以有多个</style>
+```
+
+### CSS作用域
+
+向`.vue`单文件组件的`<style>`标签上添加`scoped`属性，可以让该`<style>`标签中的样式只作用于当前组件。使用scoped时，样式选择器尽量使用class或者id，以提升页面渲染性能。
+
+```html
+<!-- 单文件组件定义 -->
+<style scoped>
+.example {
+  color: red;
+}
+</style>
+
+<template>
+  <div class="example">Hank</div>
+</template>
+
+<!-- 转换结果 -->
+<style>
+.example[data-v-f3f3eg9] {
+  color: blue;
+}
+</style>
+
+<template>
+  <div class="example" data-v-f3f3eg9>Hank</div>
+</template>
+```
+
+> 可以在一个组件中同时使用带`scoped`属性和不带该属性的`<style/>`，分别用来定义组件私有样式和全局样式。
+
+### CSS模块化
+
+在单文件组件`.vue`的`<style>`标签上添加`module`属性即可打开CSS模块化特性。[CSS Modules](https://github.com/css-modules/css-modules)用于模块化组合CSS，[vue-loader](https://vue-loader.vuejs.org/en/features/css-modules.html)已经集成了CSS模块化特性。
 
 ```html
 <style module>
@@ -1882,15 +1927,15 @@ Vue在插入、更新、移除**DOM**的时候，提供了如下几种方式去�
 2. 钩子过渡函数中直接操作DOM。
 3. 使用CSS、JavaScript动画库，如[Animate.css](https://daneden.github.io/animate.css/)、[Velocity.js](http://velocityjs.org/)。
 
-### transition
+### transition组件
 
-Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡动画效果，可以在条件渲染和展示（*使用`v-if`和`v-show`*）、动态组件、展示组件根节点的情形下进行渲染。
+Vue提供了内置组件`<transition/>`来为HTML元素、Vue组件添加过渡动画效果，可以在*条件展示*（*使用`v-if`或`v-show`*）、*动态组件*、*展示组件根节点*的情况下进行渲染。`<transition/>`主要用来处理单个节点，或者同时渲染多个节点当中的一个。
 
 #### 自动切换的class类名
 
-使用过滤效果会切换并应用下图中的6种class类名。
+使用过渡效果会切换并应用下图中的六种class类名。
 
-![](vue/transition.png "test")
+![](vue/transition.png "过渡效果自动切换的class")
 
 可以使用`<transition/>`的`name`属性来自动生成过渡class类名，例如下面例子中的`name: 'fade'`将自动拓展为`.fade-enter`，`.fade-enter-active`等，`name`属性缺省的情况下默认类名为`v`。
 
@@ -2001,7 +2046,9 @@ methods: {
 </transition>
 ```
 
-#### Vue组件的key属性
+#### HTML元素的过渡效果
+
+##### Vue组件的key属性
 
 key属性主要用在Vue虚拟DOM算法中去区分新旧VNodes，不显式使用`key`的时候，Vue会使用性能最优的自动比较算法。显式的使用`key`，则会基于`key`的变化重新排列元素顺序，并移除不存在`key`的元素。具有相同父元素的子元素必须有独特的`key`，因为重复的`key`会造成渲染错误。
 
@@ -2011,4 +2058,125 @@ key属性主要用在Vue虚拟DOM算法中去区分新旧VNodes，不显式使�
   <li v-for="item in items" :key="item.id">...</li>
 </ul>
 ```
+
+##### 元素的的交替过渡
+
+可以通过Vue提供的`v-if`和`v-else`属性来实现多组件的交替过渡，最常见的过渡效果是一个列表以及描述列表为空时的消息。
+
+```html
+<transition>
+  <table v-if="items.length > 0">
+    <!-- ... -->
+  </table>
+  <p v-else>Sorry, no items found.</p>
+</transition>
+```
+
+Vue中具有相同名称的元素切换时，需要通过关键字`key`作为标记进行区分，否则Vue出于效率的考虑只会替换相同标签内的内容，因此为`<transition>`组件中的同名元素设置`key`是一个**最佳实践**。
+
+```html
+<transition>
+  <button v-if="isEditing" key="save"> Save </button>
+  <button v-else key="edit"> Edit </button>
+</transition>
+```
+
+一些场景中，可以通过给相同HTML元素的`key`属性设置不同的状态来代替冗长的`v-if`和`v-else`。
+
+```html
+<!-- 通过v-if和v-else来实现 -->
+<transition>
+  <button v-if="isEditing" key="save"> Save </button>
+  <button v-else key="edit"> Edit </button>
+</transition>
+
+<!-- 设置动态的key属性来实现 -->
+<transition>
+  <button v-bind:key="isEditing"> {{ isEditing ? 'Save' : 'Edit' }} </button>
+</transition>
+```
+
+而对于使用了多个`v-if`的多元素过渡，也可以通过动态的`key`属性进行大幅度的简化。
+
+```html
+<!-- 多个v-if实现的多元素过渡 -->
+<transition>
+  <button v-if="docState === 'saved'" key="saved"> Edit </button>
+  <button v-if="docState === 'edited'" key="edited"> Save </button>
+  <button v-if="docState === 'editing'" key="editing"> Cancel </button>
+</transition>
+
+<!-- 通过动态key属性可以大幅简化模板代码 -->
+<transition>
+  <button v-bind:key="docState"> {{ buttonMessage }} </button>
+</transition>
+
+<script>
+...
+computed: {
+  buttonMessage: function () {
+    switch (this.docState) {
+      case 'saved': return 'Edit'
+      case 'edited': return 'Save'
+      case 'editing': return 'Cancel'
+    }
+  }
+}
+</script>
+```
+
+#### Vue组件的过渡效果
+
+多个Vue组件之间的过渡不需要使用`key`属性，只需要使用**动态组件**即可。
+
+```html
+<transition name="component-fade" mode="out-in">
+  <component v-bind:is="view"></component>
+</transition>
+
+<script>
+new Vue({
+  el: '#transition-components-demo',
+  data: {
+    view: 'v-a'
+  },
+  components: {
+    'v-a': {
+      template: '<div>Component A</div>'
+    },
+    'v-b': {
+      template: '<div>Component B</div>'
+    }
+  }
+})
+<script>
+
+<style>
+.component-fade-enter-active, .component-fade-leave-active {
+  transition: opacity .3s ease;
+}
+.component-fade-enter, .component-fade-leave-to {
+  opacity: 0;
+}
+<style>
+```
+
+#### 选择HTML元素或Vue组件的过渡模式
+
+`<transition>`的默认进入（*enter*）和离开（*leave*）行为同时发生，所以当多个需要切换显示的HTML元素或Vue组件处于相同位置的时候，这种同时生效的进入和离开过渡不能满足所有需求，Vue可以通过`<transition>`组件的`mode`属性来选择如下过渡模式。
+
+- `in-out`：新元素先进行过渡，完成之后当前显示的元素再过渡离开。
+- `out-in`：当前显示的元素先进行过渡，完成之后新元素再过渡进入。
+
+```html
+<transition name="fade" mode="out-in">
+  <button v-if="docState === 'saved'" key="saved"> Edit </button>
+  <button v-if="docState === 'edited'" key="edited"> Save </button>
+  <button v-if="docState === 'editing'" key="editing"> Cancel </button>
+</transition>
+```
+
+### transition-group组件
+
+`<transition-group>`用来设置多个HTML元素或Vue组件的过渡效果，不同于`<transition>`，该组件默认会被渲染为一个真实的`<span>`元素，但是开发人员也可以通过`<transition-group>`组件的`tag`属性更换为其它合法的HTML元素。`<transition-group>`组件内部的元素总是要提供唯一的`key`属性值。
 
