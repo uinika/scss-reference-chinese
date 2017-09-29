@@ -4,7 +4,7 @@ tags: CSS
 categories: Web
 ---
 
-层叠样式表（**CSS**，*Cascading Stylesheet*）用于指定浏览器所渲染的样式（*如颜色、定位、装饰*），距离2011年CSS2.1版本发布至今，已经整整过去**6**个年头，浏览器和前端技术经历了日新月异的变化。虽然目前CSS3.0规范在选择器、弹性盒模型、动画与过渡方面进行了诸多增强，但是[W3C规范](https://www.w3.org/)始终保持着一致的继承性，所以CSS2.1及之前版本规范中提出的大量特性与概念依旧得以沿用。本文参照[Mozilla开发者社区](https://developer.mozilla.org/en-US/docs/Web/CSS)以及[网易NEC](http://nec.netease.com/)前端开源项目，将CSS2.1当中常用的概念与典型布局进行了比较全面的梳理与总结。
+层叠样式表（**CSS**，*Cascading Stylesheet*）用于指定浏览器所渲染的样式（*如颜色、定位、装饰*），距离2011年CSS2.1版本发布至今，已经整整过去**6**个年头，浏览器和前端技术经历了日新月异的变化。虽然目前CSS3.0规范在选择器、弹性盒模型、动画与过渡方面进行了诸多增强，但是[W3C规范](https://www.w3.org/)始终保持着一致的继承性，所以CSS2.1及之前版本规范中提出的大量特性与概念依旧得以沿用。本文参照[Mozilla开发者社区](https://developer.mozilla.org/en-US/docs/Web/CSS)以及[网易NEC](http://nec.netease.com/)前端开源项目，将CSS2.1当中常用的概念与典型布局进行了比较全面的梳理与概括。
 
 ![](css2/logo.jpg)
 
@@ -30,13 +30,16 @@ categories: Web
 2. 类选择器（*例如`.example`*），属性选择器（*例如`[type="radio"]`*），伪类选择器（*例如`:hover`*）
 3. 类型选择器（*例如`h1`*）和 伪元素（*例如`::before`*）
 
-> 通用选择器(`*`)、组合选择器(`+, >, ~, ' '`)、否定伪类选择器(`:not()`)对特异性没有影响（但`:not()`内声明的选择器会影响优先级）。
+> 通用选择器（`*`）、组合选择器（*`+, >, ~, ' '`*）、否定伪类选择器（*`:not()`*）对特异性没有影响（*但`:not()`内声明的选择器会影响优先级*）。
 
 ### 样式继承
 
-每个CSS属性定义都会指明其是否可以继承，这决定了当你没有为元素的属性指定值时该如何计算值。
+每个CSS属性值都会指明其是否可以继承，以便在没有手动为HTML元素指定样式值时，该元素默认应该使用哪个样式。
 
+- 可继承CSS属性（*inherited property*）：未指定值时，取父元素同属性的计算值（*computed value*）。
+- 非继承CSS属性（*reset property*）：未指定值时，取该属性的初始值（*initial value*）。
 
+> 所有CSS属性都可以使用的`inherit`和`initial`属性值，分别用来让一个元素继承父元素同属性的计算值，以及将被父元素覆盖的属性值重置为该CSS属性的默认值。
 
 ### !important
 
@@ -50,6 +53,13 @@ background: red !important;
 
 
 ## 盒子模型
+
+每个HTML元素都会被CSS描述为一个矩形的盒子，每个盒子有`margin`、`border`、`padding`、`content`四个框。
+
+![](css2/boxmodel.png)
+
+margin塌陷（*margin collapsing*）：
+
 
 
 ## 浮动定位
