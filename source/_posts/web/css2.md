@@ -70,29 +70,192 @@ margin塌陷（*margin collapsing*）：
 
 ## div/span
 
+## 一列布局
 
-## 一列固定宽度
+### 一列定宽布局
+
+![](css2/layout-1-1.png "一列定宽布局")
+
+```html
+<main id="app">
+  <div class="column"></div>
+</main>
+```
+
+```scss
+#app {
+  background: $gray;
+  .column {
+    background: $blue;
+    width: 800px;
+    height: 90%;
+    margin: 20px;
+  }
+}
+```
+
+### 一列宽度自适应
+
+![](css2/layout-1-2.png "一列宽度自适应")
+
+```html
+<main id="app">
+  <div class="column"></div>
+</main>
+```
+
+```scss
+#app {
+  background: $gray;
+  .column {
+    background: $blue;
+    width: 90%;
+    height: 90%;
+    margin: 20px;
+  }
+}
+```
+
+### 一列宽度居中
+
+![](css2/layout-1-3.png "一列宽度居中")
+
+```html
+<main id="app">
+  <div class="column"></div>
+</main>
+```
+
+```scss
+#app {
+  background: $gray;
+  .column {
+    background: $blue;
+    width: 50%;
+    margin: auto 0;
+    height: 90%;
+    margin: 20px auto;
+  }
+}
+```
+
+## 二列布局
+
+### 二列定宽布局
+
+![](css2/layout-2-1.png "二列定宽布局")
+
+```html
+<main id="app">
+  <div class="column-left"></div>
+  <div class="column-right"></div>
+</main>
+```
+
+```scss
+#app {
+  margin: 1%;
+  .column-left {
+    display: inline-block;
+    background: $silver;
+    width: 49%;
+    height: 90%;
+  }
+  .column-right {
+    display: inline-block;
+    background: $black;
+    width: 49%;
+    height: 90%;
+  }
+}
+```
 
 
-## 一列宽度自适应
+### 二列宽度自适应
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
 
 
-## 二列固定宽度
+### 二列左侧宽度自适应
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
+### 二列右侧宽度自适应
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
 
 
-## 二列宽度自适应
+### 二列固定宽度居中
 
+![](css2/layout-.png)
 
-## 两列右列宽度自适应
+```html
 
+```
 
-## 二列固定宽度居中
+```scss
+
+```
 
 
 ## 三列浮动中间列宽度自适应
 
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
 
 ## 高度自适应
 
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
 
 ## 垂直居中
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
