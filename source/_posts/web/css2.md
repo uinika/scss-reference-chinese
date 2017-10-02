@@ -61,14 +61,18 @@ background: red !important;
 margin塌陷（*margin collapsing*）：
 
 
+## 定位
 
-## 浮动定位
+### 浮动定位
 
+### 相对定位
 
-## 相对/绝对定位
+### 绝对定位
 
 
 ## div/span
+
+## 外边距负值
 
 ## 一列布局
 
@@ -346,10 +350,52 @@ margin塌陷（*margin collapsing*）：
 
 ### 三列右侧自适应布局
 
-![](css2/layout-.png)
+![](css2/layout-3-3.png)
+
+```html
+<main id="app">
+  <div class="column-left">
+    <h1>column-left</h1>
+  </div>
+  <div class="column-middle">
+    <h1>column-middle</h1>
+  </div>
+  <div class="column-right">
+    <div>
+      <h1>column-right</h1>
+    </div>
+  </div>
+</main>
+```
 
 ```scss
-
+#app {
+  background: $gray;
+  .column-left {
+    background: $blue;
+    height: 100%;
+    width: 300px;
+    position: relative; // 将块元素设置为相对定位
+    float: left;
+  }
+  .column-middle {
+    background: $cyan;
+    height: 100%;
+    width: 350px;
+    position: relative; // 将块元素设置为相对定位
+    float: left;
+  }
+  .column-right {
+    background: $pink;
+    float: right;
+    height: 100%;
+    width: 100%;
+    margin-left: -650px; // 设置外边距为负值
+    div {
+      margin-left: 650px; // 补偿负值外边距
+    }
+  }
+}
 ```
 
 
