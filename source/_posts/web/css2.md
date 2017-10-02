@@ -78,7 +78,9 @@ margin塌陷（*margin collapsing*）：
 
 ```html
 <main id="app">
-  <div class="column"></div>
+  <div class="column">
+    <h2>column</h2>
+  </div>
 </main>
 ```
 
@@ -86,10 +88,9 @@ margin塌陷（*margin collapsing*）：
 #app {
   background: $gray;
   .column {
-    background: $blue;
-    width: 800px;
-    height: 90%;
-    margin: 20px;
+    background: $cyan;
+    width: 300px;  // 宽度使用绝对单位
+    height: 100%;
   }
 }
 ```
@@ -100,18 +101,18 @@ margin塌陷（*margin collapsing*）：
 
 ```html
 <main id="app">
-  <div class="column"></div>
+  <div class="column">
+    <h2>column</h2>
+  </div>
 </main>
 ```
-
 ```scss
 #app {
   background: $gray;
   .column {
-    background: $blue;
-    width: 90%;
-    height: 90%;
-    margin: 20px;
+    background: $cyan;
+    width: 60%;  // 宽度使用相对单位
+    height: 100%;
   }
 }
 ```
@@ -122,50 +123,54 @@ margin塌陷（*margin collapsing*）：
 
 ```html
 <main id="app">
-  <div class="column"></div>
+  <div class="column">
+    <h2>column</h2>
+  </div>
 </main>
 ```
-
 ```scss
 #app {
   background: $gray;
   .column {
-    background: $blue;
-    width: 50%;
-    margin: auto 0;
-    height: 90%;
-    margin: 20px auto;
+    background: $cyan;
+    width: 60%;
+    height: 100%;
+    margin: 0 auto; // 块元素居中
   }
 }
 ```
 
 ## 二列布局
 
+```html
+<main id="app">
+  <div class="column-left">
+    <h1>column-left</h1>
+  </div>
+  <div class="column-right">
+    <h1>column-right</h1>
+  </div>
+</main>
+```
+
 ### 二列定宽布局
 
 ![](css2/layout-2-1.png "二列定宽布局")
 
-```html
-<main id="app">
-  <div class="column-left"></div>
-  <div class="column-right"></div>
-</main>
-```
-
 ```scss
 #app {
-  margin: 1%;
+  background: $gray;
   .column-left {
-    display: inline-block;
-    background: $silver;
-    width: 49%;
-    height: 90%;
+    background: $cyan;
+    width: 300px;  // 绝对宽度
+    height: 100%;
+    float: left;
   }
   .column-right {
-    display: inline-block;
-    background: $black;
-    width: 49%;
-    height: 90%;
+    background: $pink;
+    width: 400px;  // 绝对宽度
+    height: 100%;
+    float: left;
   }
 }
 ```
@@ -175,12 +180,44 @@ margin塌陷（*margin collapsing*）：
 
 ![](css2/layout-.png)
 
-```html
-
+```scss
+#app {
+  background: $gray;
+  .column-left {
+    background: $cyan;
+    width: 30%;  // 相对宽度
+    height: 100%;
+    float: left;
+  }
+  .column-right {
+    background: $pink;
+    width: 70%;  // 相对宽度
+    height: 100%;
+    float: left;
+  }
+}
 ```
 
-```scss
 
+### 二列右侧宽度自适应
+
+![](css2/layout-.png)
+
+```scss
+#app {
+  background: $gray;
+  .column-left {
+    background: $cyan;
+    width: 30%; // 左栏设置固定值
+    height: 100%;
+    float: left;
+  }
+  .column-right {
+    background: $pink;
+    height: 100%; 
+    // 右栏不设置宽度和浮动
+  }
+}
 ```
 
 
@@ -188,6 +225,31 @@ margin塌陷（*margin collapsing*）：
 
 ![](css2/layout-.png)
 
+```scss
+#app {
+  background: $gray;
+  .column-left {
+    background: $cyan;
+    height: 100%;
+    float: left;
+    width: 100%;
+  }
+  .column-right {
+    background: $pink;
+    height: 100%;
+    float: right;
+    width: 230px;
+    margin-left: -230px; // 负边距
+  }
+}
+```
+
+## 三列布局
+
+### 三列中间自适应布局
+
+![](css2/layout-.png)
+
 ```html
 
 ```
@@ -196,7 +258,31 @@ margin塌陷（*margin collapsing*）：
 
 ```
 
-### 二列右侧宽度自适应
+### 三列左侧自适应布局
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
+### 三列右侧自适应布局
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
+### 高度自适应
 
 ![](css2/layout-.png)
 
@@ -209,7 +295,7 @@ margin塌陷（*margin collapsing*）：
 ```
 
 
-### 二列固定宽度居中
+### 垂直居中
 
 ![](css2/layout-.png)
 
@@ -221,41 +307,8 @@ margin塌陷（*margin collapsing*）：
 
 ```
 
+## 圣杯布局
 
-## 三列浮动中间列宽度自适应
+[圣杯布局](https://alistapart.com/article/holygrail)
 
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
-
-
-## 高度自适应
-
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
-
-
-## 垂直居中
-
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
+## 双飞翼布局
