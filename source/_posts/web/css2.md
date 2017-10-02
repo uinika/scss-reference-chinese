@@ -178,7 +178,7 @@ margin塌陷（*margin collapsing*）：
 
 ### 二列宽度自适应
 
-![](css2/layout-.png)
+![](css2/layout-2-2.png)
 
 ```scss
 #app {
@@ -191,7 +191,7 @@ margin塌陷（*margin collapsing*）：
   }
   .column-right {
     background: $pink;
-    width: 70%;  // 相对宽度
+    width: 60%;  // 相对宽度
     height: 100%;
     float: left;
   }
@@ -201,7 +201,7 @@ margin塌陷（*margin collapsing*）：
 
 ### 二列右侧宽度自适应
 
-![](css2/layout-.png)
+![](css2/layout-2-3.png)
 
 ```scss
 #app {
@@ -223,7 +223,7 @@ margin塌陷（*margin collapsing*）：
 
 ### 二列左侧宽度自适应
 
-![](css2/layout-.png)
+![](css2/layout-2-4.png)
 
 ```scss
 #app {
@@ -238,8 +238,8 @@ margin塌陷（*margin collapsing*）：
     background: $pink;
     height: 100%;
     float: right;
-    width: 230px;
-    margin-left: -230px; // 负边距
+    width: 30%;
+    margin-left: -30%; // 负边距
   }
 }
 ```
@@ -248,67 +248,143 @@ margin塌陷（*margin collapsing*）：
 
 ### 三列中间自适应布局
 
-![](css2/layout-.png)
-
+![](css2/layout-3-1.png)
 ```html
-
+<main id="app">
+  <div class="column-left">
+    <h1>column-left</h1>
+  </div>
+  <div class="column-middle">
+    <div>
+      <h1>column-middle</h1>
+    </div>
+  </div>
+  <div class="column-right">
+    <h1>column-right</h1>
+  </div>
+</main>
 ```
-
 ```scss
-
+#app {
+  background: $gray;
+  .column-left {
+    background: $cyan;
+    height: 100%;
+    position: relative;
+    float: left;
+    width: 350px;
+    margin-right: -350px;  // 负外边距
+  }
+  .column-middle {
+    background: $pink;
+    height: 100%;
+    float: left;
+    width: 100%;
+    // 嵌套div让出左右block的负值外边距
+    div {
+      margin-right: 300px;
+      margin-left: 350px;
+    }
+  }
+  .column-right {
+    background: $blue;
+    height: 100%;
+    float: right;
+    width: 300px;
+    margin-left: -300px;  // 负外边距
+  }
+}
 ```
 
 ### 三列左侧自适应布局
 
-![](css2/layout-.png)
+![](css2/layout-3-2.png)
 
 ```html
-
+<main id="app">
+  <div class="column-left">
+    <div>
+      <h1>column-left</h1>
+    </div>
+  </div>
+  <div class="column-right">
+    <h1>column-right</h1>
+  </div>
+  <!-- 居中内容因为浮动必须放置在DOM结构的最后 -->
+  <div class="column-middle">
+    <h1>column-middle</h1>
+  </div>
+</main>
 ```
-
 ```scss
-
+#app {
+  background: $gray;
+  .column-left {
+    background: $pink;
+    height: 100%;
+    float: left;
+    width: 100%;
+    margin-right: -650px;  // 设置外边距为负值
+    div {
+      margin-right: 650px;  // 补偿负值外边距
+    }
+  }
+  .column-middle {
+    background: $cyan;
+    height: 100%;
+    float: right;
+    width: 350px;
+  }
+  .column-right {
+    background: $blue;
+    height: 100%;
+    float: right;
+    width: 300px;
+  }
+}
 ```
 
 ### 三列右侧自适应布局
 
 ![](css2/layout-.png)
 
-```html
-
-```
-
-```scss
-
-```
-
-### 高度自适应
-
-![](css2/layout-.png)
-
-```html
-
-```
-
 ```scss
 
 ```
 
 
-### 垂直居中
-
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
 
 ## 圣杯布局
 
 [圣杯布局](https://alistapart.com/article/holygrail)
 
+
 ## 双飞翼布局
+
+
+## 高度自适应
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
+
+## 垂直居中
+
+![](css2/layout-.png)
+
+```html
+
+```
+
+```scss
+
+```
+
+## 响应式栅格
