@@ -61,18 +61,17 @@ background: red !important;
 margin塌陷（*margin collapsing*）：
 
 
-## 定位
-
-### 浮动定位
-
-### 相对定位
-
-### 绝对定位
+## 浮动/相对/绝对定位
 
 
-## div/span
+## 块元素/行内元素
+
+
+## 简写属性
+
 
 ## 外边距负值
+
 
 ## 一列布局
 
@@ -243,10 +242,12 @@ margin塌陷（*margin collapsing*）：
     height: 100%;
     float: right;
     width: 30%;
-    margin-left: -30%; // 负边距
+    margin-left: -30%; // 负外边距
   }
 }
 ```
+
+>> `负外边距`和`不设置宽度和浮动`都可以用来分别实现**二列左右侧宽度自适应**效果。
 
 ## 三列布局
 
@@ -408,29 +409,7 @@ margin塌陷（*margin collapsing*）：
 ## 双飞翼布局
 
 
-## 高度自适应
-
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
-
-
 ## 垂直居中
 
-![](css2/layout-.png)
-
-```html
-
-```
-
-```scss
-
-```
 
 ## 响应式栅格
