@@ -76,24 +76,24 @@ margin塌陷（*margin collapsing*）：
 
 ## 一列布局
 
-### 一列定宽布局
-
-![](css2/layout-1-1.png "一列定宽布局")
-
 ```html
 <main id="app">
   <div class="column">
-    <h2>column</h2>
+    <h1>column</h1>
   </div>
 </main>
 ```
+
+### 一列定宽布局
+
+![](css2/layout-1-1.png "一列定宽布局")
 
 ```scss
 #app {
   background: $gray;
   .column {
-    background: $cyan;
-    width: 300px;  // 宽度使用绝对单位
+    background: $pink;
+    width: 400px; // 宽度使用绝对单位
     height: 100%;
   }
 }
@@ -114,7 +114,7 @@ margin塌陷（*margin collapsing*）：
 #app {
   background: $gray;
   .column {
-    background: $cyan;
+    background: $pink;
     width: 60%;  // 宽度使用相对单位
     height: 100%;
   }
@@ -136,7 +136,7 @@ margin塌陷（*margin collapsing*）：
 #app {
   background: $gray;
   .column {
-    background: $cyan;
+    background: $pink;
     width: 60%;
     height: 100%;
     margin: 0 auto; // 块元素居中
