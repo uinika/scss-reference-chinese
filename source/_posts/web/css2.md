@@ -54,11 +54,26 @@ background: red !important;
 
 ## 盒子模型
 
-每个HTML元素都会被CSS描述为一个矩形的盒子，每个盒子有`margin`、`border`、`padding`、`content`四个框。
+每个HTML元素都会被CSS描述为一个矩形的盒子，每个盒子模型都由`content`**内容**、`padding`**内边距**、`border`**边框**、`margin`**外边距**4个框所组成。
 
 ![](css2/boxmodel.png)
 
-margin塌陷（*margin collapsing*）：
+> `content`区域设置的背景、颜色、图片样式会延伸到`padding`区域。
+
+## 可替换HTML元素
+
+HTML可替换元素（*replaced element*）的渲染并不由**CSS**控制，某些情况下，CSS会对可替换元素做特殊处理，比如计算外边距和一些auto值。
+
+```html
+<!-- 典型可替换元素 -->
+<img/> <object/> <video/>
+<!-- 表单元素 -->
+<textarea/> <input/>
+<!-- 特殊场景下表现为可替换元素 -->
+<audio/> <canvas/>
+```
+
+> 通过CSS的`content`属性插入的HTML内容，被称为**匿名可替换元素**（*anonymous replaced elements*）。
 
 
 ## 浮动/相对/绝对定位
@@ -69,6 +84,9 @@ margin塌陷（*margin collapsing*）：
 
 ## 简写属性
 
+## 外边距塌陷
+
+margin塌陷（*margin collapsing*）：
 
 ## 外边距负值
 
