@@ -78,14 +78,55 @@ HTML可替换元素（*replaced element*）的渲染并不由**CSS**控制，某
 
 > 通过CSS的`content`属性插入的HTML内容，被称为**匿名可替换元素**（*anonymous replaced elements*）。
 
+## 简写属性
 
-## 浮动/相对/绝对定位
+CSS规范定义简写属性的目的，在于将同一主题的常见属性定义集中在一起，从而编写更简洁、更具可读性的样式表。
+
+```css
+/* background */
+#app {
+  background-color: #000;
+  background-image: url(images/bg.gif);
+  background-repeat: no-repeat;
+  background-position: top right;
+}
+#app {
+  background: #000 url(images/bg.gif) no-repeat top right;
+}
+
+/* font */
+#app {
+  font-style: italic;
+  font-weight: bold;
+  font-size: .8em;
+  line-height: 1.2;
+  font-family: Arial, sans-serif;
+}
+#app {
+  font: italic bold .8em/1.2 Arial, sans-serif;
+}
+```
+
+目前CSS可以进行简写的属性如下：
+
+- `flex`
+- `list-style`
+- `transition` `transform`,
+- `background` `font` `margin` `padding`
+- `border` `border-top` `border-right` `border-bottom` `border-left` `border-width` `border-color` `border-style` `border-radius`
 
 
 ## 块元素/行内元素
 
 
-## 简写属性
+## 定位
+
+### 相对定位
+
+### 绝对定位
+
+### 浮动定位
+
 
 ## 外边距塌陷
 
@@ -434,3 +475,6 @@ margin塌陷（*margin collapsing*）：
 
 
 ## 响应式栅格
+
+
+## CSS精灵
