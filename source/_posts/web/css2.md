@@ -4,7 +4,7 @@ tags: CSS
 categories: Web
 ---
 
-层叠样式表（**CSS**，*Cascading Stylesheet*）用于指定浏览器所渲染的样式（*如颜色、定位、装饰*），距离2011年CSS2.1版本发布至今，已经整整过去**6**个年头，浏览器和前端技术经历了日新月异的变化。虽然目前CSS3.0规范在选择器、弹性盒模型、动画与过渡方面进行了诸多增强，但是[W3C规范](https://www.w3.org/)始终保持着一致的继承性，所以CSS2.1及之前版本规范中提出的大量特性与概念依旧得以沿用。本文参照[Mozilla开发者社区](https://developer.mozilla.org/en-US/docs/Web/CSS)以及[网易NEC](http://nec.netease.com/)前端开源项目，将CSS2.1当中常用的概念与典型布局进行了比较全面的梳理与概括。
+层叠样式表（**CSS**，*Cascading Stylesheet*）用于指定浏览器所渲染的样式（*如颜色、定位、装饰*），距离2011年CSS2.1版本发布至今，已经整整过去**6**个年头，浏览器和前端技术经历了日新月异的变化。虽然目前CSS3.0规范在选择器、弹性盒模型、动画与过渡方面进行了诸多增强，但是[W3C规范](https://www.w3.org/)始终保持着一致的继承性，所以CSS2.1及之前版本规范中提出的大量特性与概念依旧得以沿用。本文详细参考[Mozilla开发者社区](https://developer.mozilla.org/en-US/docs/Web/CSS)、[网易NEC](http://nec.netease.com/)前端开源项目、[CSS Mastery](https://www.apress.com/cn/book/9781430223979)，将CSS2.1当中常用的概念与典型布局进行了比较全面的梳理与概括。
 
 ![](css2/logo.jpg)
 
@@ -39,14 +39,17 @@ categories: Web
 - 可继承CSS属性（*inherited property*）：未指定值时，取父元素同属性的计算值（*computed value*）。
 - 非继承CSS属性（*reset property*）：未指定值时，取该属性的初始值（*initial value*）。
 
-> 所有CSS属性都可以使用的`inherit`和`initial`属性值，分别用来让一个元素继承父元素同属性的计算值，以及将被父元素覆盖的属性值重置为该CSS属性的默认值。
+所有CSS属性都可以使用如下2个值：
+
+1. `inherit`：让该CSS元素值去继承父元素同名CSS属性的计算值。
+2. `initial`：将被父元素覆盖的属性值重置为该CSS属性的默认值。
 
 ### !important
 
 使用`!important`规则的样式声明将会覆盖其它任何声明，如果两条带有`!important`规则的声明被应用到相同HTML元素上，拥有更高优先级的声明将会被采用。
 
 ```scss
-background: red !important;
+background: red !important; 
 ```
 
 > 不要在全站、插件当中使用`!important`，尽量只在局部页面需要覆写的情况下使用。
@@ -58,7 +61,7 @@ background: red !important;
 
 ![](css2/boxmodel.png)
 
-> `content`区域设置的背景、颜色、图片样式会延伸到`padding`区域。
+> `content`内容区域设置的背景、颜色、图片样式会延伸到`padding`区域。
 
 ## 可替换HTML元素
 
