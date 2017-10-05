@@ -123,14 +123,58 @@ CSS规范定义简写属性的目的，在于将同一主题的常见属性定�
 
 ### 相对定位
 
+相对于HTML元素的原始位置（*普通文档流*）进行移动，HTML元素依然占据原来的空间，但可能会覆盖相临的HTML元素。
+
+```css
+#app {
+  position: relative;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+}
+```
+
 ### 绝对定位
+
+使HTML元素位置脱离文档流，其位置由已定位的父级元素确定，如果不存在这个已定位父级元素，则其位置是相对于初始包含块的（即`<html>`元素或viewport）。
+
+```css
+#app {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  bottom: 20px;
+  left: 20px;
+}
+```
+
+> 当绝对定位的HTML元素覆盖其它元素时，可以通过设置其`z-index`属性来控制堆放顺序。
 
 ### 浮动定位
 
 
+
 ## 外边距塌陷
 
-margin塌陷（*margin collapsing*）：
+margin塌陷（*margin collapsing*）是指HTML块元素的顶部margin和底部margin有时会被折叠为margin值最大的外边距，外边距塌陷通常出现在如下3种情况。
+
+- 相邻的两个兄弟HTML元素之间的margin会塌陷。
+
+```html
+<p style="margin-bottom: 30px;">该段落的margin-bottom会被合并</p>
+<p style="margin-top: 20px;">该段落的margin-top会被合并</p>
+```
+
+- 块级父元素与其第1个或最后1个子元素
+
+- 空块元素
+
+```html
+<p style="margin-bottom: 0px;">这个段落的和下面段落的距离将为20px</p>
+<div style="margin-top: 20px; margin-bottom: 20px;"></div>
+<p style="margin-top: 0px;">这个段落的和上面段落的距离将为20px</p>
+```
 
 ## 外边距负值
 
