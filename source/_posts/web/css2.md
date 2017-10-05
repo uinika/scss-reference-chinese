@@ -157,24 +157,59 @@ CSS规范定义简写属性的目的，在于将同一主题的常见属性定�
 
 ## 外边距塌陷
 
-margin塌陷（*margin collapsing*）是指HTML块元素的顶部margin和底部margin有时会被折叠为margin值最大的外边距，外边距塌陷通常出现在如下3种情况。
+margin塌陷（*margin collapsing*）是指HTML块元素的顶部margin和底部margin有时会被折叠为margin值最大的外边距，外边距塌陷通常发生在下面3种情况：
 
 - 相邻的两个兄弟HTML元素之间的margin会塌陷。
 
 ```html
-<p style="margin-bottom: 30px;">该段落的margin-bottom会被合并</p>
-<p style="margin-top: 20px;">该段落的margin-top会被合并</p>
+<!-- 两个p元素的margin发生塌陷，渲染出p元素的间隔为30px -->
+<p style="margin-bottom: 30px;">该元素的margin-bottom为30px</p>
+<p style="margin-top: 20px;">该元素的margin-top为20px</p>
 ```
 
-- 块级父元素与其第1个或最后1个子元素
+- 块级父元素与其第1个/最后1个子元素
 
-- 空块元素
+如果块级的父HTML元素未使用`border-top`、`padding-top`、`inline`、 `clear`属性（*即`border-top`、`padding-top`为0的时候*），此时父元素与第1个子元素会发生**上外边距合并**，展现出的外边距将是两者之间`margin-top`最大的那个。
 
 ```html
-<p style="margin-bottom: 0px;">这个段落的和下面段落的距离将为20px</p>
-<div style="margin-top: 20px; margin-bottom: 20px;"></div>
-<p style="margin-top: 0px;">这个段落的和上面段落的距离将为20px</p>
+<section style="margin-top: 30px;">
+  <p style="margin-top: 50px;">父子元素的margin-top发生合并，父元素会渲染出子元素50px的margin-top效果</p>
+</section>
 ```
+
+如果块级父元素未使用`border`、`padding`、`inline`、`height`、`min-height`、`max-height`属性，则父元素与最后1个子元素将发生**下外边距合并**。
+
+```html
+<section style="margin-bottom: 15px;">
+  <p style="margin-bottom: 40px;">父子元素的margin-bottom发生塌陷，父元素会渲染出子元素40px的margin-bottom效果</p>
+</section>
+```
+
+- 空的块元素
+
+如果一个没有内容的**空块级元素**未使用`border`、`padding`、`inline`、`height`、`min-height`属性，此时它将会与相临的兄弟元素发生**上下外边距合并**。
+
+```html
+<!-- 中间div元素的与相邻p元素首先发生margin塌陷，然后两个p元素的margin再次发生塌陷，最终只渲染出间隔30px的两个p元素 -->
+<p style="margin-bottom: 10px;">该HTML元素与下面元素的margin-bottom为10px</p>
+<div style="margin-top: 5px; margin-bottom: 10px;"></div>
+<p style="margin-top: 30px;">该HTML元素与上面元素的margin-top为30px</p>
+```
+
+当存在一个负值`margin`时，塌陷后的外边距是两者之和；如果`margin`都为负值，则取绝对值最大的那个。
+
+```html
+<!-- 两个div元素发生外边距塌陷，渲染出的div元素间隔距离是20px -->
+<div style="margin-bottom: -80px;">该元素的margin-bottom为-80px</div>
+<div style="margin-top: 100px;">该元素的margin-top为100px</div>
+```
+
+> 即使外边距为0，这些规则也仍旧生效。
+
+
+## 包含块
+
+
 
 ## 外边距负值
 
