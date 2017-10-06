@@ -209,7 +209,104 @@ margin塌陷（*margin collapsing*）是指HTML块元素的顶部margin和底部
 
 ## 包含块
 
+HTML元素的尺寸、位置经常受到其包含块（*containing block*）的影响，通常情况下包含块是其父元素，但特殊情况下并不总是这样，因此必须通过HTML元素的`position`属性来确定其包含块。
 
+1. 如果`position`属性是`static`或`relative`，包含块就是其父级块元素（*例如`inline-block`、`block`、`list-item`*）或格式化上下文（*例如table容器、flex容器、grid容器、block容器本身*）内容区的边缘组成。
+
+2. 如果`position`属性是`absolute`，包含块就是由距离最近的`position`属性值`非static`（*`fixed`, `absolute`, `relative`, `sticky`*）的祖先元素的内边距区的边缘组成。
+
+3. 如果`position`属性是`fixed`，包含块由**viewport**或**页面区域**所组成。
+
+4. 如果`position`属性是`absolute`或`fixed`，包含块也有可能是由满足下面条件的**最近父元素的内边距区的边缘**组成：
+
+* 一个非none的转换或透视值。
+* 一个将会改变的转换或透视值。
+* 一个非none的过滤值，或者一个将会改变的过滤值（*仅工作在Firefox*）。
+
+> 根元素`<html>`所在的包含块是一个被称为**初始包含块**的矩形区域。
+
+CSS属性被赋予一个百分比值的时候，其值由该元素的**包含块**计算而来的。
+
+1. 一个HTML元素的`height`、`top`、`bottom`属性值由包含块的`height`属性值计算而来（*如果包含块的`height`值依赖于其内容，且包含块的`position`属性值为`relative`或`static`，则该HTML元素的这些值为**0***）。
+2. 一个HTML元素的`width`、`left`、`right`、`padding`、`margin`属性由包含块的`width`属性值来计算而来。
+
+```html
+<article>
+  <section>
+    <p>This is a paragraph!</p>
+  </section>
+</article>
+```
+
+![](css2/percentage-1.png "")
+
+```scss
+article {
+  background: $gray;
+  width: 500px;
+  height: 300px;
+  section {
+    display: block;
+    width: 400px;
+    height: 160px;
+    background: $cyan;
+    p {
+      width: 50%;   /* == 400px * 50% = 200px */
+      height: 25%;  /* == 160px * 25% = 40px  */
+      margin: 5%;   /* == 400px *  5% = 20px  */
+      padding: 5%;  /* == 400px *  5% = 20px  */
+      background: $pink;
+    }
+  }
+}
+```
+
+![](css2/percentage-2.png "")
+
+```scss
+article {
+  background: $gray;
+  width: 500px;
+  height: 300px;
+  section {
+    display: inline;
+    background: $cyan;
+    p {
+      width: 50%;  /* equals half the article's width  */
+      height: 200px;
+      background: $pink;
+    }
+  }
+}
+```
+
+![](css2/percentage-3.png "")
+
+```scss
+article {
+  position: absolute;
+  background: $gray;
+  width: 500px;
+  height: 300px;
+  section {
+    position: absolute;
+    left: 30px;
+    top: 30px;
+    width: 400px;
+    height: 160px;
+    padding: 30px 20px;
+    background: $cyan;
+    p {
+      position: absolute;
+      width:  50%;  /* == (400px + 20px + 20px) * 50% = 220px */
+      height: 25%;  /* == (160px + 30px + 30px) * 25% = 55px  */
+      margin:  5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
+      padding: 5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
+      background: $pink;
+    }
+  }
+}
+```
 
 ## 外边距负值
 
