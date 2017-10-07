@@ -126,90 +126,70 @@ CSS规范定义简写属性的目的，在于将同一主题的常见属性定�
 
 ## 定位
 
-盒子模型生成后，CSS渲染引擎需要定位它们的位置。
+CSS盒子模型生成后，浏览器渲染引擎会通过如下几个属性来定位其在文档流中的位置。
 
 ### position属性
 
-static：
-对象遵循常规流。此时4个定位偏移属性不会被应用。
-relative：
-对象遵循常规流，并且参照自身在常规流中的位置通过top，right，bottom，left这4个定位偏移属性进行偏移时不会影响常规流中的任何元素。
-absolute：
-对象脱离常规流，此时偏移属性参照的是离自身最近的定位祖先元素，如果没有定位的祖先元素，则一直回溯到body元素。盒子的偏移位置不影响常规流中的任何元素，其margin不与其他任何margin折叠。
-fixed：
-与absolute一致，但偏移定位是以窗口为参考。当出现滚动条时，对象不会随着滚动。
+- `static`
+元素**遵循**常规文档流，四个定位偏移属性不可用。
+
+- `relative`
+元素**遵循**常规文档流，参照自身在常规流中的位置，通过4个定位偏移属性`top`、`right`、`bottom`、`left`进行偏移操作，但不会影响到常规流中的其它元素。
+
+- `absolute`
+元素**脱离**常规文档流，此时偏移位置参照*离自身最近的定位祖先元素*，如果没有不存在，则一直回溯至`<body>`。元素的偏移位置不影响常规流中的其它元素，其margin不会与其它margin发生折叠。
+
+- `fixed`
+元素**脱离**常规文档流，与`absolute`属性值一致，但偏移位置以`window`作为参考。出现滚动条时，元素并不会随之滚动。
+
+> 当`position`属性值为`非static`时，层叠顺序可以通过`z-index`属性定义。
+
+> **绝对定位元素**的`top`、`right`、`bottom`、`left`属性未设置时，会紧随在前面的兄弟元素之后，虽然位置上不影响常规流中其它元素，但是该元素会失去其位置并与后继元素发生折叠。
 
 ### float属性
 
+发生浮动定位时，元素CSS属性的`position`需要为`static`或`relative`，且`float`不能为`none`。如果`float`设置为`left`，浮动从行盒开头进行定位；如果设置为`right`, 浮动从行盒末尾进行定位。
 
-### 常规流（*normal flow*）：
+- `none`：元素**不浮动**。
 
-盒一个接一个排列。
+- `left`：元素**向左**浮动。
 
-### 绝对定位（*absolute*）
+- `right`：元素**向右**浮动。
 
-中的盒坐标是绝对的。绝对定位元素可以盖住使用其它定位方案的元素。
+> `float`属性在**绝对定位**和**display为none**时不会生效。
 
-```css
-div {
-  position: absolute;
-  top/right/bottom/right
+### clear属性
+
+指出了不允许进行浮动的边。
+
+`none`：两侧都**可以**存在浮动元素。
+`left`：不允许**左侧**出现浮动元素。
+`right`：不允许**右侧**出现浮动元素。
+`both`：**两侧**都**不**允许出现浮动元素。
+
+
+```html
+<div class="test1">1</div>
+<div class="test2">2</div>
+<div class="test3">3</div>
+
+<style>
+.test1 {
+  float: left;
 }
-```
-
-### 相对定位（*relative*）
-
-```css
-div {
-  position: relative;
-  top/right/bottom/right
+.test2 {
+  clear: both;
 }
-```
-
-### 浮动（*float*）
-
-方案将盒从常规流里提出来，放在当前盒的旁边。
-
-```css
-div {
-  float: left/right;
-  clear: left/right/both;
+.test3 {
+  float: left;
 }
+</style>
+
+<!-- 渲染结果 -->
+1
+2
+3
 ```
-
-### 相对定位
-
-相对于HTML元素的原始位置（*普通文档流*）进行移动，HTML元素依然占据原来的空间，但可能会覆盖相临的HTML元素。
-
-```css
-#app {
-  position: relative;
-  top: 20px;
-  right: 20px;
-  bottom: 20px;
-  left: 20px;
-}
-```
-
-### 绝对定位
-
-使HTML元素位置脱离文档流，其位置由已定位的父级元素确定，如果不存在这个已定位父级元素，则其位置是相对于初始包含块的（即`<html>`元素或viewport）。
-
-```css
-#app {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  bottom: 20px;
-  left: 20px;
-}
-```
-
-> 当绝对定位的HTML元素覆盖其它元素时，可以通过设置其`z-index`属性来控制堆放顺序。
-
-### 浮动定位
-
-
 
 ## 外边距塌陷
 
