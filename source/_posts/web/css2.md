@@ -116,10 +116,66 @@ CSS规范定义简写属性的目的，在于将同一主题的常见属性定�
 - `border` `border-top` `border-right` `border-bottom` `border-left` `border-width` `border-color` `border-style` `border-radius`
 
 
-## 块元素/行内元素
+## 块级/行内元素
 
+### 块级元素（*block-level*）
+当HTML元素的`display`属性为`block`、`list-item`、`table`时，该元素就是**块级元素**。块级元素视觉上呈现为竖直排列的**块**，`<div>`和`<p>`都是典型的块级元素。
+
+### 行内元素（*inline-level*）
+当HTML元素的`display`属性为`inline`、`inline-block`、`inline-table`时，该元素为**行内元素**。视觉上行内元素的内容会逐行进行排列，**文本**和**图片**都是典型的行内级元素。
 
 ## 定位
+
+盒子模型生成后，CSS渲染引擎需要定位它们的位置。
+
+### position属性
+
+static：
+对象遵循常规流。此时4个定位偏移属性不会被应用。
+relative：
+对象遵循常规流，并且参照自身在常规流中的位置通过top，right，bottom，left这4个定位偏移属性进行偏移时不会影响常规流中的任何元素。
+absolute：
+对象脱离常规流，此时偏移属性参照的是离自身最近的定位祖先元素，如果没有定位的祖先元素，则一直回溯到body元素。盒子的偏移位置不影响常规流中的任何元素，其margin不与其他任何margin折叠。
+fixed：
+与absolute一致，但偏移定位是以窗口为参考。当出现滚动条时，对象不会随着滚动。
+
+### float属性
+
+
+### 常规流（*normal flow*）：
+
+盒一个接一个排列。
+
+### 绝对定位（*absolute*）
+
+中的盒坐标是绝对的。绝对定位元素可以盖住使用其它定位方案的元素。
+
+```css
+div {
+  position: absolute;
+  top/right/bottom/right
+}
+```
+
+### 相对定位（*relative*）
+
+```css
+div {
+  position: relative;
+  top/right/bottom/right
+}
+```
+
+### 浮动（*float*）
+
+方案将盒从常规流里提出来，放在当前盒的旁边。
+
+```css
+div {
+  float: left/right;
+  clear: left/right/both;
+}
+```
 
 ### 相对定位
 
@@ -716,3 +772,12 @@ p {
 ## CSS精灵
 
 ## margin负值
+
+
+## vertical-align
+
+## line-height
+
+## text-align
+
+## 溢出与换行
