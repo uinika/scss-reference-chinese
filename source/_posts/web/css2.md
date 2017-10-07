@@ -230,85 +230,145 @@ CSS属性被赋予一个百分比值的时候，其值由该元素的**包含块
 1. 一个HTML元素的`height`、`top`、`bottom`属性值由包含块的`height`属性值计算而来（*如果包含块的`height`值依赖于其内容，且包含块的`position`属性值为`relative`或`static`，则该HTML元素的这些值为**0***）。
 2. 一个HTML元素的`width`、`left`、`right`、`padding`、`margin`属性由包含块的`width`属性值来计算而来。
 
+接下来的各个例子中的CSS样式都统一使用如下HTML：
+
 ```html
-<article>
+<body>
   <section>
     <p>This is a paragraph!</p>
   </section>
-</article>
+</body>
 ```
 
-![](css2/percentage-1.png "")
+下面例子中，因为`<p>`元素处于静态位置，其临近的祖先HTML元素`<section>`是一个块元素，所以其包含块就是`<section>`，
 
-```scss
-article {
-  background: $gray;
-  width: 500px;
-  height: 300px;
-  section {
-    display: block;
-    width: 400px;
-    height: 160px;
-    background: $cyan;
-    p {
-      width: 50%;   /* == 400px * 50% = 200px */
-      height: 25%;  /* == 160px * 25% = 40px  */
-      margin: 5%;   /* == 400px *  5% = 20px  */
-      padding: 5%;  /* == 400px *  5% = 20px  */
-      background: $pink;
-    }
-  }
+![](css2/containing-block-1.png "包含块-Example-1")
+
+```css
+body {
+  background: beige;
+}
+
+section {
+  display: block;
+  width: 400px;
+  height: 160px;
+  background: lightgray;
+}
+
+p {
+  width:  50%;  /* == 400px * 50% = 200px */
+  height: 25%;  /* == 160px * 25% = 40px  */
+  margin:  5%;  /* == 400px *  5% = 20px  */
+  padding: 5%;  /* == 400px *  5% = 20px  */
+  background: cyan;
 }
 ```
 
-![](css2/percentage-2.png "")
+下面例子中，HTML元素`<p>`的包含块是`<body>`，因为`<section>`不是块元素且没有建立格式化上下文。
 
-```scss
-article {
-  background: $gray;
-  width: 500px;
-  height: 300px;
-  section {
-    display: inline;
-    background: $cyan;
-    p {
-      width: 50%;  /* equals half the article's width  */
-      height: 200px;
-      background: $pink;
-    }
-  }
+![](css2/containing-block-2.png "包含块-Example-2")
+
+```css
+body {
+  background: beige;
+}
+
+section {
+  display: inline;
+  background: lightgray;
+}
+
+p {
+  width: 50%;     /* == half the body's width  */
+  height: 200px;  /* Note: a percentage would be 0 */
+  background: cyan;
 }
 ```
 
-![](css2/percentage-3.png "")
+下面例子中，元素`<p>`的包含块是`<section>`，这是因为`<section>`的`position`属性为`absolute`，`<p>`的百分比属性值受到包含块`<section>`的`padding`值影响，
 
-```scss
-article {
+![](css2/containing-block-3.png "包含块-Example-3")
+
+```css
+body {
+  background: beige;
+}
+
+section {
   position: absolute;
-  background: $gray;
-  width: 500px;
-  height: 300px;
-  section {
-    position: absolute;
-    left: 30px;
-    top: 30px;
-    width: 400px;
-    height: 160px;
-    padding: 30px 20px;
-    background: $cyan;
-    p {
-      position: absolute;
-      width:  50%;  /* == (400px + 20px + 20px) * 50% = 220px */
-      height: 25%;  /* == (160px + 30px + 30px) * 25% = 55px  */
-      margin:  5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
-      padding: 5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
-      background: $pink;
-    }
-  }
+  left: 30px;
+  top: 30px;
+  width: 400px;
+  height: 160px;
+  padding: 30px 20px;
+  background: lightgray;
+}
+
+p {
+  position: absolute;
+  width:  50%;  /* == (400px + 20px + 20px) * 50% = 220px */
+  height: 25%;  /* == (160px + 30px + 30px) * 25% = 55px  */
+  margin:  5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
+  padding: 5%;  /* == (400px + 20px + 20px) *  5% = 22px  */
+  background: cyan;
 }
 ```
 
-## 外边距负值
+下面例子中，元素`<p>`的`position`属性为`fixed`，因此其包含块为**初始化包含块**（*屏幕上的viewport*）。因此`<p>`元素的尺寸会受到浏览器window尺寸的影响。
+
+![](css2/containing-block-4.png "包含块-Example-4")
+
+```css
+body {
+  background: beige;
+}
+
+section {
+  width: 400px;
+  height: 480px;
+  margin: 30px;
+  padding: 15px;
+  background: lightgray;
+}
+
+p {
+  position: fixed;
+  width: 50%;   /* == (50vw - (width of vertical scrollbar))    */
+  height: 50%;  /* == (50vh - (height of horizontal scrollbar)) */
+  margin: 5%;   /* == (5vw  - (width of vertical scrollbar))    */
+  padding: 5%;  /* == (5vw  - (width of vertical scrollbar))    */
+  background: cyan;
+}
+```
+
+下面例子中，元素`<p>`的`position`属性为`absolute`，因此其包含块为`<section>`，因为`<section>`作为临近祖先元素，并且使用了非`none`的`transform`属性。
+
+![](css2/containing-block-5.png "包含块-Example-5")
+
+```css
+body {
+  background: beige;
+}
+
+section {
+  transform: rotate(0deg);
+  width: 400px;
+  height: 160px;
+  background: lightgray;
+}
+
+p {
+  position: absolute;
+  left: 80px;
+  top: 30px;
+  width:  50%;  /* == 200px */
+  height: 25%;  /* == 40px  */
+  margin:  5%;  /* == 20px  */
+  padding: 5%;  /* == 20px  */
+  background: cyan;
+}
+```
 
 
 ## 一列布局
@@ -654,3 +714,5 @@ article {
 
 
 ## CSS精灵
+
+## margin负值
