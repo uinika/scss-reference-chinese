@@ -8,11 +8,46 @@ categories: Web
 
 ## JavaScript & ES6
 
-基于爱彼迎的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行整理，适用于使用Babel提供ES6预编译环境的场景。
+基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行整理，适用于使用Babel提供ES6预编译环境的场景。
 
 <!-- more -->
 
 ### 变量命名
+
+1. 驼峰命名（*camelCase*）：用于定义JavaScript**普通变量**、**函数方法**。
+3. 帕斯卡命名（*PascalCase*）：用于JavaScript声明**类**、**对象**、**数组**等引用类型。
+2. 短横线命名（*kebab-case*）：用于自定义**HTML属性**和**元素**、**SCSS变量**、**图片资源**，即视图和样式相关的变量都采取这种方式命名。
+
+```html
+<template>
+  <main id = 'app'>
+    <section class = 'article-content'>
+      <my-paragraph>kebab-case</my-paragraph>
+    </section>
+  </main>
+<template>
+
+<style>
+#app {
+  background: url(../assets/banner-logo.png);  // kebab-case
+}
+.article-content {  // kebab-case
+  font-size: 18px;
+}
+</style> 
+
+<script>
+let currentDate = 'Tue Oct 10 2017 17:52:04 GMT+0800 (CST)';  // camelCase
+
+const changeDate = function() {  // camelCase
+  console.log(new Date());
+};
+
+const YourName = {  // PascalCase
+  name: 'uinika'
+};
+</script>
+```
 
 代码缩进必须使用**2个空格**，代码块的花括号`{`、流程控制语句的小括号`(`前必须放置**1个空格**，且每个函数、代码块之前通过换行进行分隔。
 
@@ -26,7 +61,7 @@ class Hank {
   // 换行分隔代码块
   toString() {                         // 花括号前放置空格
     if (this.height && this.weight) {  // 小括号前放置空格
-      console.info("toString");
+      console.info('toString');
     }
   }
 }
@@ -42,12 +77,23 @@ class Hank {
 // 保留1个空行
 ```
 
-使用`$`作为存储jQuery对象变量名称的前缀。
+使用美元符`$`作为存储**jQuery对象**变量名称的前缀。
 
 ```javascript
 const menu = $('#menu');  // bad way
 
 const $menu = $('#menu'); // good way
+```
+
+使用下划线`_`作为代码中**私有变量**的前缀，避免其它小伙伴操作该变量造成污染。
+
+```javascript
+function traverse(array) {
+  let _index = 0;  // 将数组索引声明为私有变量，防止误操作导致索引泄露
+  for(_index; array.length < _index; _index++ ) {
+    console.log(array[_index]);
+  };
+};
 ```
 
 > **严禁在项目中使用单字母和拼音命名的变量和函数名称**。
@@ -103,10 +149,10 @@ vm.group = {
   password,
   isAuthorized,
   // 普通属性
-  age: "20",
+  age: '20',
   height: 182,
   weight: 76,
-  homeland: "CHINA"
+  homeland: 'CHINA'
 }
 ```
 
@@ -159,7 +205,7 @@ class Hank {
   }
 }
 
-const hank = new Hank("uinika", 18);
+const hank = new Hank('uinika', 18);
 hank.printName().printAge();
 ```
 
@@ -168,7 +214,7 @@ hank.printName().printAge();
 ```javascript
 class Uinika extends Hank {
   constructor(height, weight) {
-    super("uinika", 18);  // 实例化父级构造器
+    super('uinika', 18);  // 实例化父级构造器
     this.height = height;
     this.weight = weight;
   }
@@ -202,7 +248,7 @@ myArray.push('uinika'); // it is correct
 - 使用ES6的扩展运算符（*spread*）`...`复制数组。
 
 ```javascript
-const target = ["A", "B", "C", "D"];
+const target = ['A', 'B', 'C', 'D'];
 const copy = [];
 
 // not recommend
@@ -229,10 +275,10 @@ let myArray = Array.from(myObject); // ['A', 'B', 'C']
 
 ### 字符串
 
-为避免频繁按下`shift+"`组合键，请在代码中尽可能使用单引号`'`声明字符串。
+为避免频繁按下`shift+'`组合键，请在代码中尽可能使用单引号`'`声明字符串。
 
 ```javascript
-const name = "Hank";  // bad way
+const name = 'Hank';  // bad way
 const name = 'Hank';  // good way
 ```
 
@@ -286,7 +332,7 @@ function good() {};
 }
 
 // 箭头函数的简写形式
-name => name + "zheng"; 
+name => name + 'zheng'; 
 ```
 
 使用箭头函数来书写**立即调用的函数表达式**（*IIFE，Immediately Invoked Function Expression*）。
@@ -303,7 +349,7 @@ name => name + "zheng";
 
 ```javascript
 if(variable1 === '' && variable2 !== 0 ){
-  console.info("just a test!");
+  console.info('just a test!');
 }
 ```
 
@@ -372,8 +418,8 @@ if (test) {
  * @description 去除目标字符串全部空格
  */
 function trim(input) {
-  if (typeof input === "string" && input)
-    input.replace(/\s/g, "");
+  if (typeof input === 'string' && input)
+    input.replace(/\s/g, '');
 }
 ```
 
