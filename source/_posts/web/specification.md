@@ -4,11 +4,53 @@ tags: Zen
 categories: Web
 ---
 
-开发团队目前正在全面切换到`ES6  + Vue / React + Webpack`这套技术栈，小伙伴们开发过程中对编码方面的规范以及ES6使用上的约定存在诸多困惑，所以参考了Github以及互联网企业UED们的开源文档，结合团队之前积累的大量开发约定和范式，整理了这篇**code style**文档并且同样[开源](https://uinika.github.io/)出来，计划在team小伙伴们熟练掌握以后，开始逐步在项目中开启[ESLint](https://eslint.org/)校验。
+开发团队目前正在全面切换到`ES6  + Vue / React + Webpack`这套技术栈，小伙伴们开发过程中对编码方面的规范以及ES6使用上的约定存在诸多困惑，所以参考了Github以及互联网企业UED们的开源文档，结合团队之前积累的大量开发约定和范式，整理了这篇**code style**文档并且同样[开源](https://uinika.github.io/)出来，计划在team小伙伴们熟练掌握以后，逐步在项目中推行[ESLint](https://eslint.org/)**代码风格**校验。
 
 ## JavaScript & ES6
 
 基于爱彼迎的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行整理，适用于使用Babel提供ES6预编译环境的场景。
+
+<!-- more -->
+
+### 变量命名
+
+代码缩进必须使用**2个空格**，代码块的花括号`{`、流程控制语句的小括号`(`前必须放置**1个空格**，且每个函数、代码块之前通过换行进行分隔。
+
+```javascript
+class Hank {
+  constrocter() {
+    this.height = '182cm',
+    this.weight = '75kg'
+  }
+
+  // 换行分隔代码块
+  toString() {                         // 花括号前放置空格
+    if (this.height && this.weight) {  // 小括号前放置空格
+      console.info("toString");
+    }
+  }
+}
+```
+
+不要在函数参数列表的前后添加**任何空格**，但是可以使用**1个空格**将JavaScript运算符分隔开，并且在每个代码文件末尾保留**1个空行**。
+
+```javascript
+// 函数参数列表前后不添加空格
+((window)=>{
+  var self = window; // 使用1个空格分隔运算符
+})(window)
+// 保留1个空行
+```
+
+使用`$`作为存储jQuery对象变量名称的前缀。
+
+```javascript
+const menu = $('#menu');  // bad way
+
+const $menu = $('#menu'); // good way
+```
+
+> **严禁在项目中使用单字母和拼音命名的变量和函数名称**。
 
 ### 数据类型
 
@@ -25,13 +67,11 @@ const array = [0, 1, 2, 3, 4, 5];
 const object = {a: 'a', b: 'b', c: 'c'};
 ```
 
-> let和const都具有代码块级的作用域。
-
-<!-- more -->
+> let和const都具有代码块级的作用域，书写时注意将两者进行分组。
 
 ### 对象
 
-- 使用字面量语法创建对象，而不要使用`new`关键字。
+使用字面量语法创建对象，而不要使用`new`关键字。
 
 ```javascript
 const myObject = new Object();  // not recommend
@@ -39,7 +79,7 @@ const myObject = new Object();  // not recommend
 const myObject = {}  // it is correct
 ```
 
-- 对象当中的方法使用**简写函数**、**简写属性**进行定义。
+对象当中的方法使用**简写函数**、**简写属性**进行定义。
 
 ```javascript
 let username = 'admin';
@@ -54,7 +94,7 @@ vm.login = {
 }
 ```
 
-当对象中同时存在简写属性和普通属性时，需要将简写内容进行分组。
+当对象中同时存在*简写属性*和*普通属性*时，需要将*简写属性*写到单独的组。
 
 ```javascript
 vm.group = {
@@ -68,6 +108,18 @@ vm.group = {
   weight: 76,
   homeland: "CHINA"
 }
+```
+
+使用`.`运算符访问对象属性，或者使用`[]`通过变量访问属性。
+
+```javascript
+const user = {
+  height: 182,
+  weight: 75
+}
+
+console.info( user.height );
+console.info( user['weight'] );
 ```
 
 ES6中新出现的`class`关键字，实质是构造函数创建对象的一种糖衣语法，目的是更加容易的向对象添加原型方法。因此，建议尽可能使用`class`创建类及原型方法，避免在构造函数上使用`prototype`关键字。
@@ -243,6 +295,104 @@ name => name + "zheng";
 (() => {
   console.info('Hello Hank!');
 })();
+```
+
+### 布尔运算
+
+尽可能使用`===`和`!==`去同时比较**值**与**数据类型**，而非通过`==`和`!=`仅比较**值**。
+
+```javascript
+if(variable1 === '' && variable2 !== 0 ){
+  console.info("just a test!");
+}
+```
+
+各数据类型的布尔运算结果如下，使用`if()`等逻辑判断语句时需要注意。
+
+1. 对象类型的`object`和`array`都计算为`true`，无论其是否为**空对象**`{}`或者**空数组**`[]`。
+2. **空**字符串类型`''`计算为`false`，但**非空**字符串`'string'`计算为`true`。
+3. 数字类型`NaN`和`0`计算为`false`。
+4. `undefined`和`null`都是`false`。
+
+``` javascript
+if ([0]) {
+  // 结果为true，因为JavaScript中object和array都同属对象类型，布尔运算时对象类型都会被渲染为true。
+}
+```
+
+利用JavaScript逻辑判断语句的强制数据类型转换特性，可以更加简洁的书写布尔判断。
+
+```javascript
+if (name !== '') {} // bad
+if (name) {}       // good
+
+if (collection.length > 0) {}  // bad
+if (collection.length) {}      // good
+```
+
+如果通过`if...else...`语句使用多行代码块，则`else`放在`if`代码块关闭括号`}`同一行。
+
+```javascript
+// bad job
+if (test) {
+  ...
+}
+else {
+  ...
+}
+
+// good job
+if (test) {
+  ...
+} else {
+  ...
+}
+```
+
+### 注释
+
+- 使用`/** */`作为多行注释，用来标注全局功能模块的*名称*、*类型*、*参数*、*返回值*、*描述*等信息。
+
+```javascript
+/**
+  * @name   auto-resize
+  * @type   directive
+  * @param  数值类型，表示缩进的像素值
+  * @return null
+  * @description 自动根据当前window大小计算页面的显示尺寸
+  */
+```
+
+- 使用`/* */`作为单行注释，标注局部代码块的*参数*、*返回值*、*描述信息*。
+
+```javascript
+/* 
+ * @param  用户输入字符串
+ * @return null
+ * @description 去除目标字符串全部空格
+ */
+function trim(input) {
+  if (typeof input === "string" && input)
+    input.replace(/\s/g, "");
+}
+```
+
+- 使用`// `作为行内注释，标记代码段信息。
+
+```javascript
+function trustHtml($sce) {
+  return $sce.trustAsHtml(val);  //返回被信任的HTML字符串
+};
+```
+
+> 使用`// TODO:`格式注释描述**问题本身**，使用`// FIXME:`格式注释描述**问题解决方式**。
+
+```javascript
+() => {
+  issue();   // TODO: 描述问题本身的信息
+  handle();  // FIXME: 描述如何解决问题
+  return this;
+}
 ```
 
 ### 解构赋值
