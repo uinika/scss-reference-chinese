@@ -470,16 +470,33 @@ const [array1, array2] = array;  // good way
 > 函数返回值时，直接返回对象`{}`而非数组`[]`，避免因为数组索引改变导致不能正确读取相应位置数据。
 
 
-
-
-
-
 ## CSS & SCSS
 
 
 ## HTML
 
+### 整体结构
 
+统一使用HTML5提供的`<!DOCTYPE html>`文档类型声明，并在`<head>`中使用`<link>`引入外部CSS文件，然后在`<body>`底部通过`<script>`引入JavaScript脚本文件。
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
 
+<head>
+  <title>Aves</title>
+  <meta name="renderer" content="webkit" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+</head>
 
-<!-- more -->
+<body>
+  <div id="app">
+    <main id="dashboard"></main>
+  </div>
+</body>
+
+</html>
+```
+
+### 语义化 
