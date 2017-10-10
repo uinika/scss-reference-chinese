@@ -1,5 +1,5 @@
 ---
-title: SCSS快速上手指南
+title: SCSS快速上手
 tags: CSS
 categories: Web
 ---
