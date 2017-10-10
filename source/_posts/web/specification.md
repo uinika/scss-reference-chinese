@@ -472,9 +472,9 @@ const [array1, array2] = array;  // good way
 
 ## CSS & SCSS
 
-### 语义化选择器命名
+### 命名原则
 
-#### 布局
+### 布局选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
@@ -488,7 +488,7 @@ const [array1, array2] = array;  // good way
 | 侧栏子容器 | sidec | sdc |
 | 盒容器 | wrap/box | wrap/box |
 
-#### 模块/组件
+### 模块/组件选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
@@ -521,7 +521,7 @@ const [array1, array2] = array;  // good way
 | 按钮 | button | btn |
 | 输入 | input | ipt |
 
-#### 功能
+### 功能选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
@@ -538,7 +538,7 @@ const [array1, array2] = array;  // good way
 | 字体大小 | fontsize | fs |
 | 字体粗细 | fontweight | fw |
 
-#### 皮肤
+### 颜色/背景选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
@@ -549,7 +549,7 @@ const [array1, array2] = array;  // good way
 | 背景定位 | backgroundposition | bgp |
 | 边框颜色 | bordercolor | bdc |
 
-#### 状态
+### 状态选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
