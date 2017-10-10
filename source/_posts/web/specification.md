@@ -477,7 +477,7 @@ const [array1, array2] = array;  // good way
 
 ### 整体结构
 
-统一使用HTML5提供的`<!DOCTYPE html>`文档类型声明，并在`<head>`中使用`<link>`引入外部CSS文件，然后在`<body>`底部通过`<script>`引入JavaScript脚本文件。
+统一使用HTML5提供的`<!DOCTYPE html>`文档类型声明，并在`<head>`中使用`<link>`引入外部CSS文件，然后在`<body>`底部通过`<script>`引入JavaScript文件。
 ```html
 <!DOCTYPE html>
 <html lang="zh-CN">
