@@ -111,15 +111,18 @@ const hank = new Hank("uinika", 18);
 hank.printName().printAge();
 ```
 
-代码中必须使用`extends`实现继承，因为`extends`是ES6内建的原型继承方法，不会对`instanceof()`的返回结果形成破坏。
+代码中尽可能使用`extends`实现继承，因为`extends`是ES6内建的**原型继承方法，不会对`instanceof()`的返回结果形成破坏。
 
 ```javascript
 class Uinika extends Hank {
-  constructor(height) {
+  constructor(height, weight) {
+    super("uinika", 18);  // 实例化父级构造器
     this.height = height;
+    this.weight = weight;
   }
+
   print() {
-    console.log(this);
+    console.log(this);  // 打印自己以及父级构造器当中的属性
   }
 }
 ```
