@@ -248,6 +248,102 @@ SassScript支持6种数据类型，
 7. **对象map**：*`(key1: value1、key2: value2)`*
 8. **函数function**：
 
-> 使用 #{} (interpolation) 时，有引号字符串将被编译为无引号字符串，这样便于在 mixin 中引用选择器名。
+
+### 运算
+
+SassScript所有数据类型都支持`==或!=`逻辑运算，但是每种数据类型还拥有各自的运算方式。
+
+#### 数值运算
+
+数值类型支持常见的数值运算`+`、`-`、`*`、`/`、`%`以及关系运算符`<`、 `>`、`<=`、`>=`，必要时会在不同**绝对**数值单位之间转换。
+
+```scss
+p {
+  font-size: 1in + 8pt;
+}
+```
+
+进行除法运算时，需要使用变量但不需要`/`进行除法运算，可以使用`#{}`插值语句包裹变量。
+
+```scss
+p {
+  font-size: #{$font-size}/#{$line-height};
+}
+```
+
+#### 颜色运算
+
+颜色值运算是分段进行的，即分别计算**红色**、**绿色**、**蓝色**的值。
+
+```scss
+p {
+  color: #010203 + #040506;
+}
+
+// 进行01+04=05，02+05=07，03+06=09运算后编译为CSS
+p {
+  color: #050709;
+}
+```
+
+拥有相同**alpha通道**的颜色值才能直接参与运算，否则会提示错误信息。
+
+```scss
+p {
+  color: rgba(255, 0, 0, 0.75) + rgba(0, 255, 0, 0.75);
+}
+```
+
+颜色值的**alpha通道**可以使用`opacify`或`transparentize`函数进行计算。
+
+```scss
+// SASS
+$demo: rgba(255, 0, 0, 0.5);
+p {
+  color: opacify($demo, 0.3);                     // 增加alpha通道值
+  background-color: transparentize($demo, 0.25);  // 减少alpha通道值
+}
+
+// CSS
+p {
+  color: rgba(255, 0, 0, 0.8);
+  background-color: rgba(255, 0, 0, 0.25);
+}
+```
+
+#### 字符串运算 
+
+SassScript使用`+`运算符进行**字符串连接**操作。
+
+```scss
+// SCSS
+p:before {
+  content: "Foo " + Bar;         // 有引号字符串 + 无引号字符串 = 有引号字符串
+  font-family: sans- + "serif";  // 无引号字符串 + 有引号字符串 = 无引号字符串
+}
+
+// CSS
+p:before {
+  content: "Foo Bar";
+  font-family: sans-serif;
+}
+```
+
+有引号的文本字符串同样可以使用插值语句`#{}`添加动态值。
+
+```scss
+// SASS
+p:before {
+  content: "I'm #{24 + 8} years old";
+}
+
+// CSS
+p:before {
+  content: "I'm 32 years old";
+}
+```
+
+
+
 
 ## @rule和#directive
