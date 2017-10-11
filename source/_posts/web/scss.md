@@ -1,16 +1,18 @@
 ---
-title: SASS快速上手
+title: SCSS快速上手
 tags: CSS
 categories: Web
 ---
 
-![](sass/logo.png)
+SCSS是**Sass3**当中引入的新语法，语法完全兼容CSS3的同时继承了**Sass**的强大功能。本文翻译自[Sass](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)，讲解了前端开发常用的SCSS特性。
+
+![](scss/logo.png)
 
 <!-- more -->
 
 ## 编码规则
 
-Sass以**UTF-8**编码输出CSS文件，当且仅当编译后的文件包含**非ASCII**字符时，才会输出`@charset`声明，并使用该声明上指定的字符集。
+SASS以**UTF-8**编码输出CSS文件，当且仅当编译后的文件包含**非ASCII**字符时，才会输出`@charset`声明，并使用该声明上指定的字符集。
 
 ```scss
 @charset "utf-8";
@@ -332,7 +334,7 @@ p:before {
 有引号的文本字符串同样可以使用插值语句`#{}`添加动态值。
 
 ```scss
-// SASS
+// SCSS
 p:before {
   content: "I'm #{24 + 8} years old";
 }
