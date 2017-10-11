@@ -345,20 +345,99 @@ p:before {
 }
 ```
 
-
 #### 布尔运算
 
 SassScript支持布尔类型的与`&&`、或`||`、非`!`运算。
 
 #### 数组运算
 
-数组不支持任何运算方式，只能使用list functions进行控制。
+数组不支持任何特定的运算方式，只能通过预置的[list函数](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#Functions)进行操作。
 
+```scss
+$color: hsl(120deg, 100%, 50%)
+```
 
 #### 函数运算
 
+SassScript预置了多种函数，可以通过普通的CSS语句进行调用。
+
+```scss
+// SCSS
+p {
+  color: hsl(0, 100%, 50%);
+}
+
+// CSS
+p {
+  color: #ff0000;
+}
+```
+
+Sass函数允许使用**关键词参数**(即*带有键名的参数*)，因此上面例子也可以改写为下面代码。
+
+```scss
+p {
+  color: hsl($hue: 0, $saturation: 100%, $lightness: 50%);
+}
+```
+
 #### 圆括号运算符
 
-#### 插值#{}
+圆括号`()`可以用来影响运算的优先级顺序。
 
-## @rule和#directive
+```scss
+// SCSS
+div {
+  width: 2rem + (2rem * 3);
+}
+
+// CSS
+div {
+  width: 8rem;
+}
+```
+
+#### 插值语法#{}
+
+SassScript通过插值（*interpolation*）语法`#{}`在选择器和属性名上使用变量。
+
+```scss
+// SCSS
+$selector: menu;
+$border: border;
+
+div.#{$selector} {
+  #{$border}-color: blue;
+}
+
+// CSS
+div.menu {
+  border-color: blue;
+}
+```
+
+#### SassScript中的&运算符
+
+指向当前规则的父选择器，
+
+
+#### 变量定义!default
+
+可以在变量的结尾添加!default 给一个未通过 !default 声明赋值的变量赋值，此时，如果变量已经被赋值，不会再被重新赋值，但是如果变量还没有被赋值，则会被赋予新的值。
+
+
+## @Rule / #Directive
+
+### @import / #import
+
+### @media / #media
+
+### @extend / #extend
+
+### @at-root / #at-root
+
+### @debug
+
+### @warn
+
+### @error
