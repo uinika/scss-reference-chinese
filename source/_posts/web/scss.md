@@ -8,7 +8,7 @@ categories: Web
 
 ![](scss/logo.png)
 
-**Sass**是成熟、稳定、强大的**CSS预处理器**，截止到目前为止已经发展有10年，前当最新release版本为`3.5.1`。而SCSS是**Sass3**版本当中引入的新语法特性，完全兼容CSS3的同时继承了**Sass**强大的动态功能。本文翻译自[Sass Guide](http://sass-lang.com/guide)和[Sass Syntactically Awesome StyleSheets](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)两篇官方文档，讲解了现代化前端开发当中经常使用的SCSS语法特性，便于开发小组的同学快速上手。
+**[Sass](http://sass-lang.com/)**是成熟、稳定、强大的**CSS预处理器**，截止到目前为止已经发展有10年，前当最新release版本为`3.5.1`。而SCSS是**Sass3**版本当中引入的新语法特性，完全兼容CSS3的同时继承了**Sass**强大的动态功能。本文翻译自[Sass Guide](http://sass-lang.com/guide)和[Sass Syntactically Awesome StyleSheets](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)两篇官方文档，讲解了现代化前端开发当中经常使用的SCSS语法特性，便于开发小组的同学快速上手。
 
 <!-- more -->
 
