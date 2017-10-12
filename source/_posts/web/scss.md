@@ -496,9 +496,16 @@ Sass允许在同一个`@import`语句内导入多个文件。
 @import 'base', 'reset';
 ```
 
-导入文件也可以使用 #{ } 插值语句，但不是通过变量动态导入 Sass 文件，只能作用于 CSS 的 url() 导入方式：
+`@import`语句内也可以使用`#{}`插值，但是只能用于标准CSS的`@import url("");`导入方式。
 
+```scss
+// SCSS
+$family: unquote("Droid+Sans");
+@import url("http://fonts.googleapis.com/css?family=\#{$family}");
 
+// CSS
+@import url("http://fonts.googleapis.com/css?family=Droid+Sans");
+```
 
 ### @media / #media
 
