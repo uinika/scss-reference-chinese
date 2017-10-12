@@ -4,9 +4,11 @@ tags: CSS
 categories: Web
 ---
 
-**Sass**是成熟、稳定、强大的CSS**预处理器**，截止到目前为止已经发展有10年，前当最新release版本为`3.5.1`。而SCSS是**Sass3**版本当中引入的新语法特性，完全兼容CSS3的同时继承了**Sass**强大的动态功能。本文翻译自[Sass Guide](http://sass-lang.com/guide)和[Sass Syntactically Awesome StyleSheets](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)两篇官方文档，讲解了现代化前端开发当中经常使用的SCSS语法特性，便于开发小组的同学快速上手。
+基于Gulp完成前端自动化的年代，出于容易上手以及npm安装的方便，开发团队一直使用[Less](http://lesscss.org)和[gulp-less](https://github.com/stevelacy/gulp-less)作为CSS预处理工具，但是Sass提供了更加丰富的动态语法特征，因此在逐步淘汰基于Gulp的[beaver](https://github.com/uinika/beaver)前端项目脚手架以后，新项目全部基于Webpack的[node-sass](https://github.com/sass/node-sass)和[sass-loader](https://github.com/webpack-contrib/sass-loader)作为预处理工具。Sass和Less的详细比较可以参考[sass-vs-less](https://css-tricks.com/sass-vs-less/)和[Sass与Less比拼](http://cued.xunlei.com/log044)两篇文章，里面对两者的优劣做了非常详实的比较。
 
 ![](scss/logo.png)
+
+**Sass**是成熟、稳定、强大的**CSS预处理器**，截止到目前为止已经发展有10年，前当最新release版本为`3.5.1`。而SCSS是**Sass3**版本当中引入的新语法特性，完全兼容CSS3的同时继承了**Sass**强大的动态功能。本文翻译自[Sass Guide](http://sass-lang.com/guide)和[Sass Syntactically Awesome StyleSheets](http://sass-lang.com/documentation/file.SASS_REFERENCE.html)两篇官方文档，讲解了现代化前端开发当中经常使用的SCSS语法特性，便于开发小组的同学快速上手。
 
 <!-- more -->
 
