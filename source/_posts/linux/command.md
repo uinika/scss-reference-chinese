@@ -1,7 +1,7 @@
 ---
 title: Linux命令行必知必会
-tags: Linux
-categories: Embedded
+tags: Embedded
+categories: Linux
 ---
 
 将Linux作为开发环境编写代码已经3年有余，在配置了大量**快捷键**、**辅助工具**、**开源字体**之后，日常开发已经完全离不开Linux，本文基于最新的**Linux mint 18.2**发行版，总结了自己在Linux下进行日常开发所经常使用到的命令。

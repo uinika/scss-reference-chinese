@@ -1,7 +1,7 @@
 ---
 title: STC90C516RD+单片机
 tags: MCU
-categories: Electronics
+categories: Electron
 ---
 
 ## MCS-51单片机

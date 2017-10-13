@@ -1,7 +1,7 @@
 ---
 title: Linux开发环境个性化配置
-tags: Linux
-categories: Embedded
+tags: Embedded
+categories: Linux
 ---
 
 ## Mount NTFS
