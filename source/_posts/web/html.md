@@ -172,11 +172,14 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 ```html
 <table>
+
   <caption>Demo</caption>
+
   <colgroup>
     <col style="background-color: blue">
     <col style="background-color: gray">
   </colgroup>
+
   <thead>
     <tr>
       <th>月份</th>
@@ -201,16 +204,61 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
       <td>￥80</td>
     </tr>
   </tbody>
+
 </table>
 ```
 
 ### 表单
 
+用来创建用户交互表单的HTML元素。
+| 元素 | 语义 |
+|:-----|:-----|
+| `<button>`   | 可点击的按钮。
+| `<datalist>` | 包含了一组<option>元素,这些元素表示其它表单控件可选值.|
+| `<fieldset>` | |
+| `<form>`     | HTML <form> 元素 表示了文档中的一个区域，这个区域包含有交互控制元件，用来向web服务器提交信息。|
+| `<input>`    | HTML <input> 元素用于为基于Web的表单创建交互式控件，以便接受来自用户的数据。|
+| `<label>`    | HTML 元素表示用户界面中项目的标题。|
+| `<legend>`   | HTML的<legend>元素（也称为HTML的域说明元素（or HMTL Legend Field Element））代表一个用于表示它的父元素<fieldset>的内容的标题。</legend>|
+| `<meter>`    | HTML <meter>元素用来显示已知范围的标量值或者分数值。|
+| `<optgroup>` | 在一个web表单中, HTML元素 <optgroup> 会创建包含在一个 <select> 元素中的一组选项|
+| `<option>`   | 在web表单中,  HTML元素<option>用于定义在<select>,  <optgroup> 或<datalist> 元素中包含的项。| <option> 可以在弹出窗口和 html 文档中的其他项目列表中表示菜单项。|
+| `<output>`   | HTML 标签定义一个用户的操作或者计算的结果。|
+| `<progress>` | HTML中的progress (<progress>) 元素用来显示一项任务的完成进度.虽然规范中没有规定该元素具体如何显示,浏览器开发商可以自己决定,但通常情况下,该元素都显示为一个进度条形式.|
+| `<select>`   | HTML select (<select>) 元素是一种表单控件，可创建选项菜单。菜单内的选项为<option> , 可以由 | <optgroup> 元素分组。选项可以被用户预先选择。|
+| `<textarea>` | HTML <textarea> 元素表示一个多行纯文本编辑控件。|
+
 ### 交互元素
+
+用来帮助建立用户可交互的元素。
+
+| 元素 | 语义 |
+|:-----|:-----|
+| `<details>`  | HTML <details> 元素被用作发现小部件，用户可以从其中检索附加信息。|
+| `<dialog>`   | HTML <dialog> 元素表示一个对话框或其他交互式组件，例如一个检查员或窗口。|
+| `<summary>`  | HTML <summary> 元素 用作 一个<details>元素的一个内容的摘要，标题或图例。|
+| `<menu>`     | HTML <menu> 元素 呈现了一组用户可执行或激活的命令。这既包含了可能出现在屏幕顶端的列表菜单，也包含了那些隐藏在按钮之下、当点击按钮后显示出来的文本菜单。|
+| `<menuitem>` | |
 
 ### Web组件
 
+用来建立用户自定义元素，（*[Web Component](https://www.w3.org/TR/components-intro/)目前还处于草案阶段，还未成为事实上的标准，且部分内容已经被废弃*）。
+
+| 元素 | 语义 |
+|:-----|:-----|
+| `<slot>`     | web组件技术的一部分，slot是web组件的一个占位符，可以用来插入自定义的标记文本。可以创建不同的DOM树并进行渲染。|
+| `<template>` | HTML <template> 元素 是一种用于保存客户端内容的机制，该内容在页面加载时不被渲染，但可以在运行时使用JavaScript进行实例化。|
+
 ### 废弃的元素
+
+| 元素 | 语义 | 元素 | 语义 | 元素 | 语义 |
+|:-----|:-----|:-----|:-----|:-----|:-----|
+|`<acronym>`|`<applet>`|`<basefont>`|`<big>`|`<blink>`|`<center>`|
+|`<dir>`|`<font>`|`<frame>`|`<frameset>`|`<image>`|`<isindex>`|
+|`<keygen>`|`<listing>`|`<marquee>`|`<multicol>`|`<nextid>`|`<noembed>`|
+|`<plaintext>`|`<spacer>`|`<strike>`|`<tt>`|`<xmp>`|`<command>`|
+|`<content>`|`<element>`|`<shadow>`|||||
+
 
 
 ## 属性
