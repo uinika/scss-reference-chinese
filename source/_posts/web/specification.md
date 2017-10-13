@@ -525,29 +525,29 @@ const [array1, array2] = array;  // good way
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
-| 浮动清除 | clearboth | cb |
-| 向左浮动 | floatleft | fl |
-| 向右浮动 | floatright | fr |
-| 内联块级 | inlineblock | ib |
-| 文本居中 | textaligncenter | tac |
-| 文本居右 | textalignright | tar |
-| 文本居左 | textalignleft | tal |
-| 垂直居中 | verticalalignmiddle | vam |
-| 溢出隐藏 | overflowhidden | oh |
-| 完全消失 | displaynone | dn |
+| 浮动清除 | clear-both | cb |
+| 向左浮动 | float-left | fl |
+| 向右浮动 | float-right | fr |
+| 内联块级 | inline-block | ib |
+| 文本居中 | text-align-center | tac |
+| 文本居右 | text-align-right | tar |
+| 文本居左 | text-align-left | tal |
+| 垂直居中 | vertical-align-middle | vam |
+| 溢出隐藏 | overflow-hidden | oh |
+| 完全消失 | display-none | dn |
 | 字体大小 | fontsize | fs |
-| 字体粗细 | fontweight | fw |
+| 字体粗细 | font-weight | fw |
 
 ### 颜色/背景选择器
 
 | 语义 | 命名 | 简写 |
 |:-----|:-----|:-----|
-| 字体颜色 | fontcolor | fc |
+| 字体颜色 | font-color | fc |
 | 背景 | background | bg |
-| 背景颜色 | backgroundcolor | bgc |
-| 背景图片 | backgroundimage | bgi |
-| 背景定位 | backgroundposition | bgp |
-| 边框颜色 | bordercolor | bdc |
+| 背景颜色 | background-color | bgc |
+| 背景图片 | background-image | bgi |
+| 背景定位 | background-position | bgp |
+| 边框颜色 | border-color | bdc |
 
 ### 状态选择器
 
@@ -564,6 +564,8 @@ const [array1, array2] = array;  // good way
 
 
 ## HTML
+
+HTML标签的语义化有助于形成构架良好的DOM结构，有利于搜索引擎爬虫索引、抓取，也有利于不同设备显示的兼容性，以及团队的开发和维护工作。
 
 ### 整体结构
 
@@ -589,4 +591,3 @@ const [array1, array2] = array;  // good way
 </html>
 ```
 
-### 语义化 
