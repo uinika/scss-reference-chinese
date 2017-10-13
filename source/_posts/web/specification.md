@@ -6,11 +6,13 @@ categories: Web
 
 开发团队目前正在全面切换到`ES6  + Vue / React + Webpack`这套技术栈，小伙伴们开发过程中对编码方面的规范以及ES6使用上的约定存在诸多困惑，所以参考了Github以及互联网企业UED们的开源文档，结合团队之前积累的大量开发约定和范式，整理了这篇**code style**文档并且同样[开源](https://uinika.github.io/)出来，计划在team小伙伴们熟练掌握以后，逐步在项目中推行[ESLint](https://eslint.org/)**代码风格**校验。
 
+![](specification/logo.jpg)
+
+<!-- more -->
+
 ## JavaScript & ES6
 
 基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行整理，适用于使用Babel提供ES6预编译环境的场景。
-
-<!-- more -->
 
 ### 变量命名
 
