@@ -138,18 +138,36 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<canvas>`   | 用来通过JavaScript脚本绘制图形。 |
+| `<canvas>`   | 用来通过JavaScript脚本绘制位图，。 |
 | `<noscript>` | 如果不支持页面上的脚本类型，或者浏览器关闭了脚本支持，该元素定义了需要显示在html上的内容。 |
 | `<script>`   | 用于嵌入或引用可执行脚本。 |
 
+```html
+<canvas id='bitmap'></canvas>
+
+<script>
+var canvas=document.getElementById('bitmap');
+var ctx=canvas.getContext('2d');
+ctx.fillStyle='#FF0000';
+ctx.fillRect(8, 8, 100, 50);
+</script>
+```
+
+![](html/canvas.png "Canvas位图绘制Demo")
+
 ### 编辑标识
 
-用来标记文本的变化。
+两个HTML元素配合起来使用，用以标记文档中的更新与修正。
 
 | 元素 | 语义 |
 |:-----|:-----|
 | `<del>` | 表示已经从文档中删除的文本，会渲染删除线。 |
 | `<ins>` | 定义插入到文档中的文本。 |
+
+```html
+<!-- del内的错误文字应该被ins内的正确文字修正-->
+This is <del>delete</del> <ins>insert</ins> operation.
+```
 
 ### 表格内容
 
@@ -206,7 +224,7 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 </table>
 ```
 
-![](html/table.png "标准表格结构")
+![](html/table.png "表格Demo")
 
 ### 表单
 
