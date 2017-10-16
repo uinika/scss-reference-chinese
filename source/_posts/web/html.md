@@ -211,22 +211,59 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 ### 表单
 
 用来创建用户交互表单的HTML元素。
+
 | 元素 | 语义 |
 |:-----|:-----|
-| `<button>`   | 可点击的按钮。
-| `<datalist>` | 包含了一组<option>元素,这些元素表示其它表单控件可选值.|
-| `<fieldset>` | |
-| `<form>`     | HTML <form> 元素 表示了文档中的一个区域，这个区域包含有交互控制元件，用来向web服务器提交信息。|
-| `<input>`    | HTML <input> 元素用于为基于Web的表单创建交互式控件，以便接受来自用户的数据。|
-| `<label>`    | HTML 元素表示用户界面中项目的标题。|
-| `<legend>`   | HTML的<legend>元素（也称为HTML的域说明元素（or HMTL Legend Field Element））代表一个用于表示它的父元素<fieldset>的内容的标题。</legend>|
-| `<meter>`    | HTML <meter>元素用来显示已知范围的标量值或者分数值。|
-| `<optgroup>` | 在一个web表单中, HTML元素 <optgroup> 会创建包含在一个 <select> 元素中的一组选项|
-| `<option>`   | 在web表单中,  HTML元素<option>用于定义在<select>,  <optgroup> 或<datalist> 元素中包含的项。| <option> 可以在弹出窗口和 html 文档中的其他项目列表中表示菜单项。|
-| `<output>`   | HTML 标签定义一个用户的操作或者计算的结果。|
-| `<progress>` | HTML中的progress (<progress>) 元素用来显示一项任务的完成进度.虽然规范中没有规定该元素具体如何显示,浏览器开发商可以自己决定,但通常情况下,该元素都显示为一个进度条形式.|
-| `<select>`   | HTML select (<select>) 元素是一种表单控件，可创建选项菜单。菜单内的选项为<option> , 可以由 | <optgroup> 元素分组。选项可以被用户预先选择。|
-| `<textarea>` | HTML <textarea> 元素表示一个多行纯文本编辑控件。|
+| `<form>`     | 代表一个交互表单区域。 |
+| `<button>`   | 表示一个按钮。|
+| `<input>`    | 输入域，用来接收用户的输入。 |
+| `<datalist>` | 定义`<input>`的可能的选项值，*目前仅**Safari**未提供该元素支持*。 |
+| `<label>`    | 为输入域元素`<input>`定义标题。|
+| `<fieldset>` | 用来对表单控件的内容进行分组。 |
+| `<legend>`   | 为`<fieldset>`元素定义标题，***IE**不支持该元素*。 |
+| `<textarea>` | 用来创建多行文本输入域。|
+| `<select>`   | 用来创建单选/多选菜单。 |
+| `<option>`   | 用来定义下拉列表元素`<select>`的一个选项。 |
+| `<optgroup>` | 可以对`<select>`元素中的`<option>`进行分组。 |
+| `<meter>`    | 用来显示已知范围的比例值，通常被渲染为柱状图。 |
+| `<output>`   | 控制文本输出的API，***IE**不支持该元素*。 |
+| `<progress>` | 用来展示完成进度，通常渲染为一个进度条，*已经获得包括**IE**在内的全部浏览器支持*。 |
+
+```html
+<form action="/server/api" method="post">
+  <fieldset>
+    <legend>Fieldset</legend>
+    <input type="checkbox" name="check" id="check-A" value="A" />
+    <label for="check-A">单选按钮</label>
+    <input type="checkbox" name="check" id="check-B" value="B" />
+    <label for="check-B">单选按钮</label>
+  </fieldset>
+
+  <input type="radio" id="radio">
+  <label for="radio">单选按钮</label>
+
+  <progress value="70" max="100">Progress</progress>
+
+  <meter min="200" max="500" value="350">Meter</meter>
+
+  <button name="button">Button</button>
+
+  <textarea name="textarea" rows="10" cols="30">Textarea</textarea>
+
+  <label>Datalist
+    <input list="browsers">
+  </label>
+  <datalist id="browsers">
+    <option value="Internet Explorer" />
+    <option value="Chrome" />
+    <option value="Firefox" />
+    <option value="Opera" />
+    <option value="Safari" />
+  </datalist>
+</form>
+```
+
+![](html/form.png "表单元素Demo")
 
 ### 交互元素
 
@@ -258,8 +295,8 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<slot>`     | 作为占位符，用来插入自定义的标记文本，*目前还属性实验性技术*。 |
-| `<template>` | ES6模板字面量，该元素中的内容在页面加载时不被渲染，但可以通过JavaScript实例化，目前已经得到IE外的其它全部浏览器支持。 |
+| `<slot>`     | 作为占位符，用来插入自定义的标记文本，*该元素目前还属于实验性技术*。 |
+| `<template>` | ES6模板字面量，该元素中的内容在页面加载时不被渲染，但可以通过JavaScript实例化，*目前已经得到**IE**外的其它全部浏览器支持*。 |
 
 ### 废弃的元素
 

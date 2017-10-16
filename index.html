@@ -1,35 +1,40 @@
-<table>
-  <caption>Demo</caption>
-  <colgroup>
-    <col style="background-color: blue">
-    <col style="background-color: gray">
-  </colgroup>
-  <thead>
-    <tr>
-      <th>月份</th>
-      <th>工资</th>
-    </tr>
-  </thead>
+<form action="/server/api" method="post">
+  <fieldset>
+    <legend>Fieldset</legend>
+    <input type="checkbox" name="check" value="A" /> Checkbox-A
+    <input type="checkbox" name="check" value="B" /> Checkbox-B
+    <label for="radio">单选按钮</label>
+  </fieldset>
 
-  <tfoot>
-    <tr>
-      <td>合计</td>
-      <td>￥180</td>
-    </tr>
-  </tfoot>
+  <br><br>
 
-  <tbody>
-    <tr>
-      <td>1月</td>
-      <td>￥100</td>
-    </tr>
-    <tr>
-      <td>2月</td>
-      <td>￥80</td>
-    </tr>
-    <tr>
-      <td>3月</td>
-      <td>￥210</td>
-    </tr>
-  </tbody>
-</table>
+  <input type="radio" id="radio">
+  <label for="radio">单选按钮</label>
+
+  <br><br>
+
+  <label>Datalist
+    <input list="browsers">
+  </label>
+  <datalist id="browsers">
+    <option value="Internet Explorer" />
+    <option value="Chrome" />
+    <option value="Firefox" />
+    <option value="Opera" />
+    <option value="Safari" />
+  </datalist>
+
+  <br><br>
+
+  <progress value="70" max="100">Progress</progress>
+
+  <br><br>
+
+  <meter min="200" max="500" value="350">Meter</meter>
+  <br><br>
+
+  <button name="button">Button</button>
+  <br><br>
+
+  <textarea name="textarea" rows="10" cols="30">Textarea</textarea>
+</form>
