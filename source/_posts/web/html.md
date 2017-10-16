@@ -4,7 +4,7 @@ tags: HTML
 categories: Web
 ---
 
-本篇文章翻译自mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。兼容IE9以上浏览器。包含了每个HTML元素和属性的使用事项。
+本篇文章翻译自mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，比注明了当前的兼容性状况。
 
 ![](html/logo.png)
 
@@ -248,6 +248,17 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
   <button name="button">Button</button>
 
+  <select>
+    <optgroup label="四川">
+      <option value="chengdu">成都</option>
+      <option value="mianyang">绵阳</option>
+    </optgroup>
+    <optgroup label="贵州">
+      <option value="guiyang">贵阳</option>
+      <option value="zunyi">遵义</option>
+    </optgroup>
+  </select>
+
   <textarea name="textarea" rows="10" cols="30">Textarea</textarea>
 
   <label>Datalist
@@ -300,13 +311,15 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 ### 废弃的元素
 
+W3C的HTML规范声明放弃使用的元素。
+
 | Deprecated | Deprecated | Deprecated | Deprecated | Deprecated | Deprecated |
 |:-----|:-----|:-----|:-----|:-----|:-----|
-|`<acronym>`|`<applet>`|`<basefont>`|`<big>`|`<blink>`|`<center>`|
-|`<dir>`|`<font>`|`<frame>`|`<frameset>`|`<image>`|`<isindex>`|
-|`<keygen>`|`<listing>`|`<marquee>`|`<multicol>`|`<nextid>`|`<noembed>`|
-|`<plaintext>`|`<spacer>`|`<strike>`|`<tt>`|`<xmp>`|`<command>`|
-|`<content>`|`<element>`|`<shadow>`| `<menu>` | `<menuitem>` |||
+|`<acronym>`  |`<applet>` |`<basefont>`|`<big>`     |`<blink>`    |`<center>` |
+|`<dir>`      |`<font>`   |`<frame>`   |`<frameset>`|`<image>`    |`<isindex>`|
+|`<keygen>`   |`<listing>`|`<marquee>` |`<multicol>`|`<nextid>`   |`<noembed>`|
+|`<plaintext>`|`<spacer>` |`<strike>`  |`<tt>`      |`<xmp>`      |`<command>`|
+|`<content>`  |`<element>`|`<shadow>`  |`<menu>`    |`<menuitem>` |`...`      |
 
 
 
