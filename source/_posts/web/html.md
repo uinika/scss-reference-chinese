@@ -169,6 +169,8 @@ ctx.fillRect(8, 8, 100, 50);
 This is <del>delete</del> <ins>insert</ins> operation.
 ```
 
+![](html/ins-del.png "编辑标识Demo")
+
 ### 表格内容
 
 用于创建和展示表格。
