@@ -121,16 +121,53 @@ HTML提供的对图片、音频、视频的支持。
 | `<map>`   | 定义图片上可点击的链接区域，通常与`<area>`搭配使用。 |
 | `<track>` | 用来指定计时字幕，需要作为媒体元素`<audio>`和`<video>`的子元素使用。 |
 
+```html
+<video src="foo.ogg">
+  <track kind="subtitles" src="foo.en.vtt" srclang="en" label="English">
+  <track kind="subtitles" src="foo.sv.vtt" srclang="cn" label="Chinese">
+</video>
+
+<audio src="foo.ogg">
+  <track kind="captions" src="foo.en.vtt" srclang="en" label="English">
+  <track kind="captions" src="foo.sv.vtt" srclang="cn" label="Chinese">
+</audio>
+
+<audio controls="controls">
+  <source src="foo.wav" type="audio/wav">
+</audio>
+
+<map name="map-example">
+  <area shape="circle" coords="200,250,25" href="another.htm" />
+  <area shape="default" />
+</map>
+
+<img src="logo.png" alt="logo">
+```
+
 ### 内嵌内容
 
 HTML提供的常规多媒体之外的支持，但是这些支持并不容易交互。
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<embed>`  | 嵌入外部的交互式插件。 |
-| `<param>`  | 用来定义`<object>`的参数。 |
 | `<source>` | 用来定义`<picture>`、`<audio>`、`<video>`内的多媒体资源。 |
+| `<embed>`  | 嵌入外部的交互式插件。 |
 | `<object>` | 用于引入外部的插件资源。 |
+| `<param>`  | 用来定义`<object>`的参数。 |
+
+```html
+<embed type="video/quicktime" src="movie.mov" width="250" height="220">
+
+<video controls>
+  <source src="video.webm" type="video/webm">
+  <source src="video.ogg"  type="video/ogg"> 
+  <source src="video.mov"  type="video/quicktime">
+</video>
+
+<object data="move.swf" type="application/x-shockwave-flash">
+  <param name="foo" value="bar">
+</object>
+```
 
 ### 脚本
 
