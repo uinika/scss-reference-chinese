@@ -4,7 +4,7 @@ tags: HTML
 categories: Web
 ---
 
-本篇文章翻译自mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，比标注了当前的兼容性状态。
+本篇文章翻译自mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，并标注了当前的兼容性状态。
 
 ![](html/logo.png)
 
