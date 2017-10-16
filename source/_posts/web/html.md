@@ -168,8 +168,6 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 | `<tr>`       | 定义表格中的行，可以用来放置`<td>`和`<th>`元素。 |
 | `<td>`       | 定义表格中的单元格 |
 
-![](html/table.png "标准表格结构")
-
 ```html
 <table>
 
@@ -208,6 +206,8 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 </table>
 ```
 
+![](html/table.png "标准表格结构")
+
 ### 表单
 
 用来创建用户交互表单的HTML元素。
@@ -234,11 +234,23 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<details>`  | 用来定义某一部分文档的详细信息。 |
-| `<dialog>`   | HTML <dialog> 元素表示一个对话框或其他交互式组件，例如一个检查员或窗口。|
-| `<summary>`  | HTML <summary> 元素 用作 一个<details>元素的一个内容的摘要，标题或图例。|
-| `<menu>`     | HTML <menu> 元素 呈现了一组用户可执行或激活的命令。这既包含了可能出现在屏幕顶端的列表菜单，也包含了那些隐藏在按钮之下、当点击按钮后显示出来的文本菜单。|
-| `<menuitem>` | |
+| `<dialog>`   | 展示对话框或其它交互组件，*仅Opera和Chrome支持*。 |
+| `<details>`  | 定义查看和检索附加信息的小部件。 |
+| `<summary>`  | 展示`<details>`元素的摘要或总结。|
+
+```html
+<details open>
+  <summary>摘要</summary>
+  <p>内容1</p>
+  <p>内容2</p>
+</details>
+
+<dialog open>
+  <p>Dialog</p>
+</dialog>
+```
+
+![](html/interactive.png "交互元素Demo")
 
 ### Web组件
 
@@ -246,8 +258,8 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<slot>`     | 作为占位符，用来插入自定义的标记文本。 |
-| `<template>` | 该元素中的内容在页面加载时不被渲染，但是可以在运行时通过JavaScript实例化。 |
+| `<slot>`     | 作为占位符，用来插入自定义的标记文本，*目前还属性实验性技术*。 |
+| `<template>` | ES6模板字面量，该元素中的内容在页面加载时不被渲染，但可以通过JavaScript实例化，目前已经得到IE外的其它全部浏览器支持。 |
 
 ### 废弃的元素
 
@@ -257,7 +269,7 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 |`<dir>`|`<font>`|`<frame>`|`<frameset>`|`<image>`|`<isindex>`|
 |`<keygen>`|`<listing>`|`<marquee>`|`<multicol>`|`<nextid>`|`<noembed>`|
 |`<plaintext>`|`<spacer>`|`<strike>`|`<tt>`|`<xmp>`|`<command>`|
-|`<content>`|`<element>`|`<shadow>`|||||
+|`<content>`|`<element>`|`<shadow>`| `<menu>` | `<menuitem>` |||
 
 
 

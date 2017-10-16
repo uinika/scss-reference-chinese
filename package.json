@@ -2,9 +2,9 @@
   "name": "blog",
   "private": true,
   "version": "2.0.0",
-  "description": "hank's blog",
+  "description": "Hank's blog",
   "hexo": {
-    "version": "3.3.8"
+    "version": "3.3.9"
   },
   "repository": {
     "type": "git",
