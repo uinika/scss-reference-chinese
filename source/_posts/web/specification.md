@@ -493,7 +493,7 @@ const [array1, array2] = array;  // good way
 
 - `grid.scss`：基于class属性定义的CSS栅格系统，便于根据上下文语义去控制DOM结构。
 
-每个Vue或者React根级组件的样式都独立到单独模块书写，**禁止在顶层ID选择器之外再定义其它CSS样式，避免对全局样式形成污染**。
+每个Vue或者React根级组件的样式都独立到单独模块书写，**禁止在顶层ID选择器之外再定义其它CSS样式，避免对全局样式形成污染**。私有组件顶层CSS选择器使用`id`属性定义，公用组件的顶层选择器使用`class`属性定义，。
 
 ```scss
 @import "../common/styles/base.scss";
