@@ -4,7 +4,7 @@ tags: HTML
 categories: Web
 ---
 
-本篇文章翻译自Mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，在标注各元素当前兼容性状态的同时，也提供了Mozilla和W3C推荐的格式良好的标准Demo。
+Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书写页面内容，有利于计算机进行解析，方便PDA、文字浏览器、残障人士进行阅读，更加有利于搜索引擎和爬虫进行SEO索引。本篇文章翻译自Mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[Can I use](https://caniuse.com)进行了兼容性校对，在标注各元素当前兼容性状态的同时，也提供了Mozilla和W3C推荐的标准Demo用例，便于大家快速开发格式良好的Web页面。
 
 ![](html/logo.png)
 
