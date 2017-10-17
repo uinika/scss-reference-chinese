@@ -22,7 +22,7 @@ categories: Web
 
 ```html
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang='zh-CN'>
   <head></head>
   <body></body>
 </html>
@@ -43,12 +43,12 @@ categories: Web
 ```html
 <title>Title</title>
 
-<meta name="renderer" content="webkit" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name='renderer' content='webkit' />
+<meta http-equiv='X-UA-Compatible' content='IE=edge' />
+<meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
 
-<link href="../styles/base.css" rel="stylesheet" type="text/css" />
+<link href='../styles/base.css' rel='stylesheet' type='text/css' />
 ```
 
 ### 内容分区
@@ -70,14 +70,14 @@ categories: Web
 ```html
 <nav>
   <ul>
-    <li><a href="#">Home</a></li>
-    <li><a href="#">About</a></li>
-    <li><a href="#">Contact</a></li>
+    <li><a href='#'>Home</a></li>
+    <li><a href='#'>About</a></li>
+    <li><a href='#'>Contact</a></li>
   </ul>
 </nav>
 
 <address>
-  You can contact author at <a href="https://uinika.github.io/">Hank</a>.
+  You can contact author at <a href='https://uinika.github.io/'>Hank</a>.
 </address>
 
 <article>
@@ -105,7 +105,7 @@ categories: Web
 </hgroup>
 ```
 
-![](html/content-partition.png "内容分区Demo")
+![](html/content-partition.png '内容分区Demo')
 
 ### 文本内容
 
@@ -129,7 +129,7 @@ categories: Web
 | `<blockquote>` | 表达HTML元素的引用内容，渲染时会有缩进。引用来源可以通过该元素的`cite`属性进行标注`<blockquote cite='https://uinika.github.io/'>`；如果要以文本形式体现引文出处，则可以直接通过`<cite>`元素。 |
 
 ```html
-<blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">
+<blockquote cite='https://developer.mozilla.org/en-US/docs/Web/HTML/Element'>
   <p>This is a block quotation.</p>
 </blockquote>
 
@@ -142,7 +142,7 @@ categories: Web
 </dl>
 
 <figure>
-  <img src="https://www.w3.org/2008/site/images/logo-w3c-screen-lg" alt="logo">
+  <img src='https://www.w3.org/2008/site/images/logo-w3c-screen-lg' alt='logo'>
   <figcaption>W3C Logo</figcaption>
 </figure>
 
@@ -176,7 +176,7 @@ categories: Web
 </pre>
 ```
 
-![](html/text-content.png "文本内容Demo")
+![](html/text-content.png '文本内容Demo')
 
 ### 内联文本
 
@@ -252,26 +252,26 @@ HTML提供的对图片、音频、视频的支持。
 | `<track>` | 用来指定计时字幕，需要作为媒体元素`<audio>`和`<video>`的子元素使用。 |
 
 ```html
-<video src="foo.ogg">
-  <track kind="subtitles" src="foo.en.vtt" srclang="en" label="English">
-  <track kind="subtitles" src="foo.sv.vtt" srclang="cn" label="Chinese">
+<video src='foo.ogg'>
+  <track kind='subtitles' src='foo.en.vtt' srclang='en' label='English'>
+  <track kind='subtitles' src='foo.sv.vtt' srclang='cn' label='Chinese'>
 </video>
 
-<audio src="foo.ogg">
-  <track kind="captions" src="foo.en.vtt" srclang="en" label="English">
-  <track kind="captions" src="foo.sv.vtt" srclang="cn" label="Chinese">
+<audio src='foo.ogg'>
+  <track kind='captions' src='foo.en.vtt' srclang='en' label='English'>
+  <track kind='captions' src='foo.sv.vtt' srclang='cn' label='Chinese'>
 </audio>
 
-<audio controls="controls">
-  <source src="foo.wav" type="audio/wav">
+<audio controls='controls'>
+  <source src='foo.wav' type='audio/wav'>
 </audio>
 
-<map name="map-example">
-  <area shape="circle" coords="200,250,25" href="another.htm" />
-  <area shape="default" />
+<map name='map-example'>
+  <area shape='circle' coords='200,250,25' href='another.htm' />
+  <area shape='default' />
 </map>
 
-<img src="logo.png" alt="logo">
+<img src='logo.png' alt='logo'>
 ```
 
 ### 内嵌内容
@@ -286,16 +286,16 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 | `<param>`  | 用来定义`<object>`的参数。 |
 
 ```html
-<embed type="video/quicktime" src="movie.mov" width="250" height="220">
+<embed type='video/quicktime' src='movie.mov' width='250' height='220'>
 
 <video controls>
-  <source src="video.webm" type="video/webm">
-  <source src="video.ogg"  type="video/ogg"> 
-  <source src="video.mov"  type="video/quicktime">
+  <source src='video.webm' type='video/webm'>
+  <source src='video.ogg'  type='video/ogg'> 
+  <source src='video.mov'  type='video/quicktime'>
 </video>
 
-<object data="move.swf" type="application/x-shockwave-flash">
-  <param name="foo" value="bar">
+<object data='move.swf' type='application/x-shockwave-flash'>
+  <param name='foo' value='bar'>
 </object>
 ```
 
@@ -320,7 +320,7 @@ ctx.fillRect(8, 8, 100, 50);
 </script>
 ```
 
-![](html/canvas.png "Canvas位图绘制Demo")
+![](html/canvas.png 'Canvas位图绘制Demo')
 
 ### 编辑标识
 
@@ -336,7 +336,7 @@ ctx.fillRect(8, 8, 100, 50);
 This is <del>delete</del> <ins>insert</ins> operation.
 ```
 
-![](html/ins-del.png "编辑标识Demo")
+![](html/ins-del.png '编辑标识Demo')
 
 ### 表格内容
 
@@ -361,8 +361,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
   <caption>Demo</caption>
 
   <colgroup>
-    <col style="background-color: blue">
-    <col style="background-color: gray">
+    <col style='background-color: blue'>
+    <col style='background-color: gray'>
   </colgroup>
 
   <thead>
@@ -393,7 +393,7 @@ This is <del>delete</del> <ins>insert</ins> operation.
 </table>
 ```
 
-![](html/table.png "表格Demo")
+![](html/table.png '表格Demo')
 
 ### 表单
 
@@ -417,51 +417,51 @@ This is <del>delete</del> <ins>insert</ins> operation.
 | `<progress>` | 用来展示完成进度，通常渲染为一个进度条，*已经获得包括**IE**在内的全部浏览器支持*。 |
 
 ```html
-<form action="/server/api" method="post">
+<form action='/server/api' method='post'>
   <fieldset>
     <legend>Fieldset</legend>
-    <input type="checkbox" name="check" id="check-A" value="A" />
-    <label for="check-A">单选按钮</label>
-    <input type="checkbox" name="check" id="check-B" value="B" />
-    <label for="check-B">单选按钮</label>
+    <input type='checkbox' name='check' id='check-A' value='A' />
+    <label for='check-A'>单选按钮</label>
+    <input type='checkbox' name='check' id='check-B' value='B' />
+    <label for='check-B'>单选按钮</label>
   </fieldset>
 
-  <input type="radio" id="radio">
-  <label for="radio">单选按钮</label>
+  <input type='radio' id='radio'>
+  <label for='radio'>单选按钮</label>
 
-  <progress value="70" max="100">Progress</progress>
+  <progress value='70' max='100'>Progress</progress>
 
-  <meter min="200" max="500" value="350">Meter</meter>
+  <meter min='200' max='500' value='350'>Meter</meter>
 
-  <button name="button">Button</button>
+  <button name='button'>Button</button>
 
   <select>
-    <optgroup label="四川">
-      <option value="chengdu">成都</option>
-      <option value="mianyang">绵阳</option>
+    <optgroup label='四川'>
+      <option value='chengdu'>成都</option>
+      <option value='mianyang'>绵阳</option>
     </optgroup>
-    <optgroup label="贵州">
-      <option value="guiyang">贵阳</option>
-      <option value="zunyi">遵义</option>
+    <optgroup label='贵州'>
+      <option value='guiyang'>贵阳</option>
+      <option value='zunyi'>遵义</option>
     </optgroup>
   </select>
 
-  <textarea name="textarea" rows="10" cols="30">Textarea</textarea>
+  <textarea name='textarea' rows='10' cols='30'>Textarea</textarea>
 
   <label>Datalist
-    <input list="browsers">
+    <input list='browsers'>
   </label>
-  <datalist id="browsers">
-    <option value="Internet Explorer" />
-    <option value="Chrome" />
-    <option value="Firefox" />
-    <option value="Opera" />
-    <option value="Safari" />
+  <datalist id='browsers'>
+    <option value='Internet Explorer' />
+    <option value='Chrome' />
+    <option value='Firefox' />
+    <option value='Opera' />
+    <option value='Safari' />
   </datalist>
 </form>
 ```
 
-![](html/form.png "表单元素Demo")
+![](html/form.png '表单元素Demo')
 
 ### 交互元素
 
@@ -485,7 +485,7 @@ This is <del>delete</del> <ins>insert</ins> operation.
 </dialog>
 ```
 
-![](html/interactive.png "交互元素Demo")
+![](html/interactive.png '交互元素Demo')
 
 ### Web组件
 
