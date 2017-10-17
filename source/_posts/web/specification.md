@@ -49,6 +49,7 @@ const YourName = {  // PascalCase
 
 > **所有代码缩进必须使用2个空格，并优先使用单引号`'`，除非字符串嵌套需要，否则禁止单双引号混用**。
 
+
 ## JavaScript & ES6
 
 本规范基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行制定，适用于使用Babel提供ES6预编译环境的场景。
@@ -488,9 +489,20 @@ const [array1, array2] = array;  // good way
 
 - `base.scss`：基础的公用样式，例如下面CSS选择器规范中定义的class shortcut。
 
-- `skin.scss`: 使用全局UI插件的场景下，用来定制其组件补丁样式，或者以`skin-xx`方式命名多种自定义皮肤。
+- `skin.scss`: 使用全局UI插件的场景下，用来定制其组件补丁样式，或者以`skin-xx.scss`方式命名多种自定义皮肤。
 
 - `grid.scss`：基于class属性定义的CSS栅格系统，便于根据上下文语义去控制DOM结构。
+
+每个Vue或者React根级组件的样式都独立到单独模块书写，禁止在顶层ID选择器之外再定义其它CSS样式，避免对全局形成污染。
+
+```scss
+@import "../common/styles/base.scss";
+#judge {
+  // 一律使用单行注释
+}
+```
+
+> 为了避免SASS中使用多行注释时，将注释内容打包至最终产品代码，因此非公用模块的注释一律使用单行注释`//`。
 
 ### 布局选择器
 
@@ -612,7 +624,7 @@ HTML标签的语义化有助于形成构架良好的DOM结构，有助于搜索�
 
 ### 组件DOM结构
 
-每个Vue或者React顶层组件的父级元素一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只能出现一次，因此父组件下嵌套使用的子级组件、公用组件一律使用`<div>`定义，`id`属性命名使用短横线连接的`parent-child`格式。
+每个Vue或者React根级组件的顶层元素一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只可以出现一次，因此父组件下嵌套使用的子组件、公用组件一律使用`<div>`进行定义，`id`属性命名则使用短横线连接的`parent-child`格式。
 
 ```html
 <main id='parent'>
