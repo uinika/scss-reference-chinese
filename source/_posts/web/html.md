@@ -187,7 +187,7 @@ categories: Web
 | `<a>`      | 用于创建指向其它地址链接、锚元素。 |
 | `<abbr>`   | 表示缩写，但是可以通过`title`属性提供完整的描述。 |
 | `<b>`      | 加粗文本，体现与普通文本的区别，但并不表示**强调**，可以用来标注文章中的引言。 |
-| `<bdi>`    | 使文本脱离其父元素的文本方向设置。 |
+| `<bdi>`    | 使文本脱离其父元素的文本方向设置，*仅Chrome和Firefox支持，但测试未体现效果*。 |
 | `<bdo>`    | 按照`dir`属性改变**文字**的输出方向。 |
 | `<br>`     | 在文本中产生一个换行效果。 |
 | `<cite>`   | 表示文档中引用的内容。 |
@@ -216,27 +216,61 @@ categories: Web
 | `<wbr>`    | 设置英文单词中字母的换行时机（*Word Break Opportunity*），*仅**IE**不支持该元素*。 |
 
 ```html
+<p dir="ltr">
+  <bdi>right-to-left</bdi>
+</p>
+
+<p>
+  <bdo dir="rtl">right-to-left</bdo>
+</p>
+
+<ul>
+  <li>
+    <data value="32">Hank</data>
+  </li>
+  <li>
+    <data value="22">Uinika</data>
+  </li>
+</ul>
+
+<p>
+  Keyboard: <kbd>cmd</kbd> Run dialog                     <br>
+  Keyboard: <kbd>Ctrl</kbd> + <kbd>S</kbd> Save document  <br>
+</p>
+
 <ruby>
-  漢 <rp>(</rp><rt>Kan</rt><rp>)</rp>
-  字 <rp>(</rp><rt>ji</rt><rp>)</rp>
+  明日<rp>(</rp><rt>Ashita</rt><rp>)</rp>
 </ruby>
 
 <p>
-This text contains <sub>subscript</sub>
+  This article describes several <b class="keywords">text-level</b> elements.  <br>
+  More information can be found in <cite>[ISO-0000]</cite>.                    <br>
+  <dfn>The Internet</dfn> is a global system of interconnected networks.       <br>
+  Declare a Javascript variable: <code>var i = 0;</code>.                      <br>
 </p>
 
 <p>
-This text contains <sup>superscript</sup>
+  <q cite="https://www.mozilla.org/">Mozilla</q>        <br>
+  <a href="#attr-href">Description same-page link.</a>  <br>
+  <abbr title="Internationalization">I18N</abbr>        <br>
+  <span>span [spæn] n.跨度，范围</span>                  <br>
+  <em>Emphasis</em> ['emfəsɪs] n.强调                   <br>
+  <i>italic</i> [ɪˈtælɪk] n.斜体字                      <br>
+  Mark <mark>highlight</mark> text.                     <br>
+  It is a <samp>Sample</samp> text.                     <br>
+  Text is <small>Small</small>.                         <br>
+  Text is <strong>Strong</strong>.                      <br>
+  <sub>Subscript</sub>                                  <br>
+  <sup>Superscript</sup>                                <br>
+  <time>22:05</time>                                    <br>
+  <u>Underline text</u>                                 <br>
+  <s>Strike is deprecated.</s>                          <br>
+  A simple equation: <var>x</var> = <var>y</var> + 2    <br>
+  This guy come from Eng<wbr>land.                      <br>
 </p>
-
-<code>Computer code</code>
-<kbd>Keyboard input</kbd>
-<tt>Teletype text</tt>
-<samp>Sample text</samp>
-<var>Computer variable</var>
-
-<p>This guy come from Eng<wbr>land.</p>
 ```
+
+![](html/inline-text.png '内联文本Demo')
 
 ### 图片和多媒体
 
