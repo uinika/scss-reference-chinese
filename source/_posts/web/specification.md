@@ -485,7 +485,7 @@ const [array1, array2] = array;  // good way
 | 主体 | body | bd |
 | 尾部 | foot | ft |
 | 主栏 | main | mn |
-| 主栏子容器 | mainc | mnc |
+| 主栏子容器 | container | ctn |
 | 侧栏 | side | sd |
 | 侧栏子容器 | sidec | sdc |
 | 盒容器 | wrap/box | wrap/box |
@@ -537,7 +537,7 @@ const [array1, array2] = array;  // good way
 | 垂直居中 | vertical-align-middle | vam |
 | 溢出隐藏 | overflow-hidden | oh |
 | 完全消失 | display-none | dn |
-| 字体大小 | fontsize | fs |
+| 字体大小 | font-size | fs |
 | 字体粗细 | font-weight | fw |
 
 ### 颜色/背景选择器
