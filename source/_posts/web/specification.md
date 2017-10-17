@@ -583,11 +583,12 @@ const [array1, array2] = array;  // good way
 
 ## HTML
 
-HTML标签的语义化有助于形成构架良好的DOM结构，有利于搜索引擎爬虫索引、抓取，也有利于不同设备显示的兼容性，以及团队的开发和维护工作。
+HTML标签的语义化有助于形成构架良好的DOM结构，有助于搜索引擎优化和提升可访问性，具体的HTML元素语义化原则请参考[HTML5语义化标签概览](https://uinika.github.io/2017/10/17/web/html/)一文，尽可能保持HTML DOM结构的优雅。
 
-### 整体结构
+### 整体DOM结构
 
 统一使用HTML5提供的`<!DOCTYPE html>`文档类型声明，并在`<head>`中使用`<link>`引入外部CSS文件，然后在`<body>`底部通过`<script>`引入JavaScript文件。
+
 ```html
 <!DOCTYPE html>
 <html lang='zh-CN'>
@@ -607,4 +608,14 @@ HTML标签的语义化有助于形成构架良好的DOM结构，有利于搜索�
 </body>
 
 </html>
+```
+
+### 组件DOM结构
+
+每个Vue或者React顶层组件的父级元素一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只能出现一次，因此父组件下嵌套使用的子级组件、公用组件一律使用`<div>`定义，`id`属性命名使用短横线连接的`parent-child`格式。
+
+```html
+<main id="parent">
+  <div id="parent-child"></div>
+</main>
 ```
