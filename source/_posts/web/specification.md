@@ -47,7 +47,7 @@ const YourName = {  // PascalCase
 </script>
 ```
 
-> **所有代码的缩进必须使用2个空格**。
+> **所有代码缩进必须使用2个空格，并优先使用单引号`'`**。
 
 ## JavaScript & ES6
 
@@ -615,7 +615,7 @@ HTML标签的语义化有助于形成构架良好的DOM结构，有助于搜索�
 每个Vue或者React顶层组件的父级元素一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只能出现一次，因此父组件下嵌套使用的子级组件、公用组件一律使用`<div>`定义，`id`属性命名使用短横线连接的`parent-child`格式。
 
 ```html
-<main id="parent">
-  <div id="parent-child"></div>
+<main id='parent'>
+  <div id='parent-child'></div>
 </main>
 ```
