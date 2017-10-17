@@ -10,15 +10,11 @@ categories: Web
 
 <!-- more -->
 
-## JavaScript & ES6
+## 总体原则
 
-基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行整理，适用于使用Babel提供ES6预编译环境的场景。
-
-### 变量命名
-
-1. 驼峰命名（*camelCase*）：用于定义JavaScript**普通变量**、**函数方法**。
-3. 帕斯卡命名（*PascalCase*）：用于JavaScript声明**类**、**对象**、**数组**等引用类型。
-2. 短横线命名（*kebab-case*）：用于自定义**HTML属性**和**元素**、**SCSS变量**、**图片资源**，即视图和样式相关的变量都采取这种方式命名。
+1. **驼峰命名**（*camelCase*）：用于定义JavaScript`基本数据类型`、`函数方法`。
+3. **帕斯卡命名**（*PascalCase*）：用于JavaScript声明`Class类`、`Object对象`、`Array数组`引用数据类型。
+2. **短横线命名**（*kebab-case*）：用于自定义`HTML视图`、`SCSS样式`、`Assets资源`，即样式与视图相关的自定义元素都采用该方式命名。
 
 ```html
 <template>
@@ -51,7 +47,15 @@ const YourName = {  // PascalCase
 </script>
 ```
 
-代码缩进必须使用**2个空格**，代码块的花括号`{`、流程控制语句的小括号`(`前必须放置**1个空格**，且每个函数、代码块之前通过换行进行分隔。
+> **所有代码的缩进必须使用2个空格**。
+
+## JavaScript & ES6
+
+本规范基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行制定，适用于使用Babel提供ES6预编译环境的场景。
+
+### 命名原则
+
+代码块的花括号`{`、流程控制语句的小括号`(`前必须放置**1个空格**，且每个函数、代码块之前通过换行进行分隔。
 
 ```javascript
 class Hank {
@@ -474,7 +478,19 @@ const [array1, array2] = array;  // good way
 
 ## CSS & SCSS
 
+本规范借鉴**网易NEC**的[CSS基础库命名约定](http://nec.netease.com/)，结合当前开发团队多种CSS样式库混用的场景，在避免CSS选择器冲突的原则下制订，适用于通过Sass预处理器转译CSS的场景。
+
 ### 命名原则
+
+- `reset.scss`：消除默认样式和浏览器差异，并设置部分标签的初始样式。
+
+- `color.scss`：所有的取色必须来自公用的颜色列表，通过scss变量在其它文件中使用。
+
+- `base.scss`：基础的公用样式，例如下面CSS选择器规范中定义的class shortcut。
+
+- `skin.scss`: 使用全局UI插件的场景下，用来定制其组件补丁样式，或者以`skin-xx`方式命名多种自定义皮肤。
+
+- `grid.scss`：基于class属性定义的CSS栅格系统，便于根据上下文语义去控制DOM结构。
 
 ### 布局选择器
 
@@ -485,9 +501,9 @@ const [array1, array2] = array;  // good way
 | 主体 | body | bd |
 | 尾部 | foot | ft |
 | 主栏 | main | mn |
-| 主栏子容器 | container | ctn |
+| 主栏子容器 | main-container | mcc |
 | 侧栏 | side | sd |
-| 侧栏子容器 | sidec | sdc |
+| 侧栏子容器 | side-container | sdc |
 | 盒容器 | wrap/box | wrap/box |
 
 ### 模块/组件选择器
@@ -574,19 +590,19 @@ HTML标签的语义化有助于形成构架良好的DOM结构，有利于搜索�
 统一使用HTML5提供的`<!DOCTYPE html>`文档类型声明，并在`<head>`中使用`<link>`引入外部CSS文件，然后在`<body>`底部通过`<script>`引入JavaScript文件。
 ```html
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang='zh-CN'>
 
 <head>
   <title>Aves</title>
-  <meta name="renderer" content="webkit" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name='renderer' content='webkit' />
+  <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+  <meta name='viewport' content='width=device-width, initial-scale=1' />
 </head>
 
 <body>
-  <div id="app">
-    <main id="dashboard"></main>
+  <div id='app'>
+    <main id='dashboard'></main>
   </div>
 </body>
 
