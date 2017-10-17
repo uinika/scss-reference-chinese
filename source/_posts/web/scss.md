@@ -512,9 +512,148 @@ $family: unquote("Droid+Sans");
 
 ### @media / #media
 
+Sass中`@media`的用法与CSS相同，但是允许在CSS规则中嵌套使用。编译时`@media`将被编译到文件最外层，包含嵌套的父级选择器。
+
+```scss
+// SCSS
+.sidebar {
+  width: 300px;
+  @media screen and (orientation: landscape) {
+    width: 500px;
+  }
+}
+
+// CSS
+.sidebar {
+  width: 300px;
+}
+
+@media screen and (orientation: landscape) {
+  .sidebar {
+    width: 500px;
+  }
+}
+```
+
+@media的查询条件可以嵌套使用，编译后SASS会自动添加`and`关键字。
+
+```scss
+// SCSS
+@media screen {
+  .sidebar {
+    @media (orientation: landscape) {
+      width: 500px;
+    }
+  }
+}
+
+// CSS
+@media screen and (orientation: landscape) {
+  .sidebar {
+    width: 500px;
+  }
+}
+```
+
+`@media`的查询条件当中也可以使用SassScript。
+
+```scss
+// SCSS
+$media: screen;
+$feature: -webkit-min-device-pixel-ratio;
+$value: 1.5;
+@media #{$media} and ($feature: $value) {
+  .sidebar {
+    width: 500px;
+  }
+}
+
+// CSS
+@media screen and (-webkit-min-device-pixel-ratio: 1.5) {
+  .sidebar {
+    width: 500px;
+  }
+}
+```
+
 ### @extend / #extend
 
+How it Works
+Extending Complex Selectors
+Multiple Extends
+Chaining Extends
+Selector Sequences
+Merging Selector Sequences
+@extend-Only Selectors #placeholders
+The !optional Flag
+@extend in Directives
+
 ### @at-root / #at-root
+
+某些需要放置在文档根元素上的样式，可以就近的放置在其父选择器上，该特性同样可用于行内CSS选择器。
+
+```scss
+// SCSS
+.parent {
+  ...
+  @at-root .child { ... }
+}
+
+// CSS
+.parent { ... }
+.child { ... }
+```
+
+`@at-root`可以通过**代码块**同时包含多个选择器。
+
+```scss
+// SCSS
+.parent {
+  ...
+  @at-root {
+    .child1 { ... }
+    .child2 { ... }
+  }
+  .step-child { ... }
+}
+
+// CSS
+.parent { ... }
+.child1 { ... }
+.child2 { ... }
+.parent .step-child { ... }
+```
+
+`@at-root`默认情况下仅仅是排除掉父级选择器，但是实际开发过程中也有可能需要将`@media`之类的指令选择性的过滤、移动到外面，这里可以通过`@at-root (without: ...)`和`@at-root (with: ...)`语法实现该操作。
+
+```scss
+// SCSS
+@media print {
+  .page {
+    width: 8in;
+    @at-root (without: media) {
+      color: red;
+    }
+  }
+}
+
+// CSS
+@media print {
+  .page {
+    width: 8in;
+  }
+}
+
+.page {
+  color: red;
+}
+```
+
+可以向`@at-root`传递2个特殊值，`rule`表示普通的CSS规则，因此`@at-root (without: rule)`作用类似于没有任何查询条件的`@at-root`；`all`代码全部CSS规则，`@at-root (without: all)`代表样式将会被移动到所有指令和CSS规则的外侧。
+
+There are two special values you can pass to @at-root. "rule" refers to normal CSS rules; @at-root (without: rule) is the same as @at-root with no query. @at-root (without: all) means that the styles should be moved outside of all directives and CSS rules.
+
+If you want to specify which directives or rules to include, rather than listing which ones should be excluded, you can use with instead of without. For example, @at-root (with: rule) will move outside of all directives, but will preserve any CSS rules.
 
 ### @debug
 
