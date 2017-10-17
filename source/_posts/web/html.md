@@ -4,7 +4,7 @@ tags: HTML
 categories: Web
 ---
 
-本篇文章翻译自mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，并标注了当前的兼容性状态。
+本篇文章翻译自Mozilla的官方文档[HTML Reference](https://developer.mozilla.org/en-US/docs/Web/HTML/Element)，包含了**HTML5**新增的标签元素，方便大家快速的定位自己所需的HTML标签，书写更加优雅的语义化DOM结构。本文内所涉及的HTML元素都经过[CANIUSE](https://caniuse.com)进行了兼容性比对，在标注各元素当前兼容性状态的同时，也提供了Mozilla和W3C推荐的格式良好的标准Demo。
 
 ![](html/logo.png)
 
@@ -53,7 +53,7 @@ categories: Web
 
 ### 内容分区
 
-用来将文档内容进行逻辑上的组织与划分，为页面内容创建清晰明确的大纲与分区。
+用来将文档内容进行逻辑上的组织与划分，为页面内容创建清晰明确的大纲与分区。除`<address>`外，其它元素都已经获得当前主流浏览器的支持。
 
 | 元素 | 语义 |
 |:-----|:-----|
@@ -65,7 +65,47 @@ categories: Web
 | `<h1–h6>`   | 用来体现**6**个层级的段落标题，其中`<h1>`级别最高，`<h6>`级别最低，|
 | `<header>`  | 一组介绍性信息，可能包含标题元素，也可以包含logo、搜索表单等信息。 |
 | `<hgroup>`  | 代表一个文档片段的多层次标题信息，即对`<h1>`-`<h6>`进行分组。 |
-| `<address>` | 为距离该标签最近的`<article>`或`<body>`祖先元素提供联系信息。 |
+| `<address>` | 为距离该标签最近的`<article>`或`<body>`祖先元素提供联系信息，*IE和Edge暂未提供支持*。 |
+
+```html
+<nav>
+  <ul>
+    <li><a href="#">Home</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<address>
+  You can contact author at <a href="https://uinika.github.io/">Hank</a>.
+</address>
+
+<article>
+  <header>
+    <h1>Heading</h1>
+  </header>
+  <section>
+    <p>Paragraph</p>
+  </section>
+  <footer>
+    <p>Paragraph</p>
+  </footer>
+  <aside>
+    <p>Paragraph</p>
+  </aside>
+</article>
+
+<hgroup>
+  <h1>Heading level 1</h1>
+  <h2>Heading level 2</h2>
+  <h3>Heading level 3</h3>
+  <h4>Heading level 4</h4>
+  <h5>Heading level 5</h5>
+  <h6>Heading level 6</h6>
+</hgroup>
+```
+
+![](html/content-partition.png "内容分区Demo")
 
 ### 文本内容
 
@@ -73,7 +113,6 @@ categories: Web
 
 | 元素 | 语义 |
 |:-----|:-----|
-| `<blockquote>` | 表达HTML元素的引用内容，渲染时会有缩进。引用来源可以通过该元素的`cite`属性进行标注`<blockquote cite='https://uinika.github.io/'>`；如果要以文本形式体现引文出处，则可以直接通过`<cite>`元素。 |
 | `<dl>`         | 定义一个描述性的列表，通常用于展示词汇表、元数据、键值对列表。 |
 | `<dd>`         | 代表描述性列表`<dl>`当中的1项描述，该元素只能作为`<dt>`的子元素出现。 |
 | `<dt>`         | 代表描述性列表`<dl>`当中的1个术语，该元素只能作为`<dt>`子元素出现，该元素后面通常会跟随`<dd>`，多个连续出现的`<dt>`由出现在其后面的第1个`<dd>`定义。 |
@@ -87,6 +126,57 @@ categories: Web
 | `<main>`       | 用于呈现文档`<body>`中的主体内容，一个文档只能使用一个`<main>`元素，且不应该放置主体内容之外的侧边栏、导航栏、搜索栏、版权信息、网站logo等信息。</main> |
 | `<p>`          | 表示一个文本段落，是一个典型的块级元素。 |
 | `<pre>`        | 表示预定义格式文本，该元素中的文本会按照原文件中的格式编排，文本中的*空格*和*换行*都会原样呈现出来。 |
+| `<blockquote>` | 表达HTML元素的引用内容，渲染时会有缩进。引用来源可以通过该元素的`cite`属性进行标注`<blockquote cite='https://uinika.github.io/'>`；如果要以文本形式体现引文出处，则可以直接通过`<cite>`元素。 |
+
+```html
+<blockquote cite="https://developer.mozilla.org/en-US/docs/Web/HTML/Element">
+  <p>This is a block quotation.</p>
+</blockquote>
+
+<div>Division [dɪˈvɪʒən] n. 分开，分隔</div>
+
+<dl>
+  <dt>Firefox</dt>
+  <dd>A open source web browser.</dd>
+  <!-- Other terms and descriptions -->
+</dl>
+
+<figure>
+  <img src="https://www.w3.org/2008/site/images/logo-w3c-screen-lg" alt="logo">
+  <figcaption>W3C Logo</figcaption>
+</figure>
+
+<hr>
+
+<ol>
+  <li>item1</li>
+  <li>item2</li>
+  <li>item3</li>
+</ol>
+
+<ul>
+  <li>item</li>
+  <li>item</li>
+  <li>item</li>
+</ul>
+
+<main>
+  <h1>Heading</h1>
+  <p>Paragraph</p>
+
+  <article>
+    <p>Paragraph</p>
+  </article>
+</main>
+
+<pre>
+  body {
+    color:red;
+  }
+</pre>
+```
+
+![](html/text-content.png "文本内容Demo")
 
 ### 内联文本
 
