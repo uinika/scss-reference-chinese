@@ -52,7 +52,7 @@ const YourName = {  // PascalCase
 
 ## JavaScript & ES6
 
-本规范基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)代码规范进行制定，适用于使用Babel提供ES6预编译环境的场景。
+本规范基于**爱彼迎**的[Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript)以及开发小组目前的编码习惯进行制定，适用于通过Babel提供ES6预编译环境的场景。
 
 ### 命名原则
 
@@ -592,6 +592,7 @@ const [array1, array2] = array;  // good way
 | 出错 | error | err |
 | 不可用 | disabled | dis |
 
+> 前端基础架构已经提供了基于postcss的后置处理器autoprefixer（*对前置SASS编译后的CSS进行再处理*），因此编写样式时不再手动处理`-webkit-`、`-moz-`等兼容性前缀。
 
 ## HTML
 
