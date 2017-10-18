@@ -134,7 +134,7 @@ body {
 }
 ```
 
-上面代码建立了一个名为`border-radius`的Mixin，并传递了一个变量`$radius`作为参数，然后在后续代码中通过`@include border-radius(10px)`使用该Mixin，最终编译的结果如下：
+上面的代码建立了一个名为`border-radius`的Mixin，并传递了一个变量`$radius`作为参数，然后在后续代码中通过`@include border-radius(10px)`使用该Mixin，最终编译的结果如下：
 
 ```css
 .box {
@@ -147,7 +147,85 @@ body {
 
 ### 继承
 
+继承是Sass中一个非常重要的特性，可以通过`@extend`指令在选择器之间复用CSS属性，并且不产生多余的冗余代码，下面例子将会通过SASS提供的继承机制建立一系列消息相关的样式。
+
+```scss
+.message {
+  border: 1px solid #ccc; padding: 10px; color: #333;
+}
+
+.success {
+  @extend .message;
+  border-color: green;
+}
+
+.error {
+  @extend .message;
+  border-color: red;
+}
+
+.warning {
+  @extend .message;
+  border-color: yellow;
+}
+```
+
+上面代码将`.message`中的CSS属性应用到了`.success`、`.error`、`.warning`上面，魔法发生在最终生成的CSS当中，可以避免在HTML元素上书写多个class选择器，最终生成的CSS样式是下面这样的：
+
+```css
+.message, .success, .error, .warning {
+  border: 1px solid #cccccc; padding: 10px; color: #333;
+}
+
+.success {
+  border-color: green;
+}
+
+.error {
+  border-color: red;
+}
+
+.warning {
+  border-color: yellow;
+}
+```
+
 ### 操作符
+
+SASS提供了标准的算术运算符，例如`+`、`-`、`*`、`/`、`%`。在接下来的例子当中，我们尝试在`aside`和`article`选择器当中对宽度进行简单的计算。
+
+```scss
+.container { width: 100%; }
+
+
+article[role="main"] {
+  float: left;
+  width: 600px / 960px * 100%;
+}
+
+aside[role="complementary"] {
+  float: right;
+  width: 300px / 960px * 100%;
+}
+```
+
+上面代码以`960px`为基准建立了简单的流式网格，SASS提供的算术运算符让开发人员可以更容易的将像素值转换为百分比，最后生成的CSS样式是这样的：
+
+```css
+.container {
+  width: 100%;
+}
+
+article[role="main"] {
+  float: left;
+  width: 62.5%;
+}
+
+aside[role="complementary"] {
+  float: right;
+  width: 31.25%;
+}
+```
 
 
 ## 编码规则
