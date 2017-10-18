@@ -15,17 +15,135 @@ categories: Web
 
 ## 特性概览
 
-### 预处理
+CSS书写代码规模较大的Web应用时，容易造成选择器、层叠的复杂度过高，因此推荐通过SASS预处理器进行CSS的开发，SASS提供的变量、嵌套、混合、继承等特性，让CSS的书写更加有趣和程式化。
 
 ### 变量
 
+变量用来存储需要在CSS中复用的信息，例如颜色和字体。SASS通过`$`符号去声明一个变量。
+
+```scss
+$font-stack:    Helvetica, sans-serif;
+$primary-color: #333;
+
+body {
+  font: 100% $font-stack;
+  color: $primary-color;
+}
+```
+
+上面例子中变量`$font-stack`和`$primary-color`的**值**将会替换所有引用他们的位置。
+
+```css
+body {
+  font: 100% Helvetica, sans-serif;
+  color: #333;
+}
+```
+
 ### 嵌套
 
-### 片段
+SASS允许开发人员以嵌套的方式使用CSS，但是**过度的使用嵌套会让产生的CSS难以维护，因此这是一种不好的实践**。下面的例子，表达的是一个典型的网站导航样式。
+
+```scss
+nav {
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  li { display: inline-block; }
+
+  a {
+    display: block;
+    padding: 6px 12px;
+    text-decoration: none;
+  }
+}
+```
+
+大家注意上面代码中的`ul`、`li`、`a`选择器都被嵌套在`nav`选择器当中使用，这是一种书写更高可读性CSS的良好方式，编译后产生的CSS代码如下：
+
+```css
+nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+nav li {
+  display: inline-block;
+}
+
+nav a {
+  display: block;
+  padding: 6px 12px;
+  text-decoration: none;
+}
+```
 
 ### 引入
 
+可以将SASS切割为多个片段，并以underscore风格的下划线作为前缀（*_partial.scss*）命名，SASS会通过underscore风格的下划线来辨别哪些文件是SASS片段，从而不让这些SASS片段的内容直接生成至最终的CSS文件，只是在使用`@import`指令的位置被导入。CSS原生的`@import`会通过额外的HTTP请求获取引入的样式片段，而SASS的`@import`则会直接将这些引入的片段合并至当前CSS文件，并且不会产生新的HTTP请求。下面例子中的代码，将会在`base.scss`文件当中引入`_reset.scss`片断。
+
+```scss
+// _reset.scss
+html, body, ul, ol {
+  margin:  0;
+  padding: 0;
+}
+
+// base.scss
+@import 'reset';
+body {
+  font: 100% Helvetica, sans-serif;
+  background-color: #efefef;
+}
+```
+
+SASS中引入片断时，可以缺省使用文件扩展名，因此上面代码中直接通过`@import 'reset'`引入，编译后生成的代码如下：
+
+```css
+html, body, ul, ol {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font: 100% Helvetica, sans-serif;
+  background-color: #efefef;
+}
+```
+
+> SASS片断使用下划线前缀命名，主要是在使用了原生`SASS命令行工具`watch指定目录源码的场景下使用，如果开发小组正在使用webpack则无需考虑这个问题，因为样式是通过`webpack-loader`按照ES6风格的`import`进行打包和模块化。
+
 ### 混合
+
+混合（*Mixin*）用来分组那些需要在页面中复用的CSS声明，开发人员可以通过向Mixin传递变量参数来让代码更加灵活，该特性在添加浏览器兼容性前缀的时候非常有用，SASS目前使用`@mixin name`指令来进行混合操作。
+
+```scss
+@mixin border-radius($radius) {
+          border-radius: $radius;
+      -ms-border-radius: $radius;
+     -moz-border-radius: $radius;
+  -webkit-border-radius: $radius;
+}
+
+.box {
+  @include border-radius(10px);
+}
+```
+
+上面代码建立了一个名为`border-radius`的Mixin，并传递了一个变量`$radius`作为参数，然后在后续代码中通过`@include border-radius(10px)`使用该Mixin，最终编译的结果如下：
+
+```css
+.box {
+  border-radius: 10px;
+  -ms-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+}
+```
 
 ### 继承
 
