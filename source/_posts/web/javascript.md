@@ -4,36 +4,31 @@ tags: JavaScript
 categories: Web
 ---
 
-JavaScript遵循的语言规范是ECMAScript，从2012年开始，所有的现代浏览器都完整支持ECMAScript 5.1标准。2015年6月17日，ECMA国际组织发布了第6版ECMAScript标准，官方称为ECMAScript 2015(俗称ES6)，从此ECMAScript每年发布一次新标准，本文档覆盖了当前最新的ECMAScript2017草案。
+JavaScript遵循的语言规范是ECMAScript，从2012年开始，所有的现代浏览器都完整支持ECMAScript 5.1标准。2015年6月17日，ECMA国际组织发布了第6版ECMAScript标准，官方称为ECMAScript 2015（*通常称为ES6*），从此ECMAScript每年发布一次新标准，**本文覆盖了当前最新ECMAScript2017草案当中的特性**。
 
 ![](javascript/logo.jpg)
 
 <!-- more -->
 
-JavaScript是轻量级的、解释型的、使用*first-class functions*（*即函数能够以参数的形式传递给其它函数，也可以作为其它函数的返回值，或能够以值的形式指派给一个变量*）的编程语言。JavaScript是基于原型的、多范式的、动态脚本语言，支持面向对象、命令式、声明式的编程风格。
-
-JavaScript标准化工作由**ECMA**（*European Computer Manufacturers Association*）国际组织负责，JavaScript的语言标准被称为**ECMAScript**，企业遵循该标准开发各自的JavaScript实现，例如Firefox的`SpiderMonkey`或者Chrome中的`V8`解析引擎。因此，ECMAScript的规范文档主要针对解析引擎的开发人员，而非JavaScript脚本的编写人员。
-
-> ECMAScript并未对文档对象模型`DOM`进行定义，该标准交由**W3C**(World Wide Web Consortium)或**WHATWG**(Web Hypertext Application Technology Working Group)制定。
-
-可以安装任意一款现代浏览器进行JavaScript测试代码的编写，在这里推荐使用Firefox。
-- Web Console：在Firefox中使用快捷键*Ctrl+Shift+K*进入
-![](javascript/01.web-console-commandline.png)
-- Scratchpad：在Firefox中通过快捷键*Shift+F4*进入
-![](javascript/01.scratchpad.png)
 
 
-## 语法和数据类型
+JavaScript标准化工作由**ECMA**（*European Computer Manufacturers Association*）国际组织负责，JavaScript的语言标准被称为**ECMAScript**，企业遵循该标准开发各自的JavaScript实现，例如Firefox的`SpiderMonkey`或者Chrome中的`V8`解析引擎。
+
+> ECMAScript的规范文档主要针对解析引擎的开发人员，而非JavaScript脚本的编写人员。
+
+ECMAScript并未对**文档对象模型DOM**进行定义，该标准交由**W3C**（*World Wide Web Consortium*）和**WHATWG**（*Web Hypertext Application Technology Working Group*）制定。本文使用Firefox浏览器作为JavaScript测试代码的编写与运行环境，可以通过`Ctrl+Shift+K`快捷键进入控制台，或者使用`Shift+F4`进入代码草稿纸，执行和调试本文中的示例代码。
+
+## Grammar and types
 
 本章节主要讨论JavaScript的基础语法、变量声明、数据类型和字面量。
 
-### 简介Basics
+### Basics
 
-JavaScript对大小写敏感，并且使用Unicode字符集编码。
+JavaScript是轻量级的、解释型的、使用*first-class functions*（*即函数能够以参数的形式传递给其它函数，也可以作为其它函数的返回值，或能够以值的形式指派给一个变量*）的编程语言，其编程风格是基于原型的、多范式的、面向对象的动态脚本语言。
 
-JavaScript语句*statements*以分号进行分隔， 空格、缩进、换行符被称为*whitespace*，JavaScript源代码从左至右执行，并能自动在语句尾部插入分号。但为避免出现副作用，依然推荐在语句末尾手动添加分号。
+JavaScript对大小写敏感，并且使用Unicode字符集编码。JavaScript语句*statements*以分号进行分隔， 空格、缩进、换行符被称为*whitespace*，JavaScript源代码从左至右执行，并能自动在语句尾部插入分号。但为避免出现副作用，依然推荐在语句末尾手动添加分号。
 
-### 注释Comments
+### Comments
 
 JavaScript注释的语法与C++等其它语言类似。
 
