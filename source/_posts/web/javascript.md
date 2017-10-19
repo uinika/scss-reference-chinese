@@ -4,7 +4,7 @@ tags: JavaScript
 categories: Web
 ---
 
-JavaScript遵循的语言规范是ECMAScript，从2012年开始，所有的现代浏览器都完整支持ECMAScript 5.1标准。2015年6月17日，ECMA国际组织发布了第6版ECMAScript标准，官方称为ECMAScript 2015（*通常称为ES6*），从此ECMAScript每年发布一次新标准，**本文覆盖了当前最新ECMAScript2017草案当中的特性**。示例代码和术语定义主要取自《JavaScrip高级程序设计》，但是该书成文于ES6标准发布之前，因此从[Mozilla JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript)摘取了ES6及更新特性的讲解与示例，并且为了便于随时查阅与核对，本文的目录结构保持与Mozilla官方英文文档一致。
+JavaScript遵循的语言规范是ECMAScript，从2012年开始，所有的现代浏览器都完整支持ECMAScript 5.1标准。2015年6月17日，ECMA国际组织发布了第6版ECMAScript标准，官方称为ECMAScript 2015（*通常称为ES6*），从此ECMAScript每年发布一次新标准，**本文覆盖了当前最新ECMAScript2017草案当中的特性**。示例代码和术语定义主要取自《JavaScrip高级程序设计》，但是该书成文于ES6标准发布之前，因此从[Mozilla JavaScript Reference](https://developer.mozilla.org/en-US/docs/Web/JavaScript)摘取了ES6以及更新特性的讲解与示例，并且为了便于随时查阅与核对，文章的目录结构保持与Mozilla官方英文文档一致。
 
 ![](javascript/logo.jpg)
 
