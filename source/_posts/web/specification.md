@@ -483,15 +483,70 @@ const [array1, array2] = array;  // good way
 
 ### 命名原则
 
-- `reset.scss`：消除默认样式和浏览器差异，并设置部分标签的初始样式。
+- `reset.scss`：消除默认样式和浏览器差异，并设置部分标签的初始样式，例如`<html>`和`<body>`的宽高度的`100%`。
 
-- `color.scss`：所有的取色必须来自公用的颜色列表，通过scss变量在其它文件中使用。
+```scss
+@import './base';
+@import './color';
 
-- `base.scss`：基础的公用样式，例如下面CSS选择器规范中定义的class shortcut。
+.reset {
+  margin: 0;
+  padding: 0;
+  border: none;
+  outline: none;
+  width: 100%;
+  height: 100%;
+}
 
-- `skin.scss`: 使用全局UI插件的场景下，用来定制其组件补丁样式，或者以`skin-xx.scss`方式命名多种自定义皮肤。
+html {
+  @extend .reset;
+  body {
+    @extend .reset;
+    font-size: 16px;
+    font-family: "Helvetica Neue", Helvetica, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+    #app {
+      @extend .reset;
+      .router {
+        @extend .reset;
+      }
+    }
+  }
+}
 
-- `grid.scss`：基于class属性定义的CSS栅格系统，便于根据上下文语义去控制DOM结构。
+```
+
+- `color.scss`：项目中页面的所有取色必须来自这个颜色变量列表，色表本身的变量以`color-颜色-深度`格式命名。
+
+```scss
+// infomation
+$color-primary: $color-blue;
+$color-success:#13CE66;
+$color-warning:#F7BA2A;
+$color-danger:#FF4949;
+// scheme
+$color-blue:#20A0FF;
+$color-blue-light:#58B7FF;
+$color-blue-dark:#1D8CE0;
+$color-pink: #FF0097;
+$color-cyan: #4EB3B9;
+$color-black:#1F2D3D;
+$color-black-light:#324057;
+$color-black-light-extra:#475669;
+$color-silver:#8492A6;
+$color-silver-light:#99A9BF;
+$color-silver-light-extra:#C0CCDA;
+$color-gray:#D3DCE6;
+$color-gray-light:#E5E9F2;
+$color-gray-light-extra:#EFF2F7;
+$color-white:#FFFFFF;
+$color-white-dark:#F9FAFC;
+```
+
+- `base.scss`：基础的公用快捷样式，通过HTML元素的class属性直接使用。
+
+- `skin.scss`: 全局UI插件的样式补丁，如果存在多种皮肤，则以`skin-xx.scss`方式进行命名。
+
+- `grid.scss`：自定义的CSS栅格系统，直接通过HTML元素及class属性使用。
 
 每个Vue或者React根级组件的样式都独立到单独模块书写，**禁止在顶层ID选择器之外再定义其它CSS样式，避免对全局样式形成污染**。私有组件顶层CSS选择器使用`id`属性定义，公用组件的顶层选择器使用`class`属性定义，。
 
@@ -625,10 +680,12 @@ HTML标签的语义化有助于形成构架良好的DOM结构，有助于搜索�
 
 ### 组件DOM结构
 
-每个Vue或者React根级组件的顶层元素一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只可以出现一次，因此父组件下嵌套使用的子组件、公用组件一律使用`<div>`进行定义，`id`属性命名则使用短横线连接的`parent-child`格式。
+每个Vue或者React根级组件的顶层元素（*通常是指全局的路由视图*）一律通过`<main>`元素定义，因为同一个文档中`<main>`标签只可以出现一次，自定义组件一律使用`<div>`进行定义，`id`属性命名则使用短横线连接的`router-component`格式。
 
 ```html
-<main id='parent'>
-  <div id='parent-child'></div>
+<!-- 全局路由视图 -->
+<main id='router'>
+  <!-- 组件 -->
+  <div id='router-component'></div>
 </main>
 ```
