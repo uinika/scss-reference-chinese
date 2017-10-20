@@ -815,6 +815,43 @@ table {
 }
 ```
 
+![](css2/vertical-center-3.png "通过影子元素实现垂直居中")
+
+table的渲染与传统块级元素的渲染略有不同，table只能扩张到内部嵌套内容的宽度，而块级元素则可以自动扩张到其父级元素的宽度。
+
+CSS2.1当中最终极和完美的居中技术是通过**影子HTML元素**，如果设置其到100%高度的父元素当中，然后分别设置`vertical-align: middle`。影子元素并不会影响页面的语义化，因为可以将其设置为一个伪元素（**）。
+
+```html
+<div class="parent">
+  <div class="center">
+    <h1>Center</h1>
+    <p>Center</p>
+  </div>
+</div>
+```
+
+```scss
+.parent {
+  text-align: center;
+  height: 300px;
+  background: gray;
+  margin-top: 300px;
+}
+.parent:before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+.center {
+  display: inline-block;
+  vertical-align: middle;
+  width: 300px;
+  background: white;
+}
+```
+
+![](css2/vertical-center-4.png "影子元素垂直居中效果")
 
 
 ## 响应式栅格
