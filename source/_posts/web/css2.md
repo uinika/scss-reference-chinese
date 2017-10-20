@@ -743,9 +743,44 @@ p {
 
 ## 垂直居中
 
-如果知道居中HTML元素的`width`和`height`确切尺寸，且尺寸本身不会发生改变，可以使用绝对定位方便的实现居中，且居中HTML元素的父元素的`width`和`height`可以任意变化。
+最早实现垂直居中的技术是通过组合使用`position`的`absolute`和`relative`属性进行偏移和修正，该方式会产生冗余HTML标签从而影响页面的语义化，所以笔者并不推荐使用。
 
-![](css2/vertical-center-1.gif "基于CSS2绝对定位的简单垂直居中")
+```html
+<div class="parent">
+  <div class="center">
+    Center
+  </div>
+</div>
+```
+
+```scss
+$width: 500px;   // 居中元素的宽度
+$height: 300px;  // 居中元素的高度
+$offset: 50%;    // 偏移
+$amend: -50%;    // 修正偏移
+.parent {
+  position: absolute;
+  width: $width;
+  height: $height;
+  top: $offset;
+  left: $offset;
+  background: blue;
+  .center {
+    position: relative;
+    width: $width;
+    height: $height;
+    top: $amend;
+    left: $amend;
+    background: white;
+  }
+}
+```
+
+![](css2/vertical-center-1.png "定位相对偏移位置实现垂直居中")
+
+如果知道居中HTML元素的`width`和`height`尺寸，且不希望使用冗余标签影响页面语义化，可以考虑通过**margin负值**方便的实现垂直居中。
+
+![](css2/vertical-center-2.gif "基于CSS2绝对定位的简单垂直居中")
 
 ```html
 <body>
@@ -769,9 +804,9 @@ p {
 </style>
 ```
 
-![](css2/vertical-center-2.png "通过表格布局垂直居中")
+![](css2/vertical-center-3.png "通过表格布局垂直居中")
 
-当不知道居中HTML元素的具体尺寸的时候，可以通过表格定位来实现居中。
+当不知道居中HTML元素的具体尺寸的时候，可以通过**表格定位**实现居中效果。
 
 ```html
 <table>
@@ -815,7 +850,7 @@ table {
 }
 ```
 
-![](css2/vertical-center-3.png "通过影子元素实现垂直居中")
+![](css2/vertical-center-4.png "通过影子元素实现垂直居中")
 
 table的渲染与传统块级元素的渲染略有不同，table只能扩张到内部嵌套内容的宽度，而块级元素则可以自动扩张到其父级元素的宽度。
 
@@ -850,7 +885,7 @@ CSS2.1当中最终极和完美的居中技术是通过**影子HTML元素**，如
 }
 ```
 
-![](css2/vertical-center-4.png "影子元素垂直居中效果")
+![](css2/vertical-center-5.png "影子元素垂直居中效果")
 
 
 ## 响应式栅格
