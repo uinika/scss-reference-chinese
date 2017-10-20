@@ -835,7 +835,6 @@ CSS2.1当中最终极和完美的居中技术是通过**影子HTML元素**，如
   text-align: center;
   height: 300px;
   background: gray;
-  margin-top: 300px;
 }
 .parent:before {
   content: '';
