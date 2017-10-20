@@ -743,6 +743,79 @@ p {
 
 ## 垂直居中
 
+如果知道居中HTML元素的`width`和`height`确切尺寸，且尺寸本身不会发生改变，可以使用绝对定位方便的实现居中，且居中HTML元素的父元素的`width`和`height`可以任意变化。
+
+![](css2/vertical-center-1.gif "基于CSS2绝对定位的简单垂直居中")
+
+```html
+<body>
+  <div class="center">
+    Center
+  </div>
+</body>
+```
+
+```scss
+<style>
+.center {
+  position: absolute;
+  width: 300px;
+  height: 400px;
+  top: 50%;
+  left: 50%;
+  margin-left: -150px;
+  margin-top: -200px;
+}
+</style>
+```
+
+![](css2/vertical-center-2.png "通过表格布局垂直居中")
+
+当不知道居中HTML元素的具体尺寸的时候，可以通过表格定位来实现居中。
+
+```html
+<table>
+  <tr>
+    <td class="center">
+      center
+    </td>
+  </tr>
+</table>
+```
+
+```scss
+table {
+  width: 100%;
+  .center {
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+```
+
+如果需要让HTML结构更加语义化，可以通过`display`的`table`和`table-cell`属性将上面例子修改成下面这样：
+
+```html
+<div class="parent">
+  <div class="center">
+    Center
+  </div>
+</div>
+```
+
+```scss
+.parent {
+  display: table;
+  width: 100%;
+  .center {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+```
+
+
 
 ## 响应式栅格
 
