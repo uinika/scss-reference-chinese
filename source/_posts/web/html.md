@@ -10,9 +10,7 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 
 <!-- more -->
 
-## 元素 
-
-### 根级元素
+## 根级元素
 
 | 元素 | 语义 |
 |:-----|:-----|
@@ -28,7 +26,8 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 </html>
 ```
 
-### 元数据
+
+## 元数据
 
 包含页面相关的信息，可以辅助搜索引擎和浏览器引用或渲染页面。
 
@@ -51,7 +50,8 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 <link href='../styles/base.css' rel='stylesheet' type='text/css' />
 ```
 
-### 内容分区
+
+## 内容分区
 
 块级元素，用来将文档内容进行逻辑上的组织与划分，为页面内容创建清晰明确的大纲与分区。除`<address>`外，其它元素都已经获得当前主流浏览器的支持。
 
@@ -107,7 +107,8 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 
 ![](html/content-partition.png '内容分区Demo')
 
-### 文本内容
+
+## 文本内容
 
 块级元素，用来组织`<body>`标签内区块、章节的内容，并标识出这些内容的宗旨与结构，这对于**可访问性**（*accessibility*）和**搜索引擎优化**（*SEO*）非常重要。
 
@@ -178,7 +179,8 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 
 ![](html/text-content.png '文本内容Demo')
 
-### 内联文本
+
+## 内联文本
 
 行内元素，用来定义字词、文本行片段等内联元素的语义和结构。
 
@@ -272,7 +274,8 @@ Web语义化（*Semantic Web*）是指使用合理的HTML元素去格式化书�
 
 ![](html/inline-text.png '内联文本Demo')
 
-### 图片和多媒体
+
+## 图片和多媒体
 
 HTML提供的对图片、音频、视频的支持。
 
@@ -308,7 +311,8 @@ HTML提供的对图片、音频、视频的支持。
 <img src='logo.png' alt='logo'>
 ```
 
-### 内嵌内容
+
+## 内嵌内容
 
 HTML提供的常规多媒体之外的支持，但是这些支持并不容易交互。
 
@@ -333,7 +337,8 @@ HTML提供的常规多媒体之外的支持，但是这些支持并不容易交�
 </object>
 ```
 
-### 脚本
+
+## 脚本
 
 提供脚本语言（*例如JavaScript*）支持的HTML标签。
 
@@ -356,7 +361,8 @@ ctx.fillRect(8, 8, 100, 50);
 
 ![](html/canvas.png 'Canvas位图绘制Demo')
 
-### 编辑标识
+
+## 编辑标识
 
 两个HTML元素配合起来使用，用以标记文档中的更新与修正。
 
@@ -372,7 +378,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
 
 ![](html/ins-del.png '编辑标识Demo')
 
-### 表格内容
+
+## 表格内容
 
 用于创建和展示表格。
 
@@ -429,7 +436,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
 
 ![](html/table.png '表格Demo')
 
-### 表单
+
+## 表单
 
 用来创建用户交互表单的HTML元素。
 
@@ -497,7 +505,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
 
 ![](html/form.png '表单元素Demo')
 
-### 交互元素
+
+## 交互元素
 
 用来帮助建立用户可交互的元素。
 
@@ -521,7 +530,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
 
 ![](html/interactive.png '交互元素Demo')
 
-### Web组件
+
+## Web组件
 
 用来建立用户自定义元素，（*[Web Component](https://www.w3.org/TR/components-intro/)目前还处于草案阶段，还未成为事实上的标准，且部分内容已经被废弃*）。
 
@@ -530,7 +540,8 @@ This is <del>delete</del> <ins>insert</ins> operation.
 | `<slot>`     | 作为占位符，用来插入自定义的标记文本，*该元素目前还属于实验性技术*。 |
 | `<template>` | ES6模板字面量，该元素中的内容在页面加载时不被渲染，但可以通过JavaScript实例化，*目前已经得到IE外的其它全部浏览器支持*。 |
 
-### 废弃的元素
+
+## 废弃的元素
 
 W3C的HTML规范声明放弃使用的元素。
 
@@ -543,11 +554,132 @@ W3C的HTML规范声明放弃使用的元素。
 |`<content>`  |`<element>`|`<shadow>`  |`<menu>`    |`<menuitem>` |`...`      |
 
 
+## HTML元素属性
 
-## 属性
+HTML元素的属性可以用来配置或修改HTML标签的行为。
+
+| Attribute | Elements | Description |
+|:-----|:-----|:-----|
+| *accept* | `<form>, <input>` | 。 |
+| *accept-charset* | `<form>` | 。 |
+| *accesskey* | `Global attribute` | 。 |
+| *action* | `<form>` | 。 |
+| *align* | `<applet>, <caption>, <col>, <colgroup>,  <hr>, <iframe>, <img>, <table>, <tbody>,  <td>,  <tfoot> , <th>, <thead>, <tr>` | 。 |
+| *alt* | `<applet>, <area>, <img>, <input>` | 。 |
+| *async* | `<script>` | 。 |
+| *autocomplete* | `<form>, <input>` | 。 |
+| *autofocus* | `<button>, <input>, <keygen>, <select>, <textarea>` | 。 |
+| *autoplay* | `<audio>, <video>` | 。 |
+| *autosave* | `<input>` | 。 |
+| *bgcolor* | `<body>, <col>, <colgroup>, <marquee>, <table>, <tbody>, <tfoot>, <td>, <th>, <tr>` | 。 |
+| *border* | `<img>, <object>, <table>` | 。 |
+| *buffered* | `<audio>, <video>` | 。 |
+| *challenge* | `<keygen>` | 。 |
+| *charset* | `<meta>, <script>` | 。 |
+| *checked* | `<command>, <input>` | 。 |
+| *cite* | `<blockquote>, <del>, <ins>, <q>` | 。 |
+| *class* | `	Global attribute` | 。 |
+| *code* | `<applet>` | 。 |
+| *codebase* | `<applet>` | 。 |
+| *color* | `<basefont>, <font>, <hr>` | 。 |
+| *cols* | `<textarea>` | 。 |
+| *colspan* | `<td>, <th>` | 。 |
+| *content* | `<meta>` | 。 |
+| *contenteditable* | `Global attribute` | 。 |
+| *contextmenu* | `Global attribute` | 。 |
+| *controls* | `<audio>, <video>` | 。 |
+| *coords* | `<area>` | 。 |
+| *crossorigin* | `<audio>, <img>, <link>, <script>, <video>` | 。 |
+| *data* | `<object>` | 。 |
+| *data-* | `Global attribute` | 。 |
+| *datetime* | `<del>, <ins>, <time>` | 。 |
+| *default* | `<track>` | 。 |
+| *defer* | `<script>` | 。 |
+| *dir* | `Global attribute` | 。 |
+| *dirname* | `<input>, <textarea>` | 。 |
+| *disabled* | `<button>, <command>, <fieldset>, <input>, <keygen>, <optgroup>, <option>, <select>, <textarea>` | 。 |
+| *download* | `<a>, <area>` | 。 |
+| *draggable* | `Global attribute` | 。 |
+| *dropzone* | `Global attribute` | 。 |
+| *enctype* | `<form>` | 。 |
+| *for* | `<label>, <output>` | 。 |
+| *form* | `<button>, <fieldset>, <input>, <keygen>, <label>, <meter>, <object>, <output>, <progress>, <select>, <textarea>` | 。 |
+| *formaction* | `<input>, <button>` | 。 |
+| *headers* | `<td>, <th>` | 。 |
+| *height* | `<canvas>, <embed>, <iframe>, <img>, <input>, <object>, <video>` | 。 |
+| *hidden* | `Global attribute` | 。 |
+| *high* | `<meter>` | 。 |
+| *href* | `<a>, <area>, <base>, <link>` | 。 |
+| *hreflang* | `<a>, <area>, <link>` | 。 |
+| *http-equiv* | `<meta>` | 。 |
+| *icon* | `<command>` | 。 |
+| *id* | `Global attribute` | 。 |
+| *integrity* | `<link>, <script> ` | 。 |
+| *ismap* | `<img>` | 。 |
+| *itemprop* | `Global attribute` | 。 |
+| *keytype* | `<keygen>` | 。 |
+| *kind* | `<track>` | 。 |
+| *label* | `<track>` | 。 |
+| *lang* | `Global attribute` | 。 |
+| *language* | `<script>` | 。 |
+| *list* | `<input>` | 。 |
+| *loop* | `<audio>, <bgsound>, <marquee>, <video>` | 。 |
+| *low* | `<meter>` | 。 |
+| *manifest* | `<html>` | 。 |
+| *max* | `<input>, <meter>, <progress>` | 。 |
+| *maxlength* | `<input>, <textarea>` | 。 |
+| *minlength* | `<input>, <textarea>` | 。 |
+| *media* | `<a>, <area>, <link>, <source>, <style>` | 。 |
+| *method* | `<form>` | 。 |
+| *min* | `<input>, <meter>` | 。 |
+| *multiple* | `<input>, <select>` | 。 |
+| *muted* | `<audio>, <video>` | 。 |
+| *name* | `<button>, <form>, <fieldset>, <iframe>, <input>, <keygen>, <object>, <output>, <select>, <textarea>, <map>, <meta>, <param>` | 。 |
+| *novalidate* | `<form>` | 。 |
+| *open* | `<details>` | 。 |
+| *optimum* | `<meter>` | 。 |
+| *pattern* | `<input>` | 。 |
+| *ping* | `<a>, <area>` | 。 |
+| *placeholder* | `<input>, <textarea>` | 。 |
+| *poster* | `<video>` | 。 |
+| *preload* | `<audio>, <video>` | 。 |
+| *radiogroup* | `<command>` | 。 |
+| *readonly* | `<input>, <textarea>` | 。 |
+| *rel* | `<a>, <area>, <link>` | 。 |
+| *required* | `<input>, <select>, <textarea>` | 。 |
+| *reversed* | `<ol>` | 。 |
+| *rows* | `<textarea>` | 。 |
+| *rowspan* | `<td>, <th>` | 。 |
+| *sandbox* | `<iframe>` | 。 |
+| *scope* | `<th>` | 。 |
+| *scoped* | `<style>` | 。 |
+| *seamless* | `<iframe>` | 。 |
+| *selected* | `<option>` | 。 |
+| *shape* | `<a>, <area>` | 。 |
+| *size* | `<input>, <select>` | 。 |
+| *sizes* | `<link>, <img>, <source>` | 。 |
+| *slot* | `Global attribute` | 。 |
+| *span* | `<col>, <colgroup>` | 。 |
+| *spellcheck* | `Global attribute` | 。 |
+| *src* | `<audio>, <embed>, <iframe>, <img>, <input>, <script>, <source>, <track>, <video>` | 。 |
+| *srcdoc* | `<iframe>` | 。 |
+| *srclang* | `<track>` | 。 |
+| *srcset* | `<img>` | 。 |
+| *start* | `<ol>` | 。 |
+| *step* | `<input>` | 。 |
+| *style* | `Global attribute` | 。 |
+| *summary* | `<table>` | 。 |
+| *tabindex* | `Global attribute` | 。 |
+| *target* | `<a>, <area>, <base>, <form>` | 。 |
+| *title* | `Global attribute` | 。 |
+| *type* | `<button>, <input>, <command>, <embed>, <object>, <script>, <source>, <style>, <menu>` | 。 |
+| *usemap* | `<img>,  <input>, <object>` | 。 |
+| *value* | `<button>, <option>, <input>, <li>, <meter>, <progress>, <param>` | 。 |
+| *width* | `<canvas>, <embed>, <iframe>, <img>, <input>, <object>, <video>` | 。 |
+| *wrap* | `<textarea>` | 。 |
 
 
-## 全局属性
 
 
-## 链接类型
+
+
