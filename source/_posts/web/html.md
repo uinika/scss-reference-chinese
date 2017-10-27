@@ -556,6 +556,8 @@ W3C的HTML规范声明放弃使用的元素。
 
 ## 全局HTML属性
 
+可以应用在所有HTML元素上面。
+
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
 | *accesskey* | `全局属性` | 定义focus到指定元素的快捷键。 |
@@ -578,7 +580,7 @@ W3C的HTML规范声明放弃使用的元素。
 
 ## 其它HTML属性
 
-HTML元素的属性可以用来配置或修改HTML标签的行为。
+配置或修改指定HTML标签的行为。
 
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
