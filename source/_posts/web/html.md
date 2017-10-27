@@ -615,21 +615,21 @@ HTML元素的属性可以用来配置或修改HTML标签的行为。
 | *integrity* | `<link>, <script> ` | 实验特性，允许浏览器验证元素抓取内容的安全特性。 |
 | *ismap* | `<img>` | 标明这是服务器端图片映射的部分。 |
 | *itemprop* | `Global attribute` | 实验特性，。 |
-| *keytype* | `<keygen>` | 。 |
-| *kind* | `<track>` | 。 |
-| *label* | `<track>` | 。 |
-| *lang* | `Global attribute` | 。 |
-| *language* | `<script>` | 。 |
-| *list* | `<input>` | 。 |
-| *loop* | `<audio>, <bgsound>, <marquee>, <video>` | 。 |
-| *low* | `<meter>` | 。 |
-| *manifest* | `<html>` | 。 |
-| *max* | `<input>, <meter>, <progress>` | 。 |
-| *maxlength* | `<input>, <textarea>` | 。 |
-| *minlength* | `<input>, <textarea>` | 。 |
-| *media* | `<a>, <area>, <link>, <source>, <style>` | 。 |
-| *method* | `<form>` | 。 |
-| *min* | `<input>, <meter>` | 。 |
+| *keytype* | `<keygen>` | 已废弃，指定key的类型。 |
+| *kind* | `<track>` | 指定一种text track。 |
+| *label* | `<track>` | 指定text track的用户可读标题。 |
+| *lang* | `Global attribute` | 定义元素中所使用的语言。 |
+| *language* | `<script>` | 定义`<script>`元素中使用的脚本语言。 |
+| *list* | `<input>` | 标识一组建议给用户的预定义选项列表。 |
+| *loop* | `<audio>, <bgsound>, <marquee>, <video>` | 指定多媒体循环播放。 |
+| *low* | `<meter>` | 标识低量程的最大值。 |
+| *manifest* | `<html>` | 指定文档缓存清单的URL。 |
+| *max* | `<input>, <meter>, <progress>` | 标示允许的最大值。 |
+| *maxlength* | `<input>, <textarea>` | 标识元素允许的最大字符数。 |
+| *minlength* | `<input>, <textarea>` | 标识元素允许的最小字符数。 |
+| *media* | `<a>, <area>, <link>, <source>, <style>` | 为链接的资源指定一种多媒体的提示。 |
+| *method* | `<form>` | 定义表单使用哪种HTTP请求方式进行提交。 |
+| *min* | `<input>, <meter>` | 指定允许的最小值。 |
 | *multiple* | `<input>, <select>` | 。 |
 | *muted* | `<audio>, <video>` | 。 |
 | *name* | `<button>, <form>, <fieldset>, <iframe>, <input>, <keygen>, <object>, <output>, <select>, <textarea>, <map>, <meta>, <param>` | 。 |
