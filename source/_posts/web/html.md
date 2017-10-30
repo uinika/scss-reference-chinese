@@ -556,7 +556,7 @@ W3C的HTML规范声明放弃使用的元素。
 
 ## 全局HTML属性
 
-可以应用在所有HTML元素上面。
+所有HTML元素都通用的属性值。
 
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
@@ -578,7 +578,7 @@ W3C的HTML规范声明放弃使用的元素。
 
 ## 其它HTML属性
 
-配置或修改指定HTML标签的行为。
+配置指定HTML标签的特性或行为。
 
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
@@ -671,5 +671,3 @@ W3C的HTML规范声明放弃使用的元素。
 | *usemap* | `<img>,  <input>, <object>` | 元素关联图片的URL片断（*以符号`#`开头*）。 |
 | *value* | `<button>, <option>, <input>, <li>, <meter>, <progress>, <param>` | 定义页面加载时HTML元素显示的默认值。 |
 | *wrap* | `<textarea>` | 标识文本换行方式。 |
-
-
