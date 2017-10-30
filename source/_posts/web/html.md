@@ -560,22 +560,20 @@ W3C的HTML规范声明放弃使用的元素。
 
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
-| *accesskey* | `全局属性` | 定义focus到指定元素的快捷键。 |
-| *class* | `全局属性` | 通常与CSS联用去添加元素的样式。 |
-| *contenteditable* | `全局属性` | 指定元素当中的内容是否可以进行编辑。 |
-| *data-* | `全局属性` | 附着自定义属性到HTML元素。 |
+| *accesskey* | `全局属性` | 定义*focus*至指定HTML元素的快捷键。 |
+| *class* | `全局属性` | 通常用于添加CSS样式。 |
+| *contenteditable* | `全局属性` | 指定HTML元素中的内容是否可以编辑。 |
+| *data-* | `全局属性` | 添加自定义属性到HTML元素。 |
 | *dir* | `全局属性` | 定义文本方向，属性值可以是`ltr`（*Left-To-Right*）或者`rtl`（*Right-To-Left*）。 |
-| *draggable* | `全局属性` | 定义元素是否可以进行拖动。 |
-| *dropzone* | `全局属性` | 标明接收拖放内容的元素。 |
+| *draggable* | `全局属性` | 定义HTML元素是否能够执行拖动操作。 |
+| *dropzone* | `全局属性` | 指定接收拖放内容的HTML元素。 |
 | *hidden* | `全局属性` | 不渲染指定的HTML元素。 |
-| *id* | `全局属性` | 通过用来设置CSS样式，其属性值必须唯一。 |
-| *itemprop* | `全局属性` | 实验特性，。 |
-| *lang* | `全局属性` | 定义元素中所使用的语言。 |
-| *slot* | `全局属性` | 将影子DOM阴影树中的一个槽分配给一个元素。 |
-| *spellcheck* | `全局属性` | 实验属性，是否进行拼写检查。 |
-| *style* | `全局属性` | 用于定义CSS样式。 |
-| *tabindex* | `全局属性` | 重写浏览器默认的tab顺序。 |
-| *title* | `全局属性` | 鼠标hover到元素上时显示的提示信息。 |
+| *id* | `全局属性` | 通常用来设置CSS样式，其**属性值必须唯一**。 |
+| *lang* | `全局属性` | 定义HTML元素中所使用的语言。 |
+| *style* | `全局属性` | 用于直接在HTML元素上定义CSS样式。 |
+| *tabindex* | `全局属性` | 重写浏览器默认的`tab`键顺序。 |
+| *title* | `全局属性` | 鼠标*hover*到HTML元素上时显示的提示信息。 |
+| *slot* | `实验属性` | 将影子DOM阴影树中的一个槽分配给一个元素。 |
 
 
 ## 其它HTML属性
@@ -584,96 +582,95 @@ W3C的HTML规范声明放弃使用的元素。
 
 | Attribute | Elements | Description |
 |:-----|:-----|:-----|
-| *accept* | `<form>, <input>` | 表单向服务器发送的文件类型。 |
-| *accept-charset* | `<form>` | 表单的字符集编码。 |
+| *accept* | `<form>, <input>` | 表单向服务器提交的文件类型。 |
+| *accept-charset* | `<form>` | 表单字符集编码。 |
 | *action* | `<form>` | 表单提交的远程URI。 |
 | *align* | `<applet>, <caption>, <col>, <colgroup>,  <hr>, <iframe>, <img>, <table>, <tbody>,  <td>,  <tfoot> , <th>, <thead>, <tr>` | 指定元素的水平对齐方式。 |
 | *alt* | `<applet>, <area>, <img>, <input>` | 图片无法显示时的替换文字。 |
-| *async* | `<script>` | 标识当前脚本将会被异步执行。 |
-| *autocomplete* | `<form>, <input>` | 指定控件是否能由浏览器进行自动填充。 |
-| *autofocus* | `<button>, <input>, <keygen>, <select>, <textarea>` | 页面加载后输入焦点自动focus到该元素。 |
-| *autoplay* | `<audio>, <video>` | 自动播放音视频。 |
-| *buffered* | `<audio>, <video>` | 指定缓冲媒体的时间范围。 |
-| *challenge* | `<keygen>` | 与公钥一同被提交的challenge string。 |
-| *charset* | `<meta>, <script>` | 声明页面脚本的字符串编码。 |
-| *checked* | `<command>, <input>` | 标识页面加载后哪个元素会被默认选中。 |
-| *cite* | `<blockquote>, <del>, <ins>, <q>` | 包含引用或修改的资源URI。 |
-| *code* | `<applet>` | 指定需要执行的applet程序类文件的URI。 |
-| *codebase* | `<applet>` | 指定`code`属性中指定的applet类文件的绝对或相对URL。 |
+| *async* | `<script>` | 引用的JavaScript脚本将会被异步执行。 |
+| *autocomplete* | `<form>, <input>` | 表单是否能由浏览器进行自动填充。 |
+| *autofocus* | `<button>, <input>, <keygen>, <select>, <textarea>` | 页面加载后输入焦点自动*focus*至指定HTML元素。 |
+| *autoplay* | `<audio>, <video>` | 自动播放音、视频多媒体。 |
+| *buffered* | `<audio>, <video>` | 指定缓冲多媒体的时间范围。 |
+| *challenge* | `<keygen>` | 与公钥一同被提交的*challenge string*。 |
+| *charset* | `<meta>, <script>` | 声明页面脚本当中的字符串编码。 |
+| *checked* | `<command>, <input>` | 标识页面加载后默认选中的HTML元素。 |
+| *cite* | `<blockquote>, <del>, <ins>, <q>` | 包含引用或修改资源的URI。 |
+| *code* | `<applet>` | 指定需要执行的`applet`类文件的URI。 |
+| *codebase* | `<applet>` | 指定`code`属性中指定的`applet`类文件的绝对或相对URL。 |
 | *cols* | `<textarea>` | 定义输入域的列数。 |
 | *colspan* | `<td>, <th>` | 定义一个单元格所跨越的列数。 |
-| *content* | `<meta>` | 依赖于上下文的`http-equiv`或`name`的关联值。 |
-| *controls* | `<audio>, <video>` | 指示浏览器是否向用户显示回放控件。 |
-| *coords* | `<area>` | 指定热点区域的坐标值。 |
-| *crossorigin* | `<audio>, <img>, <link>, <script>, <video>` | 指示元素如何去处理跨域请求。 |
-| *data* | `<object>` | 指定资源的URL。 |
-| *datetime* | `<del>, <ins>, <time>` | 标识关联到元素的日期与时间。 |
-| *default* | `<track>` | 指定可用的多媒体轨道。 |
-| *defer* | `<script>` | 指示脚本在页面解析完成后再执行。 |
-| *disabled* | `<button>, <command>, <fieldset>, <input>, <keygen>, <optgroup>, <option>, <select>, <textarea>` | 标示用户是否可以对元素进行交互。 |
+| *content* | `<meta>` | 包含`http-equiv`或`name`属性的值（具体哪个取决于上下文）。 |
+| *controls* | `<audio>, <video>` | 是否向用户显示回放控件。 |
+| *coords* | `<area>` | 用于标识图片`<img>`热点区域的坐标值。 |
+| *crossorigin* | `<audio>, <img>, <link>, <script>, <video>` | 指示该HTML元素如何处理跨域请求。 |
+| *data* | `<object>` | 指定外部资源的URL，例如1个flash视频。 |
+| *datetime* | `<del>, <ins>, <time>` | 标识关联到指定HTML元素的日期与时间。 |
+| *default* | `<track>` | 指定默认的多媒体轨道。 |
+| *defer* | `<script>` | 指示脚本在页面解析完成之后再进行执行。 |
+| *disabled* | `<button>, <command>, <fieldset>, <input>, <keygen>, <optgroup>, <option>, <select>, <textarea>` | 使指定HTML元素失效并且不能交互。 |
 | *download* | `<a>, <area>` | 标识用于下载资源的超链接。 |
-| *enctype* | `<form>` | 当表单的`method`属性为`POST`时，该元素用来指定表单内容的MIME类型 。 |
-| *for* | `<label>, <output>` | 需要进行标注或用户输出的HTML元素ID |
-| *form* | `<button>, <fieldset>, <input>, <keygen>, <label>, <meter>, <object>, <output>, <progress>, <select>, <textarea>` | 表单元素。 |
+| *enctype* | `<form>` | 当表单`method`属性为`POST`时，用来指定表单内容的**MIME**类型 。 |
+| *for* | `<label>, <output>` | 需要进行标注或用户输出的HTML元素的ID |
+| *form* | `<button>, <fieldset>, <input>, <keygen>, <label>, <meter>, <object>, <output>, <progress>, <select>, <textarea>` | 指明HTML元素属于哪个表单。 |
 | *formaction* | `<input>, <button>` | 单独标识元素的`action`行为，会对`<form>`上的`action`造成覆盖。 |
-| *headers* | `<td>, <th>` | 应用到该元素上的`<th>`的ID。 |
-| *high* | `<meter>` | 。 |
+| *headers* | `<td>, <th>` | 包含一个空格分隔的字符串列表，每个字符串对应于此元素相关的`<th>`的`id`属性。 |
 | *href* | `<a>, <area>, <base>, <link>` | 链接资源的URL。 |
-| *hreflang* | `<a>, <area>, <link>` | 指定链接资源的语言。 |
-| *http-equiv* | `<meta>` | 包含HTTP协议头名称，可以改变浏览器和服务器的行为，目前仅有`content-security-policy`和`refresh`两个属性值可用，其它属性值已被废弃或被推荐以其它方式进行定义。 |
-| *integrity* | `<link>, <script> ` | 实验特性，允许浏览器验证元素抓取内容的安全特性。 |
-| *ismap* | `<img>` | 标明这是服务器端图片映射的部分。 |
-| *kind* | `<track>` | 指定一种text track。 |
-| *label* | `<track>` | 指定text track的用户可读标题。 |
-| *language* | `<script>` | 定义`<script>`元素中使用的脚本语言。 |
-| *list* | `<input>` | 标识一组建议给用户的预定义选项列表。 |
-| *loop* | `<audio>, <bgsound>, <marquee>, <video>` | 指定多媒体循环播放。 |
-| *low* | `<meter>` | 标识低量程的最大值。 |
-| *manifest* | `<html>` | 指定文档缓存清单的URL。 |
-| *max* | `<input>, <meter>, <progress>` | 标示允许的最大值。 |
-| *maxlength* | `<input>, <textarea>` | 标识元素允许的最大字符数。 |
-| *minlength* | `<input>, <textarea>` | 标识元素允许的最小字符数。 |
-| *media* | `<a>, <area>, <link>, <source>, <style>` | 为链接的资源指定一种多媒体的提示。 |
-| *method* | `<form>` | 定义表单使用哪种HTTP请求方式进行提交。 |
-| *min* | `<input>, <meter>` | 指定允许的最小值。 |
-| *multiple* | `<input>, <select>` | 标识类型为`email`或者`file`的输入控件是否能进行多选操作。 |
-| *muted* | `<audio>, <video>` | 页面加载时设置静音。 |
-| *name* | `<button>, <form>, <fieldset>, <iframe>, <input>, <keygen>, <object>, <output>, <select>, <textarea>, <map>, <meta>, <param>` | 元素的名称，可以用于标识表单域。 |
-| *novalidate* | `<form>` | 取消表单验证。 |
-| *open* | `<details>` | 标识页面加载时是否展示详细内容。 |
-| *optimum* | `<meter>` | 标识一个最优的数值。 |
+| *hreflang* | `<a>, <area>, <link>` | 指定链接资源使用的语言。 |
+| *http-equiv* | `<meta>` | 包含HTTP协议头名称，可以改变浏览器和服务器的行为，目前仅有`content-security-policy`和`refresh`两个属性值可用，其它属性值已被废弃或被推荐以其它方式定义。 |
+| *integrity* | `<link>, <script>` | 实验特性，允许浏览器验证HTML元素获取内容的安全性，目前仅Chrome和Firefox支持。 |
+| *ismap* | `<img>` | 标识`<img>`是服务器端图片映射的一部分。 |
+| *kind* | `<track>` | 指定一种*text track*。 |
+| *label* | `<track>` | 指定*text track*的用户可读标题。 |
+| *list* | `<input>` | 一组显示给用户的预定义的输入建议列表，其值是`<datalist>`元素的ID属性。 |
+| *loop* | `<audio>, <bgsound>, <marquee>, <video>` | 是否单曲循环播放多媒体内容。 |
+| *low* | `<meter>` | 标识低量程的上界。 |
+| *high* | `<meter>` | 标识高量程的下界。 |
+| *manifest* | `<html>` | 指定文档缓存清单的URL地址，CANIUSE显示仅Chrome对该属性支持良好，但Mozilla社区标识该属性已得到大部份浏览器支持，不过已经过时且有可能被废弃。 |
+| *min* | `<input>, <meter>` | 指定HTML表单元素允许的最**小**值。 |
+| *max* | `<input>, <meter>, <progress>` | 指定HTML表单元素允许的最**大**值。 |
+| *maxlength* | `<input>, <textarea>` | 标识指定表单元素允许的最**大**字符数。 |
+| *minlength* | `<input>, <textarea>` | 标识指定表单元素允许的最**小**字符数。 |
+| *media* | `<a>, <area>, <link>, <source>, <style>` | 指定HTML元素链接资源所应用的媒体类型。 |
+| *method* | `<form>` | 定义表单的HTTP请求方式。 |
+| *multiple* | `<input>, <select>` | 标识`email`或`file`类型的输入域是否可以进行多选操作。 |
+| *muted* | `<audio>, <video>` | 页面加载后多媒体默认为静音模式。 |
+| *name* | `<button>, <form>, <fieldset>, <iframe>, <input>, <keygen>, <object>, <output>, <select>, <textarea>, <map>, <meta>, <param>` | 元素的名称，可用于标识表单域。 |
+| *novalidate* | `<form>` | 提交时当前表单不进行验证。 |
+| *open* | `<details>` | 页面加载时是否展示详细内容。 |
+| *optimum* | `<meter>` | 该属性用于标识一个位于`max`和`min`之间的最优数值。 |
 | *pattern* | `<input>` | 定义输入域内容的正则表达式校验。 |
-| *ping* | `<a>, <area>` | 。 |
-| *placeholder* | `<input>, <textarea>` | 向用户提供一个可以输入字段的提示。 |
-| *poster* | `<video>` | 用来定义海报封面的URL。 |
+| *ping* | `<a>` | 表示浏览器会发送1个ping请求到该属性指向的资源，Mozilla标识该元素受IE、Safari以外的其它浏览器支持，但是CANIUSE认为仅Chrome和Safari支持良好。 |
+| *placeholder* | `<input>, <textarea>` | 在表单输入域上展示用户信息提示。 |
+| *poster* | `<video>` | 标识多媒体视频的海报封面URL地址。 |
 | *preload* | `<audio>, <video>` | 定义预加载的多媒体内容。 |
-| *radiogroup* | `<command>` | 。 |
-| *readonly* | `<input>, <textarea>` | 标识元素是否可以进行编辑操作。 |
+| *radiogroup* | `<command>` | 用于指定一组命令的名称，Moziila和CANIUSE都标识该属性暂未获得任何浏览器的支持。 |
+| *readonly* | `<input>, <textarea>` | 标识指定表单元素是否能够进行编辑，或是以只读方式进行展示。 |
 | *rel* | `<a>, <area>, <link>` | 指定目标对象与链接对象之间的关系。 |
-| *required* | `<input>, <select>, <textarea>` | 标识该输入控件是否为必填。 |
+| *required* | `<input>, <select>, <textarea>` | 标识该表单控件是否为必填项。 |
 | *reversed* | `<ol>` | 让列表倒序进行排列。 |
 | *rows* | `<textarea>` | 定义文本输入域的行数。 |
 | *rowspan* | `<td>, <th>` | 定义表格单元跨越的行数。 |
-| *sandbox* | `<iframe>` | 。 |
-| *scope* | `<th>` | 。 |
-| *scoped* | `<style>` | 。 |
-| *seamless* | `<iframe>` | 。 |
-| *selected* | `<option>` | 定义页面加载时默认选择的元素。 |
-| *shape* | `<a>, <area>` | 。 |
-| *size* | `<input>, <select>` | 定义输入域的宽度尺寸。 |
+| *sandbox* | `<iframe>` | 该属性用于对内联框架中出现的内容进行额外限制，属性值可以是空字符串（*所有的限制都适用*）或者是空格分隔的令牌（*解除特定限制*）。 |
+| *scope* | `<th>` | 定义表格头部`<th>`中的单元格，拥有`row, col, rowgroup, colgroup, auto`这几个枚举属性值。 |
+| *scoped* | `<style>` | 指定样式只应用于该元素的父元素及其子元素，该属性仅Firefox支持，且已经过时，并不保证使用正常。 |
+| *selected* | `<option>` | 页面加载时，表单元素`<select>`的默认选项。 |
+| *shape* | `<a>, <area>` | 该属性用于在超链接区域创建图像映射，仅有Chrome和Safari支持，仅用于HTML4，且HTML5当中已经过时。 |
+| *spellcheck* | `<textarea>, <input>` | 是否对文本域、输入域进行拼写检查。 |
+| *size* | `<input>, <select>` | 指定输入域元素的宽度尺寸。 |
 | *sizes* | `<link>, <img>, <source>` | 。 |
-| *span* | `<col>, <colgroup>` | 。 |
-| *src* | `<audio>, <embed>, <iframe>, <img>, <input>, <script>, <source>, <track>, <video>` | 可嵌入内容的URL。 |
-| *srcdoc* | `<iframe>` | 。 |
-| *srclang* | `<track>` | 指明音轨文本数据（*字幕*）的语言。 |
-| *srcset* | `<img>` | 定义一个图片资源可能的集合。 |
-| *start* | `<ol>` | 定义除了`1`之外的第一个数字。 |
-| *step* | `<input>` | 与`min`和`max`结合使用，设置数字或日期的增量限制。 |
+| *span* | `<col>, <colgroup>` | 该属性包含一个正整数，表示该HTML元素所跨越的连续列个数，通常默认值为**1**。 |
+| *src* | `<audio>, <embed>, <iframe>, <img>, <input>, <script>, <source>, <track>, <video>` | 需要嵌入页面的内容的URL。 |
+| *srcdoc* | `<iframe>` | 覆盖父元素`src`属性指定的内容，仅IE和Eage不支持该属性。 |
+| *srclang* | `<track>` | 多媒体轨道的文本数据（*字幕*）的国家语言类型。 |
+| *srcset* | `<img>` | 为一个`<img>`元素定义多个图片资源，从而使浏览器在合适的时刻选择相应图片（*例如在高分辨率屏幕下*），IE以外的浏览器都兼容该属性。 |
+| *start* | `<ol>` | 定义有序列表的起始数值。 |
+| *step* | `<input>` | 与`min`和`max`结合使用，设置数字值或者日期时间的增量限制。 |
 | *summary* | `<table>` | 用于定义表格的概述文本。 |
-| *target* | `<a>, <area>, <base>, <form>` | 指定打开URL链接的方式，可选值有`_self`、`_blank`、`_parent`、`_top`，其中`<form>`元素的还可以选择`iframename`。 |
-| *type* | `<button>, <input>, <command>, <embed>, <object>, <script>, <source>, <style>, <menu>` | 定义元素的类型。 |
+| *target* | `<a>, <area>, <base>, <form>` | 指定URL链接的打开方式，可选值有`_self`、`_blank`、`_parent`、`_top`，其中`<form>`元素还可以选择`iframename`值。 |
+| *type* | `<button>, <input>, <command>, <embed>, <object>, <script>, <source>, <style>, <menu>` | 定义HTML元素的类型。 |
 | *usemap* | `<img>,  <input>, <object>` | 元素关联图片的URL片断（*以符号`#`开头*）。 |
-| *value* | `<button>, <option>, <input>, <li>, <meter>, <progress>, <param>` | 定义页面加载时，元素的默认值。 |
+| *value* | `<button>, <option>, <input>, <li>, <meter>, <progress>, <param>` | 定义页面加载时HTML元素显示的默认值。 |
 | *wrap* | `<textarea>` | 标识文本换行方式。 |
 
 
