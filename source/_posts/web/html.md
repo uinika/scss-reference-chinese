@@ -658,12 +658,11 @@ W3C的HTML规范声明放弃使用的元素。
 | *shape* | `<a>, <area>` | 该属性用于在超链接区域创建图像映射，仅有Chrome和Safari支持，仅用于HTML4，且HTML5当中已经过时。 |
 | *spellcheck* | `<textarea>, <input>` | 是否对文本域、输入域进行拼写检查。 |
 | *size* | `<input>, <select>` | 指定输入域元素的宽度尺寸。 |
-| *sizes* | `<link>, <img>, <source>` | 。 |
-| *span* | `<col>, <colgroup>` | 该属性包含一个正整数，表示该HTML元素所跨越的连续列个数，通常默认值为**1**。 |
+| *sizes / srcset* | `<img>, <source>` | 为HTML元素定义多个图片资源，使浏览器在恰当的时刻显示相应图片（*例如在高分辨率屏幕下*），仅IE11及以下浏览器不兼容该属性。 |
+| *span* | `<col>, <colgroup>` | 该属性值为一个正整数，表示该HTML元素所跨越的连续列个数，通常默认值为**1**。 |
 | *src* | `<audio>, <embed>, <iframe>, <img>, <input>, <script>, <source>, <track>, <video>` | 需要嵌入页面的内容的URL。 |
 | *srcdoc* | `<iframe>` | 覆盖父元素`src`属性指定的内容，仅IE和Eage不支持该属性。 |
 | *srclang* | `<track>` | 多媒体轨道的文本数据（*字幕*）的国家语言类型。 |
-| *srcset* | `<img>` | 为一个`<img>`元素定义多个图片资源，从而使浏览器在合适的时刻选择相应图片（*例如在高分辨率屏幕下*），IE以外的浏览器都兼容该属性。 |
 | *start* | `<ol>` | 定义有序列表的起始数值。 |
 | *step* | `<input>` | 与`min`和`max`结合使用，设置数字值或者日期时间的增量限制。 |
 | *summary* | `<table>` | 用于定义表格的概述文本。 |
