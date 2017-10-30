@@ -670,4 +670,4 @@ W3C的HTML规范声明放弃使用的元素。
 | *type* | `<button>, <input>, <command>, <embed>, <object>, <script>, <source>, <style>, <menu>` | 定义HTML元素的类型。 |
 | *usemap* | `<img>,  <input>, <object>` | 元素关联图片的URL片断（*以符号`#`开头*）。 |
 | *value* | `<button>, <option>, <input>, <li>, <meter>, <progress>, <param>` | 定义页面加载时HTML元素显示的默认值。 |
-| *wrap* | `<textarea>` | 标识文本换行方式。 |
+| *wrap* | `<textarea>` | 标识文本换行的方式。 |
