@@ -12,25 +12,154 @@ categories: Web
 
 ## 层叠优先级
 
-浏览器通过层叠样式表的优先级判断哪些CSS属性值与HTML元素最为相关，从而在该HTML元素上应用这些CSS属性值。当HTML元素同时拥有多个CSS声明时，每条CSS规则都会**接管**或者**覆盖**该元素从祖先元素继承而来的规则。
+浏览器通过层叠样式表的**优先级**判断哪些CSS属性值与HTML元素相关，当HTML元素同时拥有多个CSS声明时，每条高优先级的CSS规则都会**覆盖**低优先级规则。
 
-### 定义位置优先级
+> CSS层叠样式表的优先级是一种**权重**，当多个CSS优先级权重相同时，**声明位置最后**的那个声明将会被应用。
+
+### 声明位置的优先级
 
 按照样式**声明与定义位置**的不同，优先级**由高向低**排列如下：
 
 1. 行内样式：`<span style="">`
-2. 内嵌样式表：`<style></style>`
-3. 引入的外部样式表：`<link href="demo.css" rel="stylesheet" />`
+2. 内嵌样式：`<style></style>`
+3. 外部样式：`<link href="demo.css" rel="stylesheet" />`
 
-### 选择器优先级
+### 选择器类型的优先级
 
 按照所使用**CSS选择器**的不同，优先级**由高向低**排列如下：
 
-1. ID选择器（*例如`#example`*）
-2. 类选择器（*例如`.example`*），属性选择器（*例如`[type="radio"]`*），伪类选择器（*例如`:hover`*）
-3. 类型选择器（*例如`h1`*）和 伪元素（*例如`::before`*）
+1. ID选择器（`#example`）
+2. 类选择器（`.example`），属性选择器（`[type="radio"]`），伪类选择器（`:hover`）
+3. 类型选择器（`h1`）和 伪元素选择器（`::before`）
 
-> 通用选择器（`*`）、组合选择器（*`+, >, ~, ' '`*）、否定伪类选择器（*`:not()`*）对特异性没有影响（*但`:not()`内声明的选择器会影响优先级*）。
+```html
+<p id='p' class='p'>
+  Color is blue!
+</p>
+
+<style>
+p  {color: red !important;}
+.p {color: green !important;}
+#p {color: blue !important;} // 优先级最高
+</style>
+```
+
+> 通用选择器（`*`）、组合选择器（*`+, >, ~, ' '`*）*
+
+### :not伪类的优先级
+
+否定伪类选择器`:not()`本身对优先级没有影响，但是`:not()`**内部声明的选择器**会影响到层叠的优先级。
+
+```html
+<div class="outer">
+  <p>Color is orange !</p>
+  <div class="inner">
+    <p>Color is yellow !</p>
+  </div>
+</div>
+
+<style>
+div.outer p {
+  color:orange;
+}
+div:not(.outer) p {
+  color: yellow;
+}
+</style>
+```
+
+### ！important优先级
+
+两条相互冲突的`!important`规则被应用到相同HTML元素时，拥有更大优先级的声明将会被采用。`!important`会破坏CSS固有的级联规则，为调试和debug带来困难，因此应尽量考虑使用样式规则的优先级去解决问题，通过更好的利用CSS级联属性，或者使用更加**具体**的选择器，去获得更高的优先级。
+
+```html
+<article>
+  <section>
+    <p>Color is yellow!</p>
+  </section>
+</article>
+
+<style>
+article {color: red !important}
+section {color: green !important}
+p       {color: blue !important}
+article section p {color: yellow !important} // 优先级最高
+</style>
+```
+
+> 如果需要覆盖`!important`，可以再添加一条优先级更高的`!important`即可。
+
+### 更加详细选择器的优先级
+
+CSS选择器越详细，其对应的优先级就越高。
+
+```html
+<div id="demo">
+  <span id='text'>Text</span>
+</div>
+
+<style>
+div#demo span {color: green} // 最终生效的样式
+#text {color: red}
+div span {color: blue}
+</style>
+```
+
+### 基于选择器形式的优先级
+
+优先级总是基于选择器的类型进行计算的，下面代码尽管`*[id="demo"]`选择了**ID**，但是依然会作为*属性选择器*去计算自身的优先级。
+
+```css
+#demo {
+  color: green; // 最终生效的样式
+}
+
+*[id="demo"] {
+  color: purple;
+}
+```
+
+### 忽略CSS选择器在DOM当中的实际距离
+
+实际DOM中的**距离**或**深度**，并不计入CSS层叠样式权重的考量。
+
+```html
+<html>
+  <body>
+    <h1>Color is purple!</h1>
+  </body>
+</html>
+
+<style>
+body h1 {
+  color: green;
+}
+html h1 {
+  color: purple; // 最终生效的样式
+}
+</style>
+```
+
+### 直接的目标元素样式与从父元素继承的样式。
+
+直接向目标元素添加的样式，其优先级总是**高于**从父元素继承的样式。
+
+```html
+<html>
+  <body id="parent">
+    <h1>Color is purple!</h1>
+  </body>
+</html>
+
+<style>
+#parent {
+  color: green;
+}
+h1 {
+  color: purple; // 最终生效的样式
+}
+</style>
+```
 
 ### 样式继承
 
