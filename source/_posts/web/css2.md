@@ -365,7 +365,7 @@ div {
 .test3 { float: left; }
 ```
 
-![](css2/float-1.png)
+![](css2/float-1.png "clear属性应用于浮动元素")
 
 ```css
 .test1 { float: left; }
@@ -375,7 +375,7 @@ div {
 .test3 { float: left; }
 ```
 
-![](css2/float-2.png)
+![](css2/float-2.png "clear属性应用于非浮动元素")
 
 
 
@@ -1083,13 +1083,28 @@ CSS2.1当中最终极和完美的居中技术是通过**影子HTML元素**，如
 
 ## CSS精灵
 
+
+## text-align
+
+`text-align`属性用来定义**行内**内容（*例如文字*）如何相对其块级父元素对齐，该CSS属性并不控制块级元素自身的对齐，只控制块级元素内部的行内内容的对齐方式。
+
+- `left`：行内内容向**左侧**对齐。
+- `right`：行内内容向**右侧**对齐。
+- `center`：行内内容**居中**。
+- `justify`：行内内容向**两端**对齐。
+- `start`：行内内容对齐**开始**边界，如果文字方向是*left-to-right*，作用与`left`属性值相同；如果文字方向是*right-to-left*，作用与`right`属性值相同。
+- `end`：行内内容对齐**结束**边界，如果文字方向是*left-to-right*，作用与`right`属性值相同；如果文字方向是*right-to-left*，作用与`left`属性值相同。
+
+![](css2/text-align.png "text-align不同属性值的行内文字效果")
+
+
 ## margin负值
+
+
+## line-height
 
 
 ## vertical-align
 
-## line-height
-
-## text-align
 
 ## 溢出与换行
