@@ -41,9 +41,9 @@ height = "border + padding + 内容区height"
 
 最近的W3C草案称为**Flexbox Layout**（笔者文章中统一翻译为**伸缩布局**），主要用于更有效的排列、布局、分配container中items之间的空间，即使是在这些元素尺寸未知或者动态的时候。Flex伸缩布局的主要思想，是让container具体改变其中items宽度、高度、顺序的能力，从而更优雅的填充可利用空间，并在它们缩小时防止overflow发生。
 
-![](css3/flex-container.png "container")
+![](css3/flex-container.png "容器container")
 
-![](css3/flex-items.png "items")
+![](css3/flex-items.png "条目items")
 
 > Flex非常适用于组件级别、小粒度的页面布局，更大粒度的布局可以考虑使用Grid。
 
@@ -61,25 +61,25 @@ height = "border + padding + 内容区height"
 
 #### flex-direction
 
-![](css3/flex-items.png "flex-direction")
+![](css3/flex-direction.png "flex-direction")
 
 #### flex-wrap
 
-![](css3/flex-items.png "flex-wrap")
+![](css3/flex-wrap.png "flex-wrap")
 
 #### flex-flow
 
 #### justify-content
 
-![](css3/flex-items.png "justify-content")
+![](css3/justify-content.png "justify-content")
 
 #### align-items
 
-![](css3/flex-items.png "align-items")
+![](css3/align-items.png "align-items")
 
 #### align-content
 
-![](css3/flex-items.png "align-content")
+![](css3/align-content.png "align-content")
 
 
 ### items的属性
