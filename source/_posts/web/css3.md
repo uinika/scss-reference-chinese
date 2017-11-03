@@ -86,7 +86,13 @@ height = "border + padding + 内容区height"
 
 #### order
 
+![](css3/order.png "order")
+
+
 #### flex-grow
+
+![](css3/flex-grow.png "flex-grow")
+
 
 #### flex-shrink
 
@@ -96,6 +102,7 @@ height = "border + padding + 内容区height"
 
 #### align-self
 
+![](css3/align-self.png "align-self")
 
 ## grid
 
