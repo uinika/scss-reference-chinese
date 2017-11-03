@@ -37,32 +37,67 @@ height = "border + padding + 内容区height"
 ```
 
 
-
 ## flex
 
-flex的所有特性都构建在**容器**（*父容器、子容器*）、**轴**（*主轴、交叉轴*）两个概念之上。
+最近的W3C草案称为**Flexbox Layout**（笔者文章中统一翻译为**伸缩布局**），主要用于更有效的排列、布局、分配container中items之间的空间，即使是在这些元素尺寸未知或者动态的时候。Flex伸缩布局的主要思想，是让container具体改变其中items宽度、高度、顺序的能力，从而更优雅的填充可利用空间，并在它们缩小时防止overflow发生。
 
-### 容器
+![](css3/flex-container.png "container")
 
-父容器可以设置子容器的排列方式，子容器也可以单独设置自身排列方式，如果同时设置，则以子容器设置为准。
+![](css3/flex-items.png "items")
 
-#### 父容器
+> Flex非常适用于组件级别、小粒度的页面布局，更大粒度的布局可以考虑使用Grid。
 
-##### justify-content
+### container的属性
 
-让父容器器下的所有子容器沿着主轴排列。
+#### display
 
-- flex-start：（起始端对齐）
-- flex-end：（末尾段对齐）
-- center（居中对齐）
-- space-around（子容器沿主轴均匀分布，首尾两端子容器与父容器的间距是子容器之间间距的一半）
-- space-between（子容器沿主轴均匀分布，首尾两端的子容器与父容器相切）
+定义一个flex container，可以设置行内或者块级元素，可以让其直接子元素进入flex上下文。
 
-##### align-items
+```css
+.container {
+  display: flex; /* or inline-flex */
+}
+```
 
-义如何沿着交叉轴方向分配子容器的间距。
+#### flex-direction
 
-### 轴
+![](css3/flex-items.png "flex-direction")
+
+#### flex-wrap
+
+![](css3/flex-items.png "flex-wrap")
+
+#### flex-flow
+
+#### justify-content
+
+![](css3/flex-items.png "justify-content")
+
+#### align-items
+
+![](css3/flex-items.png "align-items")
+
+#### align-content
+
+![](css3/flex-items.png "align-content")
+
+
+### items的属性
+
+#### order
+
+#### flex-grow
+
+#### flex-shrink
+
+#### flex-basis
+
+#### flex
+
+#### align-self
+
+
+## grid
 
 ## transition
 
