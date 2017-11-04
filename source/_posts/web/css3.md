@@ -39,7 +39,7 @@ height = "border + padding + 内容区height"
 
 ## flex
 
-最近的W3C草案称为**Flexbox Layout**（笔者文章中统一翻译为**伸缩布局**），主要用于更有效的排列、布局、分配container中items之间的空间，即使是在这些元素尺寸未知或者动态的时候。Flex伸缩布局的主要思想，是让container具体改变其中items宽度、高度、顺序的能力，从而更优雅的填充可利用空间，并在它们缩小时防止overflow发生。
+本段内容翻译自**CSS Tricks**社区的[《A Complete Guide to Flexbox》](https://css-tricks.com/snippets/css/a-guide-to-flexbox/)一文，Flex在最近的最近的W3C草案称为**Flexbox Layout**（笔者文章中统一翻译为**伸缩盒布局**），主要用于更有效的排列、布局、分配container中items之间的空间，即使是在这些元素尺寸未知或者动态的时候。Flex伸缩布局的主要思想，是让container具体改变其中items宽度、高度、顺序的能力，从而更优雅的填充可利用空间，并在它们缩小时防止overflow发生。
 
 ![](css3/flex-container.png "容器container")
 
@@ -51,7 +51,7 @@ height = "border + padding + 内容区height"
 
 #### display
 
-定义一个flex container，可以设置行内或者块级元素，可以让其直接子元素进入flex上下文。
+定义一个flex container，可以设置行内或者块级元素，设置之后其直接子元素将会纳入flex上下文。
 
 ```css
 .container {
@@ -61,13 +61,44 @@ height = "border + padding + 内容区height"
 
 #### flex-direction
 
+定义items在container中的排列方向，可以是**垂直**或者**水平**的方向。
+
 ![](css3/flex-direction.png "flex-direction")
+
+```css
+.container {
+  flex-direction: row | row-reverse | column | column-reverse;
+}
+```
+
+1. `row (默认)`: 在*ltr*环境下从**左**到**右**，*rtl*当中从**右**至**左**进行排列。 
+2. `row-reverse`: 在*ltr*环境下从**右**到**左**，*rtl*当中从**左**至**右**进行排列。
+3. `column`: 作用与`row`属性值类似，但是方向为从**上**至**下**。
+4. `column-reverse`: 作用与`row-reverse`属性值类似，但是方向为从**下**至**上**。
 
 #### flex-wrap
 
+默认情况下，items总是会试图填充一行，但是可以通过这个属性去调整这一行为，让items根据需要进行换行。
+
 ![](css3/flex-wrap.png "flex-wrap")
 
+```css
+.container{
+  flex-wrap: nowrap | wrap | wrap-reverse;
+}
+```
+
+`nowrap` (默认): 所有items将会位于同一行当中。
+`wrap`: items将会从**上**至**下**进行换行。
+`wrap-reverse`: items将会从**下**至**上**进行换行。
+
 #### flex-flow
+
+该属性是`flex-direction`和`flex-wrap`的简写，用来定义container的**main axes**和**cross axes**，其默认值为`row nowrap`。
+
+```css
+flex-flow: <‘flex-direction’> || <‘flex-wrap’>
+```
 
 #### justify-content
 
