@@ -141,8 +141,22 @@ flex-flow: <‘flex-direction’> || <‘flex-wrap’>
 
 #### align-content
 
+该属性用于设置当cross-axis拥有额外空间时，如何去排列container的行。类似于`justify-content`在main axis内如何排列每个**单独**的items行，因此当仅存在一个items行的时候，该属性并不会体现任何效果。
+
+```css
+.container {
+  align-content: flex-start | flex-end | center | space-between | space-around | stretch;
+}
+```
+
 ![](css3/align-content.png "align-content")
 
+`stretch (默认)`: container中的**行**伸缩并且占据剩余的空间。
+`flex-start`: container中的行放置在容器**起始**的位置。
+`flex-end`: container中的行放置在容器**结束**的位置。
+`center`: 容器里的行在container中处于**居中**位置。
+`space-between`: 第1行位于container起始的位置，最后1行位于container最后的位置，接下来**中间的行**进行平均分布。
+`space-around`: 每行都以**相同的间隔距离**均匀分布。
 
 ### items的属性
 
