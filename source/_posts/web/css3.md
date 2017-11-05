@@ -314,7 +314,7 @@ transition-delay: 2s, 4ms;
 
 ### transition
 
-该属性是`transition-property`, `transition-duration`, `transition-timing-function`, `transition-delay`的简写属性，可以快捷的定义HTML元素2种状态之间的转换，结合CSS伪类选择器（例如`:hover`和`:active`）共同定义交互的过渡状态，或者使用JavaScript动态的进行设置。
+该属性是`transition-property`, `transition-duration`, `transition-timing-function`, `transition-delay`的简写属性，可以快捷的定义HTML元素2种状态之间的转换，并结合CSS伪类选择器（例如`:hover`和`:active`）共同定义交互的过渡状态，或使用JavaScript动态的进行设置。
 
 ```css
 /* Order for complete property  */
