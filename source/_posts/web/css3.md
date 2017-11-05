@@ -253,8 +253,112 @@ items上的这个属性会覆写container上`align-items`属性的设置。
 
 ## transition
 
+CSS3中提供的transition特性，提供了CSS属性变化时控制动画速度的方式，代替了CSS属性发生变化时立刻进行渲染的特性。transition能够决定哪个CSS属性体现过渡效果（*transition-property*），过渡效果何时开始发生（*transition-delay*），过渡期会持续多久（*transition-duration*），过渡效果将会如何体现（*transition-timing-function*）。transition属性结合CSS伪类选择器进行使用，可以实现非常良好的用户体验。
+
+### transition-property
+
+指定需要应用过渡效果的CSS属性的名称。
+
+- `all`：所有能使用过渡的CSS属性全部有效。
+- `none`：没有CSS属性会产生过渡效果。
+- [可以使用过渡的CSS属性](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties)：指定需要产生过渡效果的CSS属性。
+
+```css
+transition-property: none;
+transition-property: all;
+transition-property: all, weight, height;
+```
+
+### transition-duration
+
+指定过渡动画持续的秒数或者毫秒数，默认值为`0s`，表明不会发生过渡效果。该属性可以同时指定多个持续时间值，这些时间会依次应用到`transition-property`上声明的属性。
+
+```css
+transition-duration: 6s;
+transition-duration: 120ms;
+transition-duration: 1s, 15s;
+transition-duration: 10s, 30s, 230ms;
+```
+
+### transition-timing-function
+
+描述CSS属性需要体现的过渡效果，通过建立一个加速曲线让过渡效果贯穿于`transition-duration`定义的持续时间，这些加速曲线使用[timing-function](https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function)进行定义。该属性同样可以一次指定多个timing-function，这些效果会在`transition-property`上依次应用。
+
+```css
+/* Keyword values */
+transition-timing-function: ease;
+transition-timing-function: ease-in;
+transition-timing-function: ease-out;
+transition-timing-function: ease-in-out;
+transition-timing-function: step-start;
+transition-timing-function: step-end;
+transition-timing-function: linear;
+
+/* Function values */
+transition-timing-function: frames(10);
+transition-timing-function: steps(4, end);
+transition-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+
+/* Multiple timing functions */
+transition-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
+```
+
+### transition-delay
+
+描述过渡效果的延迟等待时间，属性值为`0s`或`0ms`时表明过渡立即执行，为正值时会延迟过渡的执行时间，负值则会让过渡立刻开始（*但是可能会从中间状态开始*）。该属性依然可以指定多个延迟时间，这些时间会依次应用到`transition-property`上声明的属性。
+
+```css
+transition-delay: 3s;
+transition-delay: 2s, 4ms;
+```
+
+### transition
+
+该属性是`transition-property`, `transition-duration`, `transition-timing-function`, `transition-delay`的简写属性，可以快捷的定义HTML元素2种状态之间的转换，结合CSS伪类选择器（例如`:hover`和`:active`）共同定义交互的过渡状态，或者使用JavaScript动态的进行设置。
+
+```css
+/* Order for complete property  */
+transition: <property> <duration> <timing-function> <delay>;
+
+/* Apply to 1 property */
+/* property name | duration */
+transition: margin-right 4s;
+
+/* property name | duration | delay */
+transition: margin-right 4s 1s;
+
+/* property name | duration | timing function */
+transition: margin-right 4s ease-in-out;
+
+/* property name | duration | timing function | delay */
+transition: margin-right 4s ease-in-out 1s;
+
+/* Apply to 2 properties */
+transition: margin-right 4s, color 1s;
+
+/* Apply to all changed properties */
+transition: all 0.5s ease-out;
+```
 
 ## animation
+
+### animation
+
+### animation-delay
+
+### animation-direction
+
+### animation-duration
+
+### animation-fill-mode
+
+### animation-iteration-count
+
+### animation-name
+
+### animation-play-state
+
+### animation-timing-function
 
 
 ## transform
