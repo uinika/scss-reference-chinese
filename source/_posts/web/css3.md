@@ -162,19 +162,72 @@ flex-flow: <‘flex-direction’> || <‘flex-wrap’>
 
 #### order
 
+items默认按照HTML源代码的先后顺序排列，但是可以通过items的`order`属性来控制其在container中的顺序。
+
 ![](css3/order.png "order")
 
+```css
+.item {
+  order: <integer>; /* default is 0 */
+}
+```
 
 #### flex-grow
 
+用来定义items在container中按需扩展的属性，其属性值为**没有单位的比例值**，从而规定每个item所应该占据的空间。如果所有item的`flex-grow`设置为**1**，那么每个item将会均匀的占据container中剩余的空间。如果其中某个item的`flex-grow`设置为**2**，则将会占据其它item两倍的空间。
+
 ![](css3/flex-grow.png "flex-grow")
+
+```css
+.item {
+  flex-grow: <number>; /* default 0 */
+}
+```
+
+> `flex-grow`的属性值不能是**负数**，否则将会被认为是一个无效值。
 
 
 #### flex-shrink
 
+该属性用来设置item如何按需进行收缩，`shrink [ʃrɪŋk] n.收缩`。
+
+```css
+.item {
+  flex-shrink: <number>; /* default 1 */
+}
+```
+
+> `flex-shrink`的属性值同样不能为**负数**，否则会被认为无效。
+
 #### flex-basis
 
+设置container的剩余空间在分配以前的HTML元素默认尺寸，其属性值可以是**长度值**或者**关键字**。
+
+- `length`：单位数值，例如`20%`、`5rem`、`px`、`mm`、`pt`。
+- `auto`：基于items自身的高度和宽度属性。
+- `content`：根据items的内容自动调整大小尺寸，该主流浏览器对该关键字的支持还不太友好，因此包括类似的`max-content`, `min-content`, `fit-content`属性值较少被使用。
+
+```css
+.item {
+  flex-basis: <length> | auto; /* default auto */
+}
+```
+
+> `flex-basis`属性值如果设置为`0`，items内部内容以外的区域将不会被考虑。但如果设置为`auto`，剩余空间将基于`flex-grow`进行分配。
+
+![](css3/flex-basis.png "flex-basis")
+
 #### flex
+
+该属性是`flex-grow`, `flex-shrink`, `flex-basis`属性的简写，该属性值第2个参数（*flex-shrink*）、第3个参数（*flex-basis*）是可选的，默认值为`0 1 auto`。
+
+```css
+.item {
+  flex: none | [ <'flex-grow'> <'flex-shrink'>? || <'flex-basis'> ]
+}
+```
+
+> 推荐使用该简写属性来简化items的设置。
 
 #### align-self
 
