@@ -174,7 +174,7 @@ items默认按照HTML源代码的先后顺序排列，但是可以通过items的
 
 #### flex-grow
 
-用来定义items在container中按需扩展的属性，其属性值为**没有单位的比例值**，从而规定每个item所应该占据的空间。如果所有item的`flex-grow`设置为**1**，那么每个item将会均匀的占据container中剩余的空间。如果其中某个item的`flex-grow`设置为**2**，则将会占据其它item两倍的空间。
+用来定义items在container中**弹性伸展**的比例，其属性值为**没有单位的比例值**，从而规定每个item所应该占据的空间。如果所有item的`flex-grow`设置为**1**，那么每个item将会均匀的占据container中剩余的空间。如果其中某个item的`flex-grow`设置为**2**，则将会占据其它item两倍的空间。
 
 ![](css3/flex-grow.png "flex-grow")
 
@@ -189,7 +189,7 @@ items默认按照HTML源代码的先后顺序排列，但是可以通过items的
 
 #### flex-shrink
 
-该属性用来设置item如何按需进行收缩，`shrink [ʃrɪŋk] n.收缩`。
+该属性用来设置item**弹性收缩**时的比例，属性值依然为**没有单位的比例值**（`shrink [ʃrɪŋk] n.收缩`）。
 
 ```css
 .item {
@@ -201,7 +201,7 @@ items默认按照HTML源代码的先后顺序排列，但是可以通过items的
 
 #### flex-basis
 
-设置container的剩余空间在分配以前的HTML元素默认尺寸，其属性值可以是**长度值**或者**关键字**。
+设置不伸缩的情况下items的原始默认尺寸，其属性值可以是**长度值**或者**关键字**。
 
 - `length`：单位数值，例如`20%`、`5rem`、`px`、`mm`、`pt`。
 - `auto`：基于items自身的高度和宽度属性。
@@ -231,7 +231,22 @@ items默认按照HTML源代码的先后顺序排列，但是可以通过items的
 
 #### align-self
 
+items上的这个属性会覆写container上`align-items`属性的设置。
+
+```css
+.item {
+  align-self: auto | flex-start | flex-end | center | baseline | stretch;
+}
+```
+
 ![](css3/align-self.png "align-self")
+
+> 注意，item上的`float`, `clear`, `vertical-align`属性不会对flex布局造成影响。
+
+### Flex布局思维导图
+
+![](css3/flex.png "Flex布局属性概览")
+
 
 ## grid
 
