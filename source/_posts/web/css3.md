@@ -360,7 +360,12 @@ animation-delay: 2.1s, 480ms;
 
 ### animation-direction
 
-指定动画是否向前、向后、前后交替播放。
+定义动画的播放方式，可以是向前、向后，或者前后交替播放。
+
+- `normal`：正常向前播放。
+- `reverse`：反方向播放。
+- `alternate`：先正常再反向播放，并持续交替执行。
+- `alternate-reverse`：先反向再正常播放，并持续交替执行。
 
 ```css
 /* Single animation */
@@ -372,11 +377,6 @@ animation-direction: alternate-reverse;
 /* Multiple animations */
 animation-direction: normal, reverse;
 animation-direction: alternate, reverse, normal;
-
-/* Global values */
-animation-direction: inherit;
-animation-direction: initial;
-animation-direction: unset;
 ```
 
 ### animation-duration
