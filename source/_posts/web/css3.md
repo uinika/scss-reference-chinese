@@ -342,11 +342,42 @@ transition: all 0.5s ease-out;
 
 ## animation
 
-### animation
+CSS动画由2部分组成，CSS动画的**样式描述**，以及标识动画开始、结束以及中间状态的**关键帧**（*keyframe*）。CSS动画比JavaScript控制的动画性能更加优异，浏览器执行更加平顺。
 
 ### animation-delay
 
+定义动画执行的延迟时间，单位是秒（*s*）或毫秒（*ms*），可以设置为未来的某个时间点（*正值*），或者立即开始执行（*属性值为0*），或者从动画生命周期的中途执行（*负值*）。
+
+```css
+/* Single animation */
+animation-delay: 3s;
+animation-delay: 0s;
+animation-delay: -1500ms;
+
+/* Multiple animations */
+animation-delay: 2.1s, 480ms;
+```
+
 ### animation-direction
+
+指定动画是否向前、向后、前后交替播放。
+
+```css
+/* Single animation */
+animation-direction: normal;
+animation-direction: reverse;
+animation-direction: alternate;
+animation-direction: alternate-reverse;
+
+/* Multiple animations */
+animation-direction: normal, reverse;
+animation-direction: alternate, reverse, normal;
+
+/* Global values */
+animation-direction: inherit;
+animation-direction: initial;
+animation-direction: unset;
+```
 
 ### animation-duration
 
@@ -360,6 +391,7 @@ transition: all 0.5s ease-out;
 
 ### animation-timing-function
 
+### animation
 
 ## transform
 
