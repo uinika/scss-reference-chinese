@@ -395,16 +395,80 @@ animation-duration: 10s, 35s, 230ms;
 
 ### animation-fill-mode
 
+设置目标HTML元素在动画周期之外所呈现的状态。
+
+- `none`：默认值，**不设置**动画之外的状态。
+- `forwards`：设置为动画**结束**时的状态。
+- `backwards`：设置为动画**开始**时的状态。
+- `both`：遵循动画**向前**、**向后**的规则，设置为动画**结束**或**开始**的状态。
+
+```css
+/* Single animation */
+animation-fill-mode: none;
+animation-fill-mode: forwards;
+animation-fill-mode: backwards;
+animation-fill-mode: both;
+
+/* Multiple animations */
+animation-fill-mode: none, backwards;
+animation-fill-mode: both, forwards, none;
+```
+
 ### animation-iteration-count
+
+设置动画周期在结束之前所需要播放的**次数**，可以指定为多个值，播放时会循环遵循这些值的设置。
+
+- `infinite`：无限循环。
+- `<number>`：动画周期的重复播放次数，默认值为**1**，设置为小数会只播放动画周期的一部分。
+
+```css
+animation-iteration-count: 3;
+animation-iteration-count: 2.3;
+animation-iteration-count: infinite;
+animation-iteration-count: 2, 0, infinite;
+```
 
 ### animation-name
 
+指定需要应用到HTML元素上的一个或多个动画名称，每个动画名称都会通过一个`@keyframes`规则进行定义。
+
+- `none`：表示不指定任何关键帧动画。
+- `<custom-ident>`：指定关键帧动画的名称，对大小写敏感，可以由`字母`、`数字`、`_`或`-`组成。
+
+```css
+/* Single animation */
+animation-name: none;
+animation-name: test_05;
+animation-name: -specific;
+animation-name: sliding-vertically;
+
+/* Multiple animations */
+animation-name: test1, animation4;
+animation-name: none, -moz-specific, sliding;
+```
+
 ### animation-play-state
+
+用于指定动画的运行和停止，可以通过JavaScript设置该属性的值，进而实现对动画播放的控制。
+
+- `running`：播放动画。
+- `paused`：暂停播放，恢复时会从暂停的位置开始，而非重新开始一个动画周期。
+
+```css
+/* Single animation */
+animation-play-state: running;
+animation-play-state: paused;
+
+/* Multiple animations */
+animation-play-state: paused, running, running;
+```
 
 ### animation-timing-function
 
 ### animation
 
-## transform
+## @keyframes
 
 ## @media
+
+## transform
