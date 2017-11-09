@@ -465,7 +465,42 @@ animation-play-state: paused, running, running;
 
 ### animation-timing-function
 
+指定在每个动画周期持续的时间内CSS动画如何进行，可以指定属性值为`@keyframes`规则定义的关键帧动画，
+
+- `<timing-function>`：符合指定动画的时间函数，由animation-name进行定义.
+
+```css
+/* Keyword values */
+animation-timing-function: ease;
+animation-timing-function: ease-in;
+animation-timing-function: ease-out;
+animation-timing-function: ease-in-out;
+animation-timing-function: linear;
+animation-timing-function: step-start;
+animation-timing-function: step-end;
+
+/* Function values */
+animation-timing-function: cubic-bezier(0.1, 0.7, 1.0, 0.1);
+animation-timing-function: steps(4, end);
+animation-timing-function: frames(10);
+
+/* Multiple animations */
+animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
+```
+
+
 ### animation
+
+```css
+/* @keyframes duration | timing-function | delay | iteration-count | direction | fill-mode | play-state | name */
+animation: 3s ease-in 1s 2 reverse both paused slidein;
+
+/* @keyframes duration | timing-function | delay | name */
+animation: 3s linear 1s slidein;
+
+/* @keyframes duration | name */
+animation: 3s slidein;
+```
 
 ## @keyframes
 
