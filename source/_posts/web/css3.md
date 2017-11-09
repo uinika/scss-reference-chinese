@@ -381,6 +381,18 @@ animation-direction: alternate, reverse, normal;
 
 ### animation-duration
 
+定义完成一个动画周期所需要的时间，值可以为**正数**或**零**，单位是秒（*m*）或毫秒（*ms*）。默认值为**零**，表示没有动画发生。
+
+```css
+/* Single animation */
+animation-duration: 6s;
+animation-duration: 120ms;
+
+/* Multiple animations */
+animation-duration: 1.64s, 15.22s;
+animation-duration: 10s, 35s, 230ms;
+```
+
 ### animation-fill-mode
 
 ### animation-iteration-count
