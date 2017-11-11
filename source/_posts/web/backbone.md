@@ -21,7 +21,68 @@ categories: Web
 
 ## 视图组件化
 
-**组件化**是Vue、React、Angular2等现代化前端框架的总体思想，组件化的真实含义来源于将复杂的DOM结构切割为更小粒度的HTML代码片段，
+**视图组件化**是Vue、React、Angular2等现代化前端框架的基本思想，其主要目的是将复杂的DOM结构切割为更小粒度的HTML代码片段。Backbone通过`Backbone.View.extend()`继承函数来新建一个视图对象（*即组件*），该视图对象即可以使用`el`属性挂载到现有DOM，也可以通过`template`属性建立全新的视图对象。对Vue2比较熟悉的同学，应该会感觉到这个写法与Vue组件对象非常类似。
+
+：
+
+```javascript
+/* Backbone视图对象 */
+Backbone.View.extend({
+  id: "app",
+
+  template: '...',
+
+  events: {
+    "click .icon":          "open",
+    "click .button.edit":   "openEditDialog",
+    "click .button.delete": "destroy"
+  },
+
+  initialize: function() {
+    this.listenTo(this.model, "change", this.render);
+  },
+
+  render: function() {
+    this.$el.html(this.template());
+    return this;
+  }
+
+});
+```
+
+```javascript
+/* Vue组件对象 */
+new Vue({
+  el: '#example',
+
+  data: {},
+ 
+  methods: {
+
+  }
+
+})
+```
+
+```jsx
+/* React组件对象 */
+class MyComponent extends React.Component {
+  constructor(props) {
+    // 组件构造函数
+  }
+
+  myEvent(event) {
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      // JSX
+    );
+  }
+};
+```
+
 
 
 ## 作用域控制
