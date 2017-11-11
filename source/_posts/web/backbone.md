@@ -21,9 +21,7 @@ categories: Web
 
 ## 视图组件化
 
-**视图组件化**是Vue、React、Angular2等现代化前端框架的基本思想，其主要目的是将复杂的DOM结构切割为更小粒度的HTML代码片段。Backbone通过`Backbone.View.extend()`继承函数来新建一个视图对象（*即组件*），该视图对象即可以使用`el`属性挂载到现有DOM，也可以通过`template`属性建立全新的视图对象。对Vue2比较熟悉的同学，应该会感觉到这个写法与Vue组件对象非常类似。
-
-：
+**视图组件化**是Vue、React、Angular2等现代化前端框架的基本思想，其主要目的是将复杂的DOM结构切割为更小粒度的HTML代码片段。Backbone通过`Backbone.View.extend()`继承函数来新建一个视图对象（*即组件*），该视图对象即可以使用`el`属性挂载到现有DOM，也可以通过`template`属性建立全新的视图对象。对Vue2比较熟悉的同学，应该会感觉到这样的写法与*Vue组件对象*非常相似。事实上Backbone视图对象不旦与Vue2，也与Angular2和React当中的**组件对象**作用极其类似，具体请参考下面的代码：
 
 ```javascript
 /* Backbone视图对象 */
@@ -52,20 +50,29 @@ Backbone.View.extend({
 
 ```javascript
 /* Vue组件对象 */
-new Vue({
-  el: '#example',
+import Vue from 'vue';
 
-  data: {},
+new Vue({
+  template: '<div>模板字符串<div>',
+
+  data: {
+    // 组件绑定的数据
+  },
  
   methods: {
+    myEvent() {
+      // 组件自定义事件
+    },
+  },
 
-  }
-
-})
+});
 ```
 
 ```jsx
 /* React组件对象 */
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 class MyComponent extends React.Component {
   constructor(props) {
     // 组件构造函数
@@ -83,11 +90,59 @@ class MyComponent extends React.Component {
 };
 ```
 
+```typescript
+/* Angular2组件对象 */
+import { Component, Input } from '@angular/core';
+import { Demo } from './demo';
 
+@Component({
+  selector: 'demo-detail',
+  template: `
+    <div>模板字符串</div>
+  `
+})
+export class HeroDetailComponent {
+  @Input() demo: Demo;
+}
+```
 
 ## 作用域控制
 
-选择器与事件的作用域控制。
+通过上面代码的比较，大家应该能够了解，Backbone视图对象的核心任务在于**DOM选择器、数据事件绑定的作用域控制**。Web前端组件化的过程，实质是可以认为是一个切割DOM的过程，切割DOM必然意味同时需要分离**事件**和**绑定数据**，并且控制视图对象上选择器的作用范围。
+
+Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，从而集中注册当前视图对象上涉及的DOM事件。
+
+```javascript
+var View = Backbone.View.extend({
+  id: "login",
+  template: Handlebars.compile(Html),
+  initialize: function () {},
+  events: {
+    "input": "checked",
+    "click .btn": "login"
+  },
+  render: function () {
+    this.$el.html(this.template());
+    this.$(".rember-me").iCheck({
+      checkboxClass: "icheckbox_square-blue",
+      radioClass: "iradio_square-blue"
+    });
+    return this;
+  },
+  login: function () {
+    var login = new Model();
+    login.auth();
+  }
+});
+
+return View;
+```
+
+首先，从DOM选择器的角度，上面Backbone对象当中所有需要对于DOM进行的操作，都封装到`this.$el()`或者`this.$()`函数上进行，核心目的就是为了控制JQuery选择器的作用域，防止选择器的互相污染，并提升选择器的效率。
+
+其次，Backbone原生的数据绑定需要依赖于underscore当中的
+
+
 
 ## MVVM
 
@@ -100,6 +155,8 @@ class MyComponent extends React.Component {
 
 ## 前端路由
 
+
+## 基于RequireJS模块化
 
 ## 僵尸视图问题
 
