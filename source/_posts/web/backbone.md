@@ -319,6 +319,8 @@ define([
 
 ## 程序入口Demo
 
+![](backbone/structure.png "项目结构")
+
 ```javascript
 require.config({
   baseUrl: "/",
