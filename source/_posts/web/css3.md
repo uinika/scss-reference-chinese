@@ -528,6 +528,32 @@ animation: 3s slidein;
 
 ## @keyframes
 
+通过为关键帧或者基准点定义样式，来控制动画序列的中间步骤，相比于`transitions`过渡，animation能够提供更为丰富的设置。`@keyframes`定义的名称需要添加至`animation-name`属性上，每个`@keyframes`规则都包含了一组关键帧选择器的列表，这些选择器设置了动画周期上指定时间百分比的样式，即定义每一个关键帧所呈现的样式。
+
+`from`：起始于动画序列时间0%的**开始**偏移量。
+`to`：起始于动画序列时间100%的**结束**偏移量。
+`<percentage>`：动画序列时间的具体**百分比**。
+
+```css
+@keyframes tofrom {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes percentage {
+  from { transform: translate(0, 0); }
+  20% { transform: translate(20px, 20px); }
+  40% { transform: translate(40px, 0); }
+  60% { transform: translate(60px, 20); }
+  80% { transform: translate(80px, 0); }
+  to { transform: translate(100px, 20px); }
+}
+```
+
+> `@keyframes`规则不会级联，浏览器总是执行最后定义的关键帧。
+
+> 声明在关键帧中的`!important`属性将会被忽略。
+
 ## @media
 
 ## transform
