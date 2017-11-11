@@ -235,6 +235,23 @@ var Router = Backbone.Router.extend({
 return Router;
 ```
 
+
+## 模型与集合分离的缺陷
+
+![](backbone/intro-collections.png "Collection")
+
+
+## 僵尸视图问题
+
+https://lostechies.com/derickbailey/2013/02/06/managing-events-as-relationships-not-just-references/
+
+
+## 构建单页面应用
+
+http://marionettejs.com/
+
+https://github.com/walmartlabs/thorax
+
 ## 基于RequireJS模块化
 
 ```javascript
@@ -274,8 +291,7 @@ function (
 ```
 
 ```javascript
-define(
-  [
+define([
     "backbone",
     "handlebars",
     "admin",
@@ -300,19 +316,6 @@ define(
 );
 ```
 
-## 模型与集合分离的缺陷
-
-![](backbone/intro-collections.png "Collection")
-
-## 僵尸视图问题
-
-https://lostechies.com/derickbailey/2013/02/06/managing-events-as-relationships-not-just-references/
-
-## 构建单页面应用
-
-http://marionettejs.com/
-
-https://github.com/walmartlabs/thorax
 
 ## 程序入口Demo
 
