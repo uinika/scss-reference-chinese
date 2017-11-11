@@ -110,7 +110,7 @@ export class HeroDetailComponent {
 
 通过上面代码的比较，大家应该能够了解，Backbone视图对象的核心任务在于**DOM选择器、数据事件绑定的作用域控制**。Web前端组件化的过程，实质是可以认为是一个切割DOM的过程，切割DOM必然意味同时需要分离**事件**和**绑定数据**，并且控制视图对象上选择器的作用范围。
 
-Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，从而集中注册当前视图对象上涉及的DOM事件。
+首先，Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，从而集中注册当前视图对象上涉及的DOM事件。
 
 ```javascript
 var View = Backbone.View.extend({
@@ -138,20 +138,37 @@ var View = Backbone.View.extend({
 return View;
 ```
 
-首先，从DOM选择器的角度，上面Backbone对象当中所有需要对于DOM进行的操作，都封装到`this.$el()`或者`this.$()`函数上进行，核心目的就是为了控制JQuery选择器的作用域，防止选择器的互相污染，并提升选择器的效率。
+其次，从DOM选择器的角度，上面Backbone对象当中所有需要对于DOM进行的操作，都封装到`this.$el()`或者`this.$()`函数上进行，核心目的就是为了控制JQuery选择器的作用域，防止选择器的互相污染，并提升选择器的效率。
 
-其次，Backbone原生的数据绑定需要依赖于underscore当中的
+## 数据绑定
 
+Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达式，但鉴于underscore模板表达式在书写循环语句时语法过于繁杂，因此在实际生产环境下，笔者采用了Handlebar模板引擎进行数据绑定，通过执行`template: Handlebars.compile(Html)`编译字符串模板，提供与Angular以及Vue当中Mustache表达式类似的开发体验。因为字符串模板编译后通过`this.$el.html(this.template())`插入当前视图对象，因此也就实质上完成了上面内容所提到的**数据绑定的作用域控制**。
 
+```html
+{{#each comments}}
+  <h1>{{title}}</h1>
+  <p>{{content}}</p>
+{{/each}}
+```
 
 ## MVVM
 
 
-## 数据绑定
+![](backbone/intro-views.png)
+
+
+
+
 
 
 ## 双向绑定
 
+![](backbone/intro-model-view.png)
+
+
+## 模型与其集合
+
+![](backbone/intro-collections.png)
 
 ## 前端路由
 
