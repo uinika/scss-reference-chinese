@@ -18,6 +18,8 @@ categories: Web
 
 诞生于2010的[Backbone](http://backbonejs.org/)则另辟蹊径，通过与[Undersocre](http://underscorejs.org/)、[Require](http://requirejs.org/)、[Handlebar](http://handlebarsjs.com/)的整合，为那个年代的开发人员提供了Angular之外，一个更加轻量和友好的前端开发解决方案，许多思想对于后续的现代化前端框架的发展起到了举足轻重的作用。
 
+![](backbone/intro-views.png "Backbone")
+
 
 ## 视图组件化
 
@@ -110,7 +112,7 @@ export class HeroDetailComponent {
 
 通过上面代码的比较，大家应该能够了解，Backbone视图对象的核心任务在于**DOM选择器、数据事件绑定的作用域控制**。Web前端组件化的过程，实质是可以认为是一个切割DOM的过程，切割DOM必然意味同时需要分离**事件**和**绑定数据**，并且控制视图对象上选择器的作用范围。
 
-首先，Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，从而集中注册当前视图对象上涉及的DOM事件。
+首先，Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，集中注册当前视图对象上涉及的DOM事件，以及事件触发的选择器和事件类型。
 
 ```javascript
 var View = Backbone.View.extend({
@@ -142,7 +144,7 @@ return View;
 
 ## 数据绑定
 
-Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达式，但鉴于underscore模板表达式在书写循环语句时语法过于繁杂，因此在实际生产环境下，笔者采用了Handlebar模板引擎进行数据绑定，通过执行`template: Handlebars.compile(Html)`编译字符串模板，提供与Angular以及Vue当中Mustache表达式类似的开发体验。因为字符串模板编译后通过`this.$el.html(this.template())`插入当前视图对象，因此也就实质上完成了上面内容所提到的**数据绑定的作用域控制**。
+Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达式，但鉴于underscore模板表达式在书写循环语句时语法过于繁杂，因此在实际生产环境下，笔者采用了Handlebars模板引擎进行数据绑定，通过执行`template: Handlebars.compile(Html)`编译字符串模板，提供与Angular以及Vue当中Mustache表达式类似的开发体验。因为字符串模板编译后通过`this.$el.html(this.template())`插入当前视图对象，因此也就实质上完成了上面内容所提到的**数据绑定的作用域控制**。
 
 ```html
 {{#each comments}}
@@ -151,37 +153,241 @@ Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达�
 {{/each}}
 ```
 
-## MVVM
+## MVVM与双向绑定
 
+**MVVM**是*Model-View-ViewModel*的缩写形式，相比传统**MVC**模式的*Model-View-Controller*，最主要的区别在于将模型Model与视图View的绑定工作从控制器**Controller**，前置到视图模型对象**ViewModel**当中。**MVVM**这一概念最先由Angular1.x在Web前端开发当中提出，但是事实上Angular1.x仍然保留了Controller的存在，并严重依赖于其间接绑定`$scope`（*可以理解为Angular中的ViewModel*），这也正是笔者认为Angular1.x设计上的一个缺陷所在，一方面Controller的存在会让组件化工作进行得极其困难，另一方面为了抽象复用的业务逻辑，Angular不得不专门抽象出对应于Controller的Service服务层，而Web前端实际开发过程当中，大量的业务复用是基于DOM结构存在的，横向抽象出的Service层作用显得比较鸡肋，这也正是为什么虽然Angular提供了比Backbone更加完整的单页面应用开发体验，但笔者依然并未将其视为现代化前端开发当中组件化思想来源的原因所在。
 
-![](backbone/intro-views.png)
+![](backbone/intro-model-view.png 'MVVM')
 
+视图模型对象**ViewModel**存在的意义，主要是为了更加清晰的进行**View->Model->View**数据绑定，Angular1.x默认对Mustache表达式执行双向绑定（*View和Model的数据双向映射，无需事先声明*），Vue2采用了单向绑定（*数据必须先在ViewModel中进行声明*）响应式数据更新（*View和Model都基于ViewModel中事先声明的数据进行映射*）。而Backbone和Handlebars默认是单向进行绑定，如果需要实现**View**和**Model**的双向数据映射，必须通过手动监听`Backbone.Model`对象上的`change`事件，并且在事件触发后立刻执行该视图对象上的`render()`渲染函数。
 
+```javascript
+var Model = Backbone.Model.extend({
+  default: {
+    cases: {}
+  },
+  initialize: function () {
+    this.getCaseList();
+  },
+  getCaseList: function () {
+    var self = this;
+    Http.fetch({
+        url: "/legal/verdict",
+        method: "GET"
+      })
+      .then(function (data) {
+        if (Http.verify(data, 200)) {
+          self.set(data);
+        }
+      })
+  }
+});
 
+var View = Backbone.View.extend({
+  id: "demo",
+  model: new Model(),
+  initialize: function () {
+    this.listenTo(this.model, 'change', this.render);
+  },
+  template: Handlebars.compile(Html),
+  events: {},
+  render: function () {
+    this.$el.html(this.template(this.model.attributes));
+    return this;
+  }
+});
 
+return View;
+```
 
-
-## 双向绑定
-
-![](backbone/intro-model-view.png)
-
-
-## 模型与其集合
-
-![](backbone/intro-collections.png)
+上面代码中，首先设置视图对象的`model`属性，通过`new Model()`实例化当前代码内所继承的`Backbone.Model`对象。然后在当前视图对象的初始化函数`initialize`当中，通过Backbone视图对象上内置的`listenTo(this.model, 'change', this.render)`方法完成对模型的监听，并设置相应的回调渲染函数。从API使用的角度而言，**Backbone缺乏一个真实的ViewModel概念**，但是实际生产环境下，可以考虑将该视图对象所涉及的多个数据对象集中放置在一个`Model`内部处理，从而最大程度上模拟ViewModel作为视图和模型之间数据绑定介质的作用，虽然这样的灵活处理方式显得并不优雅。
 
 ## 前端路由
 
+![](backbone/intro-routing.png "Router")
+
+
+```javascript
+var Router = Backbone.Router.extend({
+  initialize: function () {
+    this.app = $("#app");
+  },
+  routes: {
+    '': "login",
+    "login": "login",
+    "dashboard": "dashboard",
+  },
+  login: function () {
+    var loginView = new Login;
+    this.app.html(loginView.render().$el);
+  },
+  layout: function () {
+    this.layoutView = new Layout;
+    return this.app.html(this.layoutView.$el);
+  },
+  // dashboard是嵌套视图
+  dashboard: function () {
+    var dashboardView = new Dashboard;
+    this.layout().find("#main").html(dashboardView.render().$el);
+  },
+});
+
+return Router;
+```
 
 ## 基于RequireJS模块化
 
+```javascript
+define([
+  "snippets/login/script",
+  "snippets/layout/script",
+  "snippets/dashboard/script",
+],
+function (
+  Login, Layout,
+  Dashboard
+) {
+  var Router = Backbone.Router.extend({
+    initialize: function () {
+      this.app = $("#app");
+    },
+    routes: {
+      '': "login",
+      "login": "login",
+      "dashboard": "dashboard",
+    },
+    login: function () {
+      var loginView = new Login;
+      this.app.html(loginView.render().$el);
+    },
+    layout: function () {
+      this.layoutView = new Layout;
+      return this.app.html(this.layoutView.$el);
+    },
+    dashboard: function () {
+      var dashboardView = new Dashboard;
+      this.layout().find("#main").html(dashboardView.render().$el);
+    },
+  });
+  return Router;
+});
+```
+
+```javascript
+define(
+  [
+    "backbone",
+    "handlebars",
+    "admin",
+    "text!snippets/layout/view.html"
+  ],
+  function (Backbone, Handlebars, Admin, Html) {
+    return Backbone.View.extend({
+      id: "layout",
+      initialize: function () {
+        this.render();
+      },
+      template: Handlebars.compile(Html),
+      events: {
+
+      },
+      render: function () {
+        this.$el.html(this.template());
+        return this;
+      }
+    });
+  }
+);
+```
+
+## 模型与集合分离的缺陷
+
+![](backbone/intro-collections.png "Collection")
+
 ## 僵尸视图问题
 
-## 单页面应用
+https://lostechies.com/derickbailey/2013/02/06/managing-events-as-relationships-not-just-references/
 
+## 构建单页面应用
 
-## 完整Demo
+http://marionettejs.com/
 
+https://github.com/walmartlabs/thorax
+
+## 程序入口Demo
+
+```javascript
+require.config({
+  baseUrl: "/",
+  paths: {
+    /*----- core -----*/
+    "text": "libraries/core/require.text",
+    "domReady": "libraries/core/require.domReady",
+    "admin": "libraries/theme/admin/js/app",
+    "jquery": "libraries/core/jquery",
+    "underscore": "libraries/core/underscore",
+    "backbone": "libraries/core/backbone",
+    "backbone.marionette": "libraries/core/backbone.marionette",
+    "backbone.radio": "libraries/core/backbone.radio",
+    "handlebars": "libraries/core/handlebars",
+    "bootstrap": "libraries/theme/bootstrap/js/bootstrap",
+    /*----- general -----*/
+    "router": "snippets/router",
+    "http": "general/http",
+    "util": "general/util",
+    /*----- widget -----*/
+    "jquery.iCheck": "libraries/theme/widget/iCheck/icheck",
+    "jquery.slimScroll": "libraries/theme/widget/slimScroll/jquery.slimscroll",
+    /*----- plugin -----*/
+    "jquery.webcam": "libraries/plugin/webcam/jquery.webcam"
+  },
+  map: {
+    "*": {
+      css: "libraries/core/require.css"
+    }
+  },
+  shim: {
+    /*----- core -----*/
+    "underscore": {
+      exports: "_"
+    },
+    "backbone": {
+      deps: ["underscore", "jquery"],
+      exports: "Backbone"
+    },
+    "backbone.radio": ["backbone"],
+    "backbone.marionette": ["backbone.radio"],
+    "bootstrap": ["jquery"],
+    "admin": ["jquery", "bootstrap"],
+    /*----- general -----*/
+    "http": ["jquery"],
+    "util": ["jquery"],
+    /*----- plugin -----*/
+    "jquery.iCheck": ["jquery", "css!libraries/theme/widget/iCheck/square/blue.css"],
+    "jquery.slimScroll": ["jquery"],
+    "jquery.webcam": ["jquery"]
+  },
+  waitSeconds: 0
+});
+
+require([
+    /*----- core -----*/
+    "backbone", "admin", "router", "backbone.marionette",
+    /*----- general -----*/
+    "http", "util",
+    /*----- plugin -----*/
+    "bootstrap", "jquery.slimScroll", "jquery.webcam"
+  ],
+  function (Backbone, Admin, Router) {
+    var router = new Router();
+    Backbone.history.start();
+    // backbone debugger
+    if (window.__backboneAgent) {
+      window.__backboneAgent.handleBackbone(Backbone);
+    }
+  }
+);
+```
 
 
 
