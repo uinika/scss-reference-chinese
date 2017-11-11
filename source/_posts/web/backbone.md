@@ -19,15 +19,14 @@ categories: Web
 诞生于2010的[Backbone](http://backbonejs.org/)则另辟蹊径，通过与[Undersocre](http://underscorejs.org/)、[Require](http://requirejs.org/)、[Handlebar](http://handlebarsjs.com/)的整合，为那个年代的开发人员提供了Angular之外，一个更加轻量和友好的前端开发解决方案，许多思想对于后续的现代化前端框架的发展起到了举足轻重的作用。
 
 
-
-
-## 组件化
+## 视图组件化
 
 **组件化**是Vue、React、Angular2等现代化前端框架的总体思想，组件化的真实含义来源于将复杂的DOM结构切割为更小粒度的HTML代码片段，
 
 
-## 选择器和事件的作用域控制
+## 作用域控制
 
+选择器与事件的作用域控制。
 
 ## MVVM
 
@@ -39,6 +38,14 @@ categories: Web
 
 
 ## 前端路由
+
+
+## 僵尸视图问题
+
+## 单页面应用
+
+
+## 完整Demo
 
 
 
