@@ -317,7 +317,7 @@ define([
 ```
 
 
-## 程序入口Demo
+## 完整Demo
 
 ![](backbone/structure.png "项目结构")
 
@@ -394,5 +394,28 @@ require([
 );
 ```
 
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
 
+<head>
+  <title>Sparrow</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" href="assets/favicon.ico" type="image/png" />
+  <link href="libraries/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="libraries/theme/admin/css/AdminLTE.css" rel="stylesheet" />
+  <link href="libraries/theme/admin/css/skins/skin-red.css" rel="stylesheet" />
+  <link href="libraries/theme/animate.css" rel="stylesheet" />
+  <link href="libraries/theme/awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="bundle.css" rel="stylesheet" />
+</head>
 
+<body class="fixed sidebar-mini skin-red">
+  <div id="app"></div>
+  <script data-main="app" src="libraries/core/require.js"></script>
+</body>
+
+</html>
+```
