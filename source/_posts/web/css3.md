@@ -416,7 +416,7 @@ animation-fill-mode: both, forwards, none;
 
 ### animation-iteration-count
 
-设置动画周期在结束之前所需要播放的**次数**，可以指定为多个值，播放时会循环遵循这些值的设置。
+设置动画周期在结束之前所需要播放的**次数**，可以指定为多个值。
 
 - `infinite`：无限循环。
 - `<number>`：动画周期的重复播放次数，默认值为**1**，设置为小数会只播放动画周期的一部分。
@@ -465,9 +465,17 @@ animation-play-state: paused, running, running;
 
 ### animation-timing-function
 
-指定在每个动画周期持续的时间内CSS动画如何进行，可以指定属性值为`@keyframes`规则定义的关键帧动画，
+动画的**时序函数**通过三次贝塞尔数学函数（*Cubic Bezier*）来生成速度曲线。
 
-- `<timing-function>`：符合指定动画的时间函数，由animation-name进行定义.
+- `cubic-bezier(<number>, <number>, <number>, <number>)`：指定贝塞尔曲线类型，4个参数都需要在`[0, 1]`区间范围内。
+- `linear`：线性过渡，等同贝塞尔曲线`(0.0, 0.0, 1.0, 1.0)`。
+- `ease`：平滑过渡，等同贝塞尔曲线`(0.25, 0.1, 0.25, 1.0)`。
+- `ease-in`：由慢到快，等同贝塞尔曲线`(0.42, 0, 1.0, 1.0)`。
+- `ease-out`：由快到慢，等同贝塞尔曲线`(0, 0, 0.58, 1.0)`。
+- `ease-in-out`：由慢到快再到慢，等同贝塞尔曲线`(0.42, 0, 0.58, 1.0)`。
+- `steps(<integer>[, [ start | end ] ]?)`：接受2个参数的步进函数。第1个参数是指定**函数步进数**的正整数，第2个参数可选，用于指定每一步值发生变化的时间点，可以为`start`或`end`（*默认值*）关键字。
+- `step-start`：等同于`steps(1, start)`。
+- `step-end`：等同于`steps(1, end)`。
 
 ```css
 /* Keyword values */
@@ -488,8 +496,18 @@ animation-timing-function: frames(10);
 animation-timing-function: ease, step-start, cubic-bezier(0.1, 0.7, 1.0, 0.1);
 ```
 
-
 ### animation
+
+动画的快捷属性，其默认值列表如下所示：
+
+- `animation-name: none`
+- `animation-duration: 0s`
+- `animation-timing-function: ease`
+- `animation-delay: 0s`
+- `animation-iteration-count: 1`
+- `animation-direction: normal`
+- `animation-fill-mode: none`
+- `animation-play-state: running`
 
 ```css
 /* @keyframes duration | timing-function | delay | iteration-count | direction | fill-mode | play-state | name */
@@ -500,7 +518,13 @@ animation: 3s linear 1s slidein;
 
 /* @keyframes duration | name */
 animation: 3s slidein;
+
+@keyframes slidein {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
 ```
+
 
 ## @keyframes
 
