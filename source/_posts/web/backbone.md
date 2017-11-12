@@ -362,7 +362,7 @@ Backbone这套前端自动化项目依然基于Gulp工作流构建，编译时�
 
 ![](backbone/structure.png "项目结构")
 
-general目录下是通用的JavaScript工具方法或者Less样式，`libraries`目录下是项目依赖的各种库文件，`assets`目录下放置图片、字体、多媒体内容，`snippets`目录存放项目所有的样式、模板、脚本文件，`router.js`用于配置路由，`app.js`则是整个单页面项目的全局启动入口（*所有的故事总是从这里开始*）。
+`general`目录下是通用的JavaScript工具方法或者Less样式，`libraries`目录下是项目依赖的各种库文件，`assets`目录下放置图片、字体、多媒体内容，`snippets`目录存放项目所有的样式、模板、脚本文件，`router.js`用于配置路由，`app.js`则是整个单页面项目的全局启动入口（*所有的故事总是从这里开始*）。
 
 ```html
 <!DOCTYPE html>
