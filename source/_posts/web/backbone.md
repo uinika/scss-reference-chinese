@@ -358,6 +358,8 @@ define([
 
 ## 完整Demo
 
+Backbone这套前端自动化项目依然基于Gulp工作流构建，编译时会对每个模块进行代码混淆或压缩，有兴趣的同学可以去克隆我Github的**[sparrow](https://github.com/uinika/sparrow)**项目，该项目基于笔者技术团队日常的开发实践，提供了一个比较通用和完善的Backbone项目结构。
+
 ![](backbone/structure.png "项目结构")
 
 ```html
