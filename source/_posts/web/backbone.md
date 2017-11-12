@@ -292,11 +292,9 @@ var myGroup = new group([
 
 ## 构建单页面应用
 
-Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着继往开来的Backbone开发人员们。伴随移动互联网的快速崛起，对单页面应用交互的需求量越来越大，大量开发人员在实际开发实践过程中，逐步对`Backbone.Router`进行增强，其间诞生了[backbone.routefilter](https://github.com/boazsender/backbone.routefilter)和[backbone.subroute](https://github.com/BackboneSubroute/backbone.subroute)两款优秀的第3方Backbone路由插件，基本解决了**僵尸视图**卸载的痛点。但是，伴随Web前端的交互逻辑越来越复杂，**嵌套视图**的问题又逐步开始凸显，而**嵌套视图**依然与**路由机制**密切相关。因此，[marionette](http://marionettejs.com/)和[thorax](https://github.com/walmartlabs/thorax)两款基于Backbone的单页面前端框架应运而生。
+Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着继往开来的Backbone开发人员们。伴随移动互联网的快速崛起，对单页面应用交互的需求量越来越大，大量开发人员在实际开发实践过程中，逐步对`Backbone.Router`进行增强，其间诞生了[backbone.routefilter](https://github.com/boazsender/backbone.routefilter)和[backbone.subroute](https://github.com/BackboneSubroute/backbone.subroute)两款优秀的第3方Backbone路由插件，基本解决了**僵尸视图**卸载的痛点。但是，伴随Web前端的交互逻辑越来越复杂，**嵌套视图**的问题又逐步开始凸显，而**嵌套视图**依然与**路由机制**密切相关。因此，[Marionette](http://marionettejs.com/)和[Thorax](https://github.com/walmartlabs/thorax)两款基于Backbone的单页面前端框架应运而生。
 
-marionette
-
-thorax
+Thorax对Backbone和Handlebars进行了深度的整合，提供了一栈式的体验，相对Marionette更加轻量也更加容易上手，可惜目前该项目作者已经停止更新和维护。而Marionette则是一款相当完善的Backbone重型单页面应用框架，完美解决了**嵌套视图**和**僵尸视图**的问题，但是同时也引入了更多的概念和API，学习曲线较为陡峭。其开源团队在配合Backbone1.3.3版本发布Marionette3.5.1之后更新周期明显放慢，好在团队依然在认真处理Github上的Issues，应该算是当前Backbone技术栈开发单页面应用为数不多的选择**(￢_￢)**。
 
 ## 基于RequireJS模块化
 
@@ -358,7 +356,11 @@ define([
 
 ## 完整Demo
 
-Backbone这套前端自动化项目依然基于Gulp工作流构建，编译时会对每个模块进行代码混淆或压缩，有兴趣的同学可以去克隆我Github的**[sparrow](https://github.com/uinika/sparrow)**项目，该项目基于笔者技术团队日常的开发实践，提供了一个比较通用和完善的Backbone项目结构。
+廉颇老矣，尚能饭否？在Web前端技术日新月展的年代，Backbone或许真的已经老了。但并不能忽略其在JavaScript前端框架演进历史当中，所曾经扮演过的重要角色。包括underscore及后续发展出来的lodash，**Jeremy Ashkenas**（*backbone和underscore的共同作者*）为开源社区做出的杰出贡献有目共睹。
+
+笔者花去周末2天时间撰写本文，一方面是对过去使用Backbone的经验和体会做一些总结；另一方面也是让大家在Webpack横行、各类高度封装的单页面前端框架层出不穷的年代，能够静下心来思考原生JavaScript究竟在浏览器里发生了哪些有趣的故事。与此同时，笔者将过去使用的Backbone前端架构抽象成为一个小小的Demo，并且同样在Github上开源出来，希望读者在阅读本文的过程中，结合Demo当中的源代码，去体会现代化前端框架发展的历史沿革。
+
+开源Demo项目命名为**[sparrow](https://github.com/uinika/sparrow)**，仍然基于NodeJS和Gulp工作流构建，编译时会对每个模块进行代码混淆或压缩，有兴趣的同学可以去**[我的Github](https://github.com/uinika)**进行克隆（*项目基于笔者技术团队日常的开发实践，提供了一个比较通用和完善的Backbone项目结构*）。
 
 ![](backbone/structure.png "项目结构")
 
