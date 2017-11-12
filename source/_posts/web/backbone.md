@@ -300,43 +300,31 @@ thorax
 
 ## 基于RequireJS模块化
 
-虽然RequireJS是异步的加载各种依赖，但是却并非按需进行加载。
+在开发人员还不能使用ES6的`import`和`export`语句愉快的进行模块化的年代，RequireJS几乎成为前端模块化的必然选择，通过为`define()`方法添加相应的依赖和回调函数，实现JavaScript代码的模块化，随后诞生的Angular1.x通过`angular.module`提供了类似的模块化特性，但是只能异步的加载HTML模板，并不能异步加载JavaScript脚本，使用上略有局限，虽然也有开发人员提出整合Angular1.x和RequireJS来弥补该局限，但是两种模块化机制混用又会为项目带来新的复杂度。
+
+RequireJS遵循了AMD规范，提供`require()`方法加载依赖然后执行相应回调函数，以及`define()`方法去定义AMD模块。
 
 ```javascript
-define([
-  "snippets/login/script",
-  "snippets/layout/script",
-  "snippets/dashboard/script",
-],
-function (
-  Login, Layout,
-  Dashboard
-) {
-  var Router = Backbone.Router.extend({
-    initialize: function () {
-      this.app = $("#app");
-    },
-    routes: {
-      '': "login",
-      "login": "login",
-      "dashboard": "dashboard",
-    },
-    login: function () {
-      var loginView = new Login;
-      this.app.html(loginView.render().$el);
-    },
-    layout: function () {
-      this.layoutView = new Layout;
-      return this.app.html(this.layoutView.$el);
-    },
-    dashboard: function () {
-      var dashboardView = new Dashboard;
-      this.layout().find("#main").html(dashboardView.render().$el);
-    },
-  });
-  return Router;
-});
+require([
+    /*----- core -----*/
+    "backbone", "admin", "router", "backbone.marionette",
+    /*----- general -----*/
+    "http", "util",
+    /*----- plugin -----*/
+    "bootstrap", "jquery.slimScroll", "jquery.webcam"
+  ],
+  function (Backbone, Admin, Router) {
+    var router = new Router();
+    Backbone.history.start();
+    // backbone debugger
+    if (window.__backboneAgent) {
+      window.__backboneAgent.handleBackbone(Backbone);
+    }
+  }
+);
 ```
+
+结合`require.text`插件，异步加载远程的HTML模板，避免类似Angular1.x虽然能定义模块，但却无法异步进行加载的尴尬。
 
 ```javascript
 define([
@@ -364,10 +352,39 @@ define([
 );
 ```
 
+虽然RequireJS本身可以异步按需加载各种依赖，但是受限于`Backbone.Router`实例化时会一次性加载所有视图对象，导致整个应用程序会在启动时一次性加载所有依赖，产品层面并没有体现出前端模块化之后的优势，仅仅有利于项目源代码的管理。但是通过**Backbone**+**RequireJS**的组合来实现`.css`、`.js`、`.html`的完全异步加载，确实为后续现代化前端框架的发展提供了比较良好的示范。
+
+> Webpack2.x.x已经原生支持ES6的`import`语句，且增加了`import()`代码切割（*code split*）函数，应该是目前最方便好用的前端模块化暨打包工具。
 
 ## 完整Demo
 
 ![](backbone/structure.png "项目结构")
+
+```html
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <title>Sparrow</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <link rel="icon" href="assets/favicon.ico" type="image/png" />
+  <link href="libraries/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="libraries/theme/admin/css/AdminLTE.css" rel="stylesheet" />
+  <link href="libraries/theme/admin/css/skins/skin-red.css" rel="stylesheet" />
+  <link href="libraries/theme/animate.css" rel="stylesheet" />
+  <link href="libraries/theme/awesome/css/font-awesome.css" rel="stylesheet" />
+  <link href="bundle.css" rel="stylesheet" />
+</head>
+
+<body class="fixed sidebar-mini skin-red">
+  <div id="app"></div>
+  <script data-main="app" src="libraries/core/require.js"></script>
+</body>
+
+</html>
+```
 
 ```javascript
 require.config({
@@ -442,28 +459,3 @@ require([
 );
 ```
 
-```html
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-  <title>Sparrow</title>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-  <link rel="icon" href="assets/favicon.ico" type="image/png" />
-  <link href="libraries/theme/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="libraries/theme/admin/css/AdminLTE.css" rel="stylesheet" />
-  <link href="libraries/theme/admin/css/skins/skin-red.css" rel="stylesheet" />
-  <link href="libraries/theme/animate.css" rel="stylesheet" />
-  <link href="libraries/theme/awesome/css/font-awesome.css" rel="stylesheet" />
-  <link href="bundle.css" rel="stylesheet" />
-</head>
-
-<body class="fixed sidebar-mini skin-red">
-  <div id="app"></div>
-  <script data-main="app" src="libraries/core/require.js"></script>
-</body>
-
-</html>
-```
