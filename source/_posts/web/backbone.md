@@ -300,6 +300,8 @@ thorax
 
 ## 基于RequireJS模块化
 
+虽然RequireJS是异步的加载各种依赖，但是却并非按需进行加载。
+
 ```javascript
 define([
   "snippets/login/script",
