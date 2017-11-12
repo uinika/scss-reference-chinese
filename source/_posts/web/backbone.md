@@ -244,15 +244,53 @@ return Router;
 
 ## 模型与集合分离的缺陷
 
+Backbone当中的**Collection**用于存放**Model**，这样的设计主要是出于2个角度的考虑，第1是方便Backbone扩展Underscore提供的集合操作方法，第2是方便通过Backbone封装的`fetch()`抓取服务器端的数组类型数据。
+
 ![](backbone/intro-collections.png "Collection")
 
+创建*Collection*需要首先创建*Model*，然后将该*Model*赋值给`Backbone.Collection`继承对象的`model`属性，最后在实例化*Collection*时通过构造函数传入每个具体的*Model*。因此，Backbone当中*Collection*和*Model*的关系实质类似于**数组**与**对象**的关系，Backbone只是将这两种引用数据类型分开进行处理，便于分别使用Underscore上提供的辅助函数处理对应的数据类型。
+
+```javascript
+var user = Backbone.Model.extend({
+  defaults: {
+    name: '',
+    age: 0
+  }
+});
+
+var group = Backbone.Collection.extend({
+  model: user
+});
+
+var myGroup = new group([
+  {
+    name: 'hank',
+    age: 32
+  }, {
+    name: 'uinika',
+    age: 23
+  }
+]);
+```
+
+`Collection`与`Model`分离的设计方式，在服务器后端接口需要变化或者调整的时候，总是需要去更改相应的数据类型及关联操作，这样对于前端开发人员敏捷的响应需求变化是非常不利的。这样的设计方式，在Java开源MVC框架大行其道的年代，多少是受到服务器后端**对象-关系映射**理念的影响，笔者认为这是Backbone处理比较欠妥的一个的地方；虽然站在**MVVM**里`ViewModel`的角度有其合理性，但是实现起来还是相对冗杂了一些。因此，笔者在Backbone的使用实践当中，最终摒弃了`Collection`的使用，而完全通过Model或者Model上的数组属性来接收服务器端的响应，并且在项目中通过下划线`_`引用全局的underscore操作各类数据，避免与Backbone数据对象的类型发生耦合。
 
 ## 僵尸视图问题
 
-https://lostechies.com/derickbailey/2013/02/06/managing-events-as-relationships-not-just-references/
+总体而言，Backbone是一款**事件驱动**的前端框架，在Backbone应用程序中会大量使用到事件机制进行各类交互，常见的用途主要体现在如下3个场景。
+
+1. 通过`Backbone.View`的`events`属性绑定事件到视图的DOM元素。
+2. 为`Collection`和`Model`绑定`change`事件，然后在事件触发时调用`render()`进行页面重绘。
+3. 应用程序的各块业务逻辑都通过`Backbone.Events`提供的事件机制进行驱动的场景。
+
+在开发单页面应用程序的场景下，当视图对象伴随URL路由地址不断进行局部刷新的时候，由于大量事件并未伴随视图对象的移除而同时解除绑定，造成大量事件对象堆积在浏览器内存当中，最终使视图对象变成僵尸视图，继而引发内存溢出的惨剧（*更加详细的讨论可以参见[Zombies! RUN! (Managing Page Transitions In Backbone Apps)](https://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/)一文*）。早期的Backbone版本并没有提供僵尸视图的解决办法，直到Backbone1.2.x版本之后，开始在`Backbone.View`视图对象上新增加一个`remove()`函数支持，可以在移除视图对象DOM元素的同时，自动调用`stopListening`移除之前通过`listenTo`绑定到视图上的Backbone自定义事件，但是`remove()`并没有同时移除视图上绑定的JQuery DOM事件，所以还需要再手动进行清理。加上`Backbone.Router`的API设计过于简单，也没有提供相应的路由切换回调函数去自动调取`remove()`卸载事件，因此截止到目前最新的Backbone1.3.3版本，依然未能彻底在官方实现上解决僵尸视图的问题。
+
+> 解决僵尸视图的关键，是需要在恰当的位置提供一种通用的事件**卸载**机制，而Backbone视图的切换多与路由URL的状态变化相关，因此路由事件成为解决Backbone僵尸视图问题的关键点所在。
 
 
 ## 构建单页面应用
+
+构建单页面应用时，嵌套视图和僵尸视图长期困扰着Backbone开发人员，
 
 http://marionettejs.com/
 
