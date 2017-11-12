@@ -8,7 +8,7 @@ categories: Web
 
 ![](backbone/logo.png)
 
-从前端技术发展趋势的角度而言，目前层出不穷的现代化前端框架的诞生，都可以认为是Angular和Backbone等古典前端框架设计思想走向融合之后的产物。虽然截至到本文开始执笔的时间，Backbone已经有些**old fashion**，但之所以单独对Backbone着重笔墨，主要是在**组件化**和**作用域控制**等方面，Backbone更加接近于现代化前端框架的设计理念，而这两点又正好是同一时期的Angular并没有解决好的问题。
+从前端技术发展趋势的角度而言，目前层出不穷的现代化前端框架的诞生，都可以认为是Angular和Backbone等古典前端框架设计思想走向融合之后的产物。虽然截至到本文开始执笔的时间，Backbone已经略微**old school**，但之所以单独对Backbone着重笔墨，主要是在**组件化**和**作用域控制**等方面，Backbone更加接近于现代化前端框架的设计理念，而这两点又正好是同一时期的Angular并没有解决好的问题。
 
 <!-- more -->
 
@@ -103,7 +103,7 @@ import { Demo } from './demo';
     <div>模板字符串</div>
   `
 })
-export class HeroDetailComponent {
+export class DemoDetailComponent {
   @Input() demo: Demo;
 }
 ```
@@ -204,8 +204,11 @@ return View;
 
 ## 前端路由
 
+Web应用程序通常需要提供可链接的、可书签化的、可任意进行分享的URL地址，从而去标识应用程序的各个具体状态。现代化前端框架的Router实现（*例如：`vue-router`、`react-router`*），通常会提供**#Hash**或者**HTML5**两种前端路由方式，Backbone的路由机制`Backbone.Router`是基于路径Hash进行实现。`Backbone.Router`当中，大量封装了`window.history`和`window.location`中提供的大量API，将浏览器地址栏当中的URL属性，与Backbone路由事件相绑定，当访问这些URL属性时，相应的路由事件就会被触发。
+
 ![](backbone/intro-routing.png "Router")
 
+路由事件当中，通常会初始化Backbone视图对象上的`render()`函数，然后调用其`$el`属性将渲染后的Backbone视图对象转换为JQuery对象，并通过`$.html()`将其插入到应用程序的DOM挂载点，从而将URL状态的变化绑定到页面状态的局部刷新。
 
 ```javascript
 var Router = Backbone.Router.extend({
@@ -213,9 +216,9 @@ var Router = Backbone.Router.extend({
     this.app = $("#app");
   },
   routes: {
-    '': "login",
-    "login": "login",
-    "dashboard": "dashboard",
+    '': "login",                   // default
+    "login": "login",              // #login
+    "dashboard": "dashboard",      // #dashboard
   },
   login: function () {
     var loginView = new Login;
@@ -235,6 +238,9 @@ var Router = Backbone.Router.extend({
 return Router;
 ```
 
+对比上面的代码，大家应该能够发现`vue-router`和`react-router`这两款现代化前端框架的路由实现，与Angular1.x上的`ui-router`最大的区别在于：前者的路由目标是组件Components，而后者的路由则是绑定在控制器Controller。而Backbone路由机制的设计，虽然配置和编写方式略显老派，但是其`URL->路由事件->视图对象->局部HTML片断`的渲染思想，明显相比Angular粒度更小，也更接近现代化前端框架的**组件化路由机制**。
+
+> 2017年以后的Angular1.6.x版本增加了`ngComponentRouter`模块，已经原生提供了Component Router支持。
 
 ## 模型与集合分离的缺陷
 
