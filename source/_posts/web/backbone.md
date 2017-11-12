@@ -283,14 +283,16 @@ var myGroup = new group([
 2. 为`Collection`和`Model`绑定`change`事件，然后在事件触发时调用`render()`进行页面重绘。
 3. 应用程序的各块业务逻辑都通过`Backbone.Events`提供的事件机制进行驱动的场景。
 
-在开发单页面应用程序的场景下，当视图对象伴随URL路由地址不断进行局部刷新的时候，由于大量事件并未伴随视图对象的移除而同时解除绑定，造成大量事件对象堆积在浏览器内存当中，最终使视图对象变成僵尸视图，继而引发内存溢出的惨剧（*更加详细的讨论可以参见[Zombies! RUN! (Managing Page Transitions In Backbone Apps)](https://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/)一文*）。早期的Backbone版本并没有提供僵尸视图的解决办法，直到Backbone1.2.x版本之后，开始在`Backbone.View`视图对象上新增加一个`remove()`函数支持，可以在移除视图对象DOM元素的同时，自动调用`stopListening`移除之前通过`listenTo`绑定到视图上的Backbone自定义事件，但是`remove()`并没有同时移除视图上绑定的JQuery DOM事件，所以还需要再手动进行清理。加上`Backbone.Router`的API设计过于简单，也没有提供相应的路由切换回调函数去自动调取`remove()`卸载事件，因此截止到目前最新的Backbone1.3.3版本，依然未能彻底在官方实现上解决僵尸视图的问题。
+在开发单页面应用程序的场景下，当视图对象伴随URL路由地址不断进行局部刷新的时候，由于大量事件并未伴随视图对象的移除而同时解除绑定，造成大量事件对象堆积在浏览器内存当中，逐渐让视图对象成为僵尸视图，最终引发内存溢出的惨剧（*更加详细的讨论可以参见[Zombies! RUN! (Managing Page Transitions In Backbone Apps)](https://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/)一文*）。
+
+早期的Backbone版本并没有提供僵尸视图的解决办法，直到Backbone1.2.x版本之后，开始在`Backbone.View`视图对象上新增加一个`remove()`函数支持，可以在移除视图对象DOM元素的同时，自动调用`stopListening`移除之前通过`listenTo`绑定到视图上的Backbone自定义事件，但是`remove()`并没有同时移除视图上绑定的JQuery DOM事件，所以还需要再手动进行清理。加上`Backbone.Router`的API设计过于简单，也没有提供相应的路由切换回调函数去自动调取`remove()`卸载事件，因此截止到目前最新的Backbone1.3.3版本，依然未能彻底在官方实现上解决僵尸视图的问题。
 
 > 解决僵尸视图的关键，是需要在恰当的位置提供一种通用的事件**卸载**机制，而Backbone视图的切换多与路由URL的状态变化相关，因此路由事件成为解决Backbone僵尸视图问题的关键点所在。
 
 
 ## 构建单页面应用
 
-构建单页面应用时，嵌套视图和僵尸视图长期困扰着Backbone开发人员，
+Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着后续的Backbone开发人员。
 
 http://marionettejs.com/
 
