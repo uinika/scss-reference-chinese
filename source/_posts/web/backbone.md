@@ -292,11 +292,11 @@ var myGroup = new group([
 
 ## 构建单页面应用
 
-Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着后续的Backbone开发人员。
+Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着继往开来的Backbone开发人员们。伴随移动互联网的快速崛起，对单页面应用交互的需求量越来越大，大量开发人员在实际开发实践过程中，逐步对`Backbone.Router`进行增强，其间诞生了[backbone.routefilter](https://github.com/boazsender/backbone.routefilter)和[backbone.subroute](https://github.com/BackboneSubroute/backbone.subroute)两款优秀的第3方Backbone路由插件，基本解决了**僵尸视图**卸载的痛点。但是，伴随Web前端的交互逻辑越来越复杂，**嵌套视图**的问题又逐步开始凸显，而**嵌套视图**依然与**路由机制**密切相关。因此，[marionette](http://marionettejs.com/)和[thorax](https://github.com/walmartlabs/thorax)两款基于Backbone的单页面前端框架应运而生。
 
-http://marionettejs.com/
+marionette
 
-https://github.com/walmartlabs/thorax
+thorax
 
 ## 基于RequireJS模块化
 
