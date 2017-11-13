@@ -273,7 +273,7 @@ var myGroup = new group([
 ]);
 ```
 
-`Collection`与`Model`分离的设计方式，在服务器后端接口需要变化或者调整的时候，总是需要去更改相应的数据类型及关联操作，这样对于前端开发人员敏捷的响应需求变化是非常不利的。这样的设计方式，在Java开源MVC框架大行其道的年代，多少是受到服务器后端**对象-关系映射**理念的影响，笔者认为这是Backbone处理比较欠妥的一个的地方；虽然站在**MVVM**里`ViewModel`的角度有其合理性，但是实现起来还是相对冗杂了一些。因此，笔者在Backbone的使用实践当中，最终摒弃了`Collection`的使用，而完全通过Model或者Model上的数组属性来接收服务器端的响应，并且在项目中通过下划线`_`引用全局的underscore操作各类数据，避免与Backbone数据对象的类型发生耦合。
+`Collection`与`Model`分离的设计方式，在服务器后端接口需要变化或者调整的时候，总是需要去更改相应的数据类型及关联操作，这样对于前端开发人员敏捷的响应需求变化是非常不利的因素。这样的设计方式，在Java开源MVC框架大行其道的年代，多少是受到服务器后端**对象-关系映射**理念的影响，笔者认为这也是Backbone另外一处处理得比较欠妥的地方；虽然站在**MVVM**里`ViewModel`的角度有其合理性，但是实现起来还是相对冗杂了一些。因此，笔者在Backbone的使用实践当中，最终摒弃了`Collection`的使用，而完全通过Model以及Model上的数组属性来接收服务器端响应，并且在项目中通过下划线`_`引用全局的underscore操作各类数据，避免与Backbone数据对象的类型发生耦合。
 
 ## 僵尸视图问题
 
@@ -281,13 +281,13 @@ var myGroup = new group([
 
 1. 通过`Backbone.View`的`events`属性绑定事件到视图的DOM元素。
 2. 为`Collection`和`Model`绑定`change`事件，然后在事件触发时调用`render()`进行页面重绘。
-3. 应用程序的各块业务逻辑都通过`Backbone.Events`提供的事件机制进行驱动的场景。
+3. 应用程序的各块业务逻辑都通过`Backbone.Events`提供的事件机制进行通信。
 
 在开发单页面应用程序的场景下，当视图对象伴随URL路由地址不断进行局部刷新的时候，由于大量事件并未伴随视图对象的移除而同时解除绑定，造成大量事件对象堆积在浏览器内存当中，逐渐让视图对象成为僵尸视图，最终引发内存溢出的惨剧（*更加详细的讨论可以参见[Zombies! RUN! (Managing Page Transitions In Backbone Apps)](https://lostechies.com/derickbailey/2011/09/15/zombies-run-managing-page-transitions-in-backbone-apps/)一文*）。
 
 早期的Backbone版本并没有提供僵尸视图的解决办法，直到Backbone1.2.x版本之后，开始在`Backbone.View`视图对象上新增加一个`remove()`函数支持，可以在移除视图对象DOM元素的同时，自动调用`stopListening`移除之前通过`listenTo`绑定到视图上的Backbone自定义事件，但是`remove()`并没有同时移除视图上绑定的JQuery DOM事件，所以还需要再手动进行清理。加上`Backbone.Router`的API设计过于简单，也没有提供相应的路由切换回调函数去自动调取`remove()`卸载事件，因此截止到目前最新的Backbone1.3.3版本，依然未能彻底在官方实现上解决僵尸视图的问题。
 
-> 解决僵尸视图的关键，是需要在恰当的位置提供一种通用的事件**卸载**机制，而Backbone视图的切换多与路由URL的状态变化相关，因此路由事件成为解决Backbone僵尸视图问题的关键点所在。
+> 解决僵尸视图问题的关键，是需要在恰当的位置提供一种通用的事件**卸载**机制，而Backbone视图的切换多与路由URL的状态变化相关，因此路由事件成为解决Backbone僵尸视图问题的关键点所在。
 
 
 ## 构建单页面应用
