@@ -292,15 +292,15 @@ var myGroup = new group([
 
 ## 构建单页面应用
 
-Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着继往开来的Backbone开发人员们。伴随移动互联网的快速崛起，对单页面应用交互的需求量越来越大，大量开发人员在实际开发实践过程中，逐步对`Backbone.Router`进行增强，其间诞生了[backbone.routefilter](https://github.com/boazsender/backbone.routefilter)和[backbone.subroute](https://github.com/BackboneSubroute/backbone.subroute)两款优秀的第3方Backbone路由插件，基本解决了**僵尸视图**卸载的痛点。但是，伴随Web前端的交互逻辑越来越复杂，**嵌套视图**的问题又逐步开始凸显，而**嵌套视图**依然与**路由机制**密切相关。因此，[Marionette](http://marionettejs.com/)和[Thorax](https://github.com/walmartlabs/thorax)两款基于Backbone的单页面前端框架应运而生。
+Backbone出现的年代，Web单页面应用开发方式还未能普及，基于JSP或PHP等服务器标签的前后端耦合式开发还是主流，因此Backbone对构建单页面应用的支持还较为薄弱，也造成**嵌套视图**和**僵尸视图**两大问题长期困扰着继往开来的Backbone开发人员们。伴随移动互联网的快速崛起，对单页面应用交互的需求量越来越大，许多开发人员在实际开发实践过程中，逐步对`Backbone.Router`进行增强，其间诞生了[backbone.routefilter](https://github.com/boazsender/backbone.routefilter)和[backbone.subroute](https://github.com/BackboneSubroute/backbone.subroute)两款优秀的第3方Backbone路由插件，基本解决了**僵尸视图**卸载的痛点。但是伴随Web前端交互逻辑愈加复杂，**嵌套视图**的问题又开始逐步凸显，而**嵌套视图**依然与**路由机制**密切相关。因此，[Marionette](http://marionettejs.com/)和[Thorax](https://github.com/walmartlabs/thorax)两款基于Backbone的单页面前端框架应运而生。
 
-Thorax对Backbone和Handlebars进行了深度的整合，提供了一栈式的体验，相对Marionette更加轻量也更加容易上手，可惜目前该项目作者已经停止更新和维护。而Marionette则是一款相当完善的Backbone重型单页面应用框架，完美解决了**嵌套视图**和**僵尸视图**的问题，但是同时也引入了更多的概念和API，学习曲线较为陡峭。其开源团队在配合Backbone1.3.3版本发布Marionette3.5.1之后更新周期明显放慢，好在团队依然在认真处理Github上的Issues，应该算是当前Backbone技术栈开发单页面应用为数不多的选择**(￢_￢)**。
+Thorax对Backbone和Handlebars进行了深度的整合，提供了一栈式的体验，相对Marionette更加轻量也更加容易上手，可惜目前该项目作者已经停止更新和维护。而Marionette则是一款相当完善的Backbone重型单页面应用框架，完美解决了**嵌套视图**和**僵尸视图**的问题，但是同时也引入了更多的概念和API，学习曲线较为陡峭。其开源团队在配合Backbone1.3.3版本发布Marionette3.5.1之后更新周期明显放慢，好在团队依然在接收并处理Github上的Issues，应该算是当前Backbone技术栈开发单页面应用为数不多的选择**(￢_￢)**。
 
 ## 基于RequireJS模块化
 
-在开发人员还不能使用ES6的`import`和`export`语句愉快的进行模块化的年代，RequireJS几乎成为前端模块化的必然选择，通过为`define()`方法添加相应的依赖和回调函数，实现JavaScript代码的模块化，随后诞生的Angular1.x通过`angular.module`提供了类似的模块化特性，但是只能异步的加载HTML模板，并不能异步加载JavaScript脚本，使用上略有局限，虽然也有开发人员提出整合Angular1.x和RequireJS来弥补该局限，但是两种模块化机制混用又会为项目带来新的复杂度。
+在开发人员还不能使用ES6的`import`和`export`语句愉快的进行模块化的年代，RequireJS几乎成为前端模块化的必然选择，通过设置相应的依赖与回调函数，实现JavaScript代码的模块化，随后诞生的Angular1.x通过`angular.module`提供了类似的模块化特性，但缺点在于只能异步的加载HTML模板，并不能异步加载JavaScript脚本，使用上略有局限，虽然也有开发人员提出整合Angular1.x和RequireJS来弥补该局限，但是两种模块化机制混用又会为项目带来新的复杂度。
 
-RequireJS遵循了AMD规范，提供`require()`方法加载依赖然后执行相应回调函数，以及`define()`方法去定义AMD模块。
+RequireJS遵循了AMD规范，API设计非常简洁明了，提供`require()`方法加载依赖然后执行相应回调函数，以及使用`define()`方法定义AMD模块。
 
 ```javascript
 require([
@@ -352,19 +352,19 @@ define([
 
 虽然RequireJS本身可以异步按需加载各种依赖，但是受限于`Backbone.Router`实例化时会一次性加载所有视图对象，导致整个应用程序会在启动时一次性加载所有依赖，产品层面并没有体现出前端模块化之后的优势，仅仅有利于项目源代码的管理。但是通过**Backbone**+**RequireJS**的组合来实现`.css`、`.js`、`.html`的完全异步加载，确实为后续现代化前端框架的发展提供了比较良好的示范。
 
-> Webpack2.x.x已经原生支持ES6的`import`语句，且增加了`import()`代码切割（*code split*）函数，应该是目前最方便好用的前端模块化暨打包工具。
+> Webpack2.x.x已经原生支持ES6的`import`语句，且增加了`import()`代码切割（*code split*）函数，应该是迄今为止最为方便好用的前端模块化暨打包工具。
 
 ## 完整Demo
 
 廉颇老矣，尚能饭否？在Web前端技术日新月展的年代，Backbone或许真的已经老了。但并不能忽略其在JavaScript前端框架演进历史当中，所曾经扮演过的重要角色。包括underscore及后续发展出来的lodash，**Jeremy Ashkenas**（*backbone和underscore的共同作者*）为开源社区做出的杰出贡献有目共睹。
 
-笔者花去周末2天时间撰写本文，一方面是对过去使用Backbone的经验和体会做一些总结；另一方面也是让大家在Webpack横行、各类高度封装的单页面前端框架层出不穷的年代，能够静下心来思考原生JavaScript究竟在浏览器里发生了哪些有趣的故事。与此同时，笔者将过去使用的Backbone前端架构抽象成为一个小小的Demo，并且同样在Github上开源出来，希望读者在阅读本文的过程中，结合Demo当中的源代码，去体会现代化前端框架发展的历史沿革。
+笔者花去周末2天时间撰写本文，一方面是对过去使用Backbone的经验和体会做一些总结；另一方面也是让大家在Webpack横行、各类高度封装的单页面前端框架层出不穷的年代，能够静下心来思考原生JavaScript究竟在浏览器里发生了哪些有趣的故事；与此同时，笔者将过去使用的Backbone前端架构抽象成为一个小小的Demo，在Github上开源出来，希望读者在阅读本文的过程中，结合Demo当中的源代码，去深入体会现代化前端框架发展的历史沿革。
 
 开源Demo项目命名为**[sparrow](https://github.com/uinika/sparrow)**，仍然基于NodeJS和Gulp工作流构建，编译时会对每个模块进行代码混淆或压缩，有兴趣的同学可以去**[我的Github](https://github.com/uinika)**进行克隆（*项目基于笔者技术团队日常的开发实践，提供了一个比较通用和完善的Backbone项目结构*）。
 
 ![](backbone/structure.png "项目结构")
 
-`general`目录下是通用的JavaScript工具方法或者Less样式，`libraries`目录下是项目依赖的各种库文件，`assets`目录下放置图片、字体、多媒体内容，`snippets`目录存放项目所有的样式、模板、脚本文件，`router.js`用于配置路由，而下面的`index.html`总是所有Web前端故事开始的地方。
+`general`目录下是通用的JavaScript工具方法以及Less样式，`libraries`目录下是项目依赖的各种库文件，`assets`目录下放置图片、字体、多媒体内容，`snippets`目录存放项目所有的样式、模板、脚本文件，`router.js`用于配置路由，而下面的`index.html`代码则是所有Web前端故事开始的地方。
 
 ```html
 <!DOCTYPE html>
