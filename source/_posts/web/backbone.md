@@ -4,19 +4,19 @@ tags: JavaScript
 categories: Web
 ---
 
-伴随着W3C协议规范不断更新，以及现代化浏览器技术的不断进步，Web前端技术在整体取得日新月异发展的同时，也推动着页面UI/UE与交互逻辑的迅速膨胀。开发人员函需从大量底层处理的劳动中解脱出来，更加从容的去面对纷繁复杂的单页面交互需求。本文开头会先简单的梳理一下历史，然后基于现代化前端框架的主要特性，逐一对Backbone进行比较和剖析。
+伴随着W3C协议规范的不断更新，以及现代化浏览器技术的快速进步，Web前端技术整体取得了日新月异发展，交互体验更加丰富与多样化，与此同时业务逻辑也在极速的膨胀。开发人员函需从大量DOM底层处理的劳动中解放出来，更加从容的面对纷繁复杂的各式交互需求。本文开头先简单的梳理一下历史，然后基于现代化前端框架的主要特性，逐一与Backbone进行比较和剖析。
 
 ![](backbone/logo.png)
 
-从前端技术发展趋势的角度而言，目前层出不穷的现代化前端框架的诞生，都可以认为是Angular和Backbone等古典前端框架设计思想走向融合之后的产物。虽然截至到本文开始执笔的时间，Backbone已经略微**old school**，但之所以单独对Backbone着重笔墨，主要是在**组件化**和**作用域控制**等方面，Backbone更加接近于现代化前端框架的设计理念，而这两点又正好是同一时期的Angular并没有解决好的问题。
+从前端技术发展趋势的角度而言，目前层出不穷的现代化前端框架的诞生，都可以认为是Angular和Backbone等古典前端框架设计思想走向融合之后的产物。虽然截至到本文执笔的时间点，Backbone已经略微**old school**，但之所以依然单独对Backbone着重笔墨，主要是在**组件化**和**作用域控制**等方面，Backbone更加接近于现代化前端框架的设计理念，而这两点又正好是同一时期的Angular并没有解决好的问题。
 
 <!-- more -->
 
-起步于2005年的[jQuery](http://jquery.com/)仅仅对DOM操作进行了基础性的封装，提供了可链式调用的写法、更加友好的ajax函数、屏蔽了浏览器兼容性的丰富选择器，但是并没有解决前端开发中选择器滥用、作用域相互污染、代码复用度低冗余度高、数据和事件绑定烦琐等等痛点。
+起步于2005年的[jQuery](http://jquery.com/)仅仅对DOM操作进行了基础性的封装，提供了可链式调用的写法、更加友好的Ajax函数、屏蔽了浏览器兼容性的各类选择器，但是并没有解决前端开发中选择器滥用、作用域相互污染、代码复用度低冗余度高、数据和事件绑定烦琐等痛点。
 
-为此，2009年横空出世的[Angular](https://angularjs.org/)提供了一揽子解决方案，对浏览器原生事件机制进行深度封装的同时，提供了路由、双向绑定、指令等现代化前端框架的特性，但是也正是由于其封装的抽象程度太深，学习曲线相对陡峭，而对于`controller`和`$scope`的过度倚重，以及照搬Java的MVC分层思想试图通过`service`来完成页面逻辑的复用，并未彻底解决前端开发前面提到的诸多痛点。
+为此，2009年横空出世的[Angular](https://angularjs.org/)提供了一揽子解决方案，对浏览器原生事件机制进行深度封装的同时，提供了路由、双向绑定、指令等现代化前端框架的特性，但是也正是由于其封装的抽象程度太深，学习曲线相对陡峭，而对于`controller`和`$scope`的过度倚重，以及照搬Java的MVC分层思想试图通过`service`来完成页面逻辑的复用，并未彻底解决前端开发过程中的上述痛点。
 
-诞生于2010的[Backbone](http://backbonejs.org/)则另辟蹊径，通过与[Undersocre](http://underscorejs.org/)、[Require](http://requirejs.org/)、[Handlebar](http://handlebarsjs.com/)的整合，为那个年代的开发人员提供了Angular之外，一个更加轻量和友好的前端开发解决方案，许多思想对于后续的现代化前端框架的发展起到了举足轻重的作用。
+诞生于2010的[Backbone](http://backbonejs.org/)则另辟蹊径，通过与[Undersocre](http://underscorejs.org/)、[Require](http://requirejs.org/)、[Handlebar](http://handlebarsjs.com/)的整合，为那个年代的开发人员提供了Angular之外，一个更加轻量和友好的前端开发解决方案，其诸多设计思想对于后续的现代化前端框架发展起到了举足轻重的作用。
 
 ![](backbone/intro-views.png "Backbone")
 
@@ -110,9 +110,9 @@ export class DemoDetailComponent {
 
 ## 作用域控制
 
-通过上面代码的比较，大家应该能够了解，Backbone视图对象的核心任务在于**DOM选择器、数据事件绑定的作用域控制**。Web前端组件化的过程，实质是可以认为是一个切割DOM的过程，切割DOM必然意味同时需要分离**事件**和**绑定数据**，并且控制视图对象上选择器的作用范围。
+通过上面代码的比较，大家应该能够了解，Backbone视图对象的核心任务在于**DOM选择器、数据事件绑定的作用域控制**。Web前端组件化的过程，实质是可以认为是一个切割DOM的过程，切割DOM必然意味同时需要分离**事件**和**数据绑定**，并且控制视图对象上选择器的作用范围。
 
-首先，Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象，集中注册当前视图对象上涉及的DOM事件，以及事件触发的选择器和事件类型。
+首先，Backbone的事件绑定机制源于JQuery的事件委托方法`on()`，Backbone仅仅将其封装成为一个简单明了的糖衣语法对象`events`，集中注册当前视图对象上涉及的DOM事件，以及事件触发的选择器和事件类型。
 
 ```javascript
 var View = Backbone.View.extend({
@@ -140,11 +140,11 @@ var View = Backbone.View.extend({
 return View;
 ```
 
-其次，从DOM选择器的角度，上面Backbone对象当中所有需要对于DOM进行的操作，都封装到`this.$el()`或者`this.$()`函数上进行，核心目的就是为了控制JQuery选择器的作用域，防止选择器的互相污染，并提升选择器的效率。
+其次，从DOM选择器的纬度，上面例子中Backbone对象内的全部DOM操作，都被封装至`this.$el()`或者`this.$()`函数上进行，核心目的就是为了控制JQuery选择器的作用域，防止选择器的互相污染，并且也一定程度上提升了选择器的效率。
 
 ## 数据绑定
 
-Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达式，但鉴于underscore模板表达式在书写循环语句时语法过于繁杂，因此在实际生产环境下，笔者采用了Handlebars模板引擎进行数据绑定，通过执行`template: Handlebars.compile(Html)`编译字符串模板，提供与Angular以及Vue当中Mustache表达式类似的开发体验。因为字符串模板编译后通过`this.$el.html(this.template())`插入当前视图对象，因此也就实质上完成了上面内容所提到的**数据绑定的作用域控制**。
+Backbone原生的数据绑定需要依赖于underscore当中的`<%=...%>`表达式，但鉴于underscore模板表达式在书写循环语句时语法过于繁杂，因此在实际生产环境下，笔者采用了Handlebars模板引擎进行数据绑定，通过执行`template: Handlebars.compile(Html)`编译字符串模板，提供与Angular以及Vue当中Mustache表达式类似的开发体验。因为字符串模板编译后通过`this.$el.html(this.template())`插入当前视图对象，实质上就是通过`this`指针的运用，完成了上面内容所提到的**数据绑定的作用域控制**。
 
 ```html
 {{#each comments}}
@@ -200,7 +200,7 @@ var View = Backbone.View.extend({
 return View;
 ```
 
-上面代码中，首先设置视图对象的`model`属性，通过`new Model()`实例化当前代码内所继承的`Backbone.Model`对象。然后在当前视图对象的初始化函数`initialize`当中，通过Backbone视图对象上内置的`listenTo(this.model, 'change', this.render)`方法完成对模型的监听，并设置相应的回调渲染函数。从API使用的角度而言，**Backbone缺乏一个真实的ViewModel概念**，但是实际生产环境下，可以考虑将该视图对象所涉及的多个数据对象集中放置在一个`Model`内部处理，从而最大程度上模拟ViewModel作为视图和模型之间数据绑定介质的作用，虽然这样的灵活处理方式显得并不优雅。
+上面代码中，首先设置视图对象的`model`属性，通过`new Model()`实例化当前代码内所继承的`Backbone.Model`对象。然后在当前视图对象的初始化函数`initialize`当中，通过Backbone视图对象上内置的`listenTo(this.model, 'change', this.render)`方法完成对模型的监听，并设置相应的回调渲染函数。从API使用的角度而言，**Backbone缺乏一个真实的ViewModel概念**，但是实际生产环境下，可以考虑将该视图对象所涉及的多个数据对象集中放置在一个`Model`内部处理，从而最大程度上模拟ViewModel作为视图和模型之间数据绑定介质的作用，虽然这样的灵活处理方式显得不尽优雅。
 
 ## 前端路由
 
@@ -208,7 +208,7 @@ Web应用程序通常需要提供可链接的、可书签化的、可任意进�
 
 ![](backbone/intro-routing.png "Router")
 
-路由事件当中，通常会初始化Backbone视图对象上的`render()`函数，然后调用其`$el`属性将渲染后的Backbone视图对象转换为JQuery对象，并通过`$.html()`将其插入到应用程序的DOM挂载点，从而将URL状态的变化绑定到页面状态的局部刷新。
+路由事件当中，通常会初始化Backbone视图对象上的`render()`函数，然后调用其`$el`属性将渲染后的Backbone视图对象转换为JQuery对象，并通过`$.html()`将其插入到应用程序的DOM挂载点，从而将URL状态的变化绑定至Web页面进行局部刷新。
 
 ```javascript
 var Router = Backbone.Router.extend({
@@ -240,7 +240,7 @@ return Router;
 
 对比上面的代码，大家应该能够发现`vue-router`和`react-router`这两款现代化前端框架的路由实现，与Angular1.x上的`ui-router`最大的区别在于：前者的路由目标是组件Components，而后者的路由则是绑定在控制器Controller。而Backbone路由机制的设计，虽然配置和编写方式略显老派，但是其`URL->路由事件->视图对象->局部HTML片断`的渲染思想，明显相比Angular粒度更小，也更接近现代化前端框架的**组件化路由机制**。
 
-> 2017年以后的Angular1.6.x版本增加了`ngComponentRouter`模块，已经原生提供了Component Router支持。
+> 2017年以后的Angular1.6.x版本增加了`ngComponentRouter`模块，已经原生提供了Component Router组件路由的支持。
 
 ## 模型与集合分离的缺陷
 
@@ -248,7 +248,7 @@ Backbone当中的**Collection**用于存放**Model**，这样的设计主要是�
 
 ![](backbone/intro-collections.png "Collection")
 
-创建*Collection*需要首先创建*Model*，然后将该*Model*赋值给`Backbone.Collection`继承对象的`model`属性，最后在实例化*Collection*时通过构造函数传入每个具体的*Model*。因此，Backbone当中*Collection*和*Model*的关系实质类似于**数组**与**对象**的关系，Backbone只是将这两种引用数据类型分开进行处理，便于分别使用Underscore上提供的辅助函数处理对应的数据类型。
+创建*Collection*需要首先创建*Model*，然后将该*Model*赋值给`Backbone.Collection`继承对象的`model`属性，最后在实例化*Collection*时通过构造函数传入每个具体的*Model*。因此，Backbone当中*Collection*和*Model*的关系实质类似于**数组**与**对象**的关系，Backbone只是将这两种引用数据类型分开进行处理，便于使用Underscore上提供的辅助函数处理各自的数据类型。
 
 ```javascript
 var user = Backbone.Model.extend({
