@@ -6,7 +6,7 @@ categories: Web
 
 ![](jquery/logo.png)
 
-伴随`Vue`、`Angular`、`React`等编译式前端框架的崛起，前端开发人员逐渐从繁琐的DOM操作当中解脱出来。但是在项目实践过程当中，依然存有诸多问题需要通过直接操作DOM来解决，虽然现代化浏览器已经支持等HTML5新特性，不过为了屏蔽各种浏览器原生API接口的差异化，最终依然需要借助`jQuery`来实现DOM操作。所以，`jQuery`这款诞生于2006年的库，依然在现代化前端开发当中扮演着重要角色，本文结合笔者近几年的实践经验，总结了使用`jQuery`过程当中容易被忽略的一些问题。
+伴随`Vue`、`Angular`、`React`等编译式前端框架的崛起，前端开发人员逐渐从繁琐的DOM操作当中解脱出来。但是在项目实践过程当中，依然存有诸多问题需要通过直接操作DOM来解决，虽然现代化浏览器已经支持`selectAll()`等HTML5新特性，不过为了屏蔽各式浏览器原生API的差异，实际开发场景依然需要借助`jQuery`来完成DOM操作。因此`jQuery`这款诞生于2006年的库，依然在**现代化前端开发**当中扮演着重要角色。本文结合笔者积累的实践经验，总结了使用`jQuery`使用过程中一些容易被忽略的问题。
 
 <!-- more -->
 
@@ -21,7 +21,7 @@ var html = dom.innerHTML; // 获取DOM元素内的HTML代码
 
 ![](jquery/dom.png "通过document获取原生DOM对象")
 
-- jQuery对象：被jQuery包装过的DOM对象
+- jQuery对象：被jQuery包装过的DOM对象。
 
 ```javascript
 var jq = $("#app"); // 获取jQuery对象
@@ -30,7 +30,7 @@ var html = jq.html(); // 获取jQuery对象内的HTML代码
 
 ![](jquery/jquery.png "jQuery对象的本质是数组")
 
-> 不能交换使用jQuery对象、DOM对象上的属性，如上面代码中的`innerHTML`与`html()`。
+> 不能交换使用jQuery对象、DOM对象上的属性，例如上面代码中的`innerHTML`与`html()`。
 
 ## jQuery对象->DOM对象
 
@@ -68,7 +68,7 @@ var jq = $(dom);
 
 下面对jQuery选择器的性能由高向低进行排序：
 
-1. ID选择器
+1、ID选择器
 
 底层通过调用`document.getElementById()`实现。
 
@@ -76,7 +76,7 @@ var jq = $(dom);
 $("#id")
 ```
 
-2. 标签选择器
+2、标签选择器
 
 底层通过调用`document.getElementsByTagName()`实现。
 
@@ -84,7 +84,7 @@ $("#id")
 $("input")
 ```
 
-3. 类选择器
+3、类选择器
 
 底层通过调用`document.getElementsByClassName()`实现。
 
@@ -92,7 +92,7 @@ $("input")
 $(".class")
 ```
 
-4. 属性及其它选择器
+4、属性及其它选择器
 
 底层通过对HTML字符串进行正则表达式匹配来实现。
 
