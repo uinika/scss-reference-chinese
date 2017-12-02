@@ -1,8 +1,12 @@
 ---
-title: Linux开发环境个性化配置
+title: Linux工作环境个性化配置
 tags: Embedded
 categories: Linux
 ---
+
+博主使用Linux作为日常**开发**和**工作**环境已经近5年时间，几乎玩遍了`Debian`、`Ubuntu`、`Mint`、`Fedora`等桌面环境。虽然Linux作为服务器运行稳定并且可靠，但是在桌面GUI这个层面，多显卡驱动兼容性和CPU占用率过高等诸多问题，在Linux开源社区依然悬而未决。各类依赖包的商业授权许可，依然掣肘着Linux操作系统的桌面化进程。但是瑕不掩瑜的是作为开发环境，Linux环境确实提供了各类十分好用的生产力工具，加之笔者完成嵌入式Linux开发时，需要将其作为交叉编译环境，因此日常的开发工作都需要在Linux桌面系统上完成。
+
+![](config/logo.png)
 
 ## Mount NTFS
 
@@ -13,6 +17,8 @@ sudo ntfsfix /dev/sda2
 sudo ntfsfix /dev/sda3
 sudo ntfsfix /dev/sda4
 ```
+
+<!-- more -->
 
 ## VSCode
 
@@ -47,7 +53,6 @@ sudo ntfsfix /dev/sda4
 }
 ```
 
-<!-- more -->
 
 ## DEB Packages
 

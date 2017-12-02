@@ -4,9 +4,9 @@ tags: JavaScript
 categories: Web
 ---
 
-![](jquery/logo.png)
-
 伴随`Vue`、`Angular`、`React`等编译式前端框架的崛起，前端开发人员逐渐从繁琐的DOM操作当中解脱出来。但是在项目实践过程当中，依然存有诸多问题需要通过直接操作DOM来解决，虽然现代化浏览器已经支持`selectAll()`等HTML5新特性，不过为了屏蔽各式浏览器原生API的差异，实际开发场景依然需要借助`jQuery`来完成DOM操作。因此`jQuery`这款诞生于2006年的库，依然在**现代化前端开发**当中扮演着重要角色。本文结合笔者积累的实践经验，总结了使用`jQuery`使用过程中一些容易被忽略的问题。
+
+![](jquery/logo.png)
 
 <!-- more -->
 

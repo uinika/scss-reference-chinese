@@ -1,10 +1,10 @@
 ---
-title: React与Flux的两三事儿
+title: React 16.2.x官方文档解读
 tags: JavaScript
 categories: Web
 ---
 
-React 16.2.x新特性，
+全文翻译自[React 16.2.0英文文档](https://reactjs.org/)，适当精简了生产环境不常使用的内容，并对部分比较复杂的概念进行更翔实的解读，以及与Vue2进行了一些特性上的比较。应该是目前**最新**、**最完整**的React上手指南，适合已经具备**组件式**前端框架开发经验的同学快速上手React 16。
 
 ![](react/logo.ico)
 
@@ -123,7 +123,7 @@ const element = (
 );
 ```
 
-### JSX可以自动预防注入攻击
+### JSX可以预防脚本注入攻击
 
 React DOM默认会在JSX渲染之前，避免任何值嵌入。因此可以确保不会被注入显式编写在应用外的其它内容。为了避免XSS跨站脚本攻击，任何内容在渲染之前都会被转换为字符串。
 
@@ -212,6 +212,8 @@ setInterval(timer, 1000);
 
 React DOM会比较当前React元素与其之前的状态，然后只对发生变化的DOM局部执行更新操作。
 
+![](react/elements-update.gif "React只对变化的那部分DOM内容进行更新")
+
 
 ## Components
 
@@ -238,23 +240,137 @@ class Welcome extends React.Component {
 }
 ```
 
+### 渲染一个组件
 
-
-
-```jsx
-
-```
+首先定义一个React组件，然后将组件赋值给一个React元素，最后再使用`ReactDOM.render()`方法渲染该React元素到页面上。
 
 ```jsx
+// 定义一个函数式组件
+function Welcome(props) {
+  return <h1>你好, {props.name}！</h1>;
+}
 
+// 将上面定义的组件赋予一个React元素
+const element = <Welcome name="Hank" />;
+
+// 渲染这个元素
+ReactDOM.render(
+  element,
+  document.getElementById('app')
+);
 ```
+
+> React组件的名称通常约定为**大写**格式。
+
+### 组合使用多个组件
+
+我们可以在一个组件返回的JSX当中组合引用其它的组件。
 
 ```jsx
+function Welcome(props) {
+  return <h1>你好, {props.name}！</h1>;
+}
 
+function App() {
+  return (
+    <div>
+      <Welcome name="Hank" />
+      <Welcome name="Jack" />
+      <Welcome name="Candy" />
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
 ```
+
+### 组件的抽取
+
+可以将一个较大的组件分割为更加细粒度的组件，便于复用与维护，例如下面这个函数式组件`Comment`：
+
 ```jsx
-
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <div className="UserInfo">
+        <img className="Avatar"
+          src={props.author.avatarUrl}
+          alt={props.author.name}
+        />
+        <div className="UserInfo-name">
+          {props.author.name}
+        </div>
+      </div>
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
 ```
+
+可以将其拆分为`Avatar`，`UserInfo`，`Comment`三个具有包含关系的组件。
+
 ```jsx
+function Avatar(props) {
+  return (
+    <img className="Avatar"
+      src={props.user.avatarUrl}
+      alt={props.user.name}
+    />
+  );
+}
 
+function UserInfo(props) {
+  return (
+    <div className="UserInfo">
+      <Avatar user={props.user} />
+      <div className="UserInfo-name">
+        {props.user.name}
+      </div>
+    </div>
+  );
+}
+
+function Comment(props) {
+  return (
+    <div className="Comment">
+      <UserInfo user={props.author} />
+      <div className="Comment-text">
+        {props.text}
+      </div>
+      <div className="Comment-date">
+        {formatDate(props.date)}
+      </div>
+    </div>
+  );
+}
 ```
+
+### Props是只读的
+
+无论是以函数式还是`class`类的方式声明组件，都不能对它们的`props`进行修改。
+
+```jsx
+function pure(firstname, lastname) {
+  return firstname + lastname; // 没有对props进行修改
+}
+
+function impure(firstname, lastname) {
+  firstname = "nothing"; // 对props进行了修改，因此不建议这样做
+}
+```
+
+> **重要原则：组件外部只能通过props改变组件本身的行为。**
+
+
+## State
+
+
+## Lifecycle
