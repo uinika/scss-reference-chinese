@@ -85,6 +85,16 @@ cd ~/.vim/bundle/YouCompleteMe
 ./install.sh --clang-completer
 ```
 
+## Peek
+
+[an animated GIF recorder](https://github.com/phw/peek)
+
+```
+sudo add-apt-repository ppa:peek-developers/stable
+sudo apt update
+sudo apt install peek
+```
+
 ## Openshot
 
 ```
