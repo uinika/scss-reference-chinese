@@ -521,7 +521,7 @@ ReactDOM.render(
 
 ### componentDidMount()钩子
 
-React组件被渲染到HTML DOM后被执行，可以用来初始化之前例子中的定义器。
+React组件被渲染到HTML DOM后被执行，可以用来初始化之前例子中的定时器。
 
 ```jsx
 componentDidMount() {
@@ -535,8 +535,146 @@ componentDidMount() {
 
 ### componentWillUnmount()钩子
 
-
+React组件从HTML DOM卸载之前得到执行，可以用来销毁定义在组件`this`上的定时器。
 
 ```jsx
+componentWillUnmount() {
+  clearInterval(this.timerID);
+}
+```
 
+### 抽取timer()函数
+
+`timer()`函数会通过`this.setState()`定时更新组件本身的`state`，从而动态展示当前时间。
+
+```jsx
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.timer(),
+      1000
+    );
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+
+  timer() {
+    this.setState({
+      date: new Date()
+    });
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('app')
+);
+```
+
+
+## 深入State
+
+除了在类组件的构造函数中之外，不允许直接修改`state`，而必须通过组件提供的`setState()`方法。
+
+```jsx
+// 错误
+this.state.comment = '你好';
+
+// 正确
+this.setState({comment: '你好'});
+```
+
+React中`this.props`和`this.state`的更新都是**异步**的，当在同一个组件中多次应用时，不能依赖它们去计算下一个状态（*可能会造成错误*），例如下面代码可能会错误的更新计数器：
+
+```jsx
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+```
+
+要修复这个问题，`setState()`可以接收一个函数作为参数，该函数第1个参数是之前的`state`，第2个参数是`props`。
+
+```jsx
+this.setState((prevState, props) => ({
+  counter: prevState.counter + props.increment
+}));
+```
+
+通过`setState()`对state的更新操作都会合并到当前state，例如下面代码的`state`中可以包含多个独立值：
+
+```jsx
+constructor(props) {
+  super(props);
+  this.state = {
+    users: [],
+    groups: []
+  };
+}
+```
+
+然后可以在组件里，分别使用`setState()`对这些值进行单独更新。
+
+```jsx
+componentDidMount() {
+  fetchUser().then(response => {
+    this.setState({
+      users: response.users
+    });
+  });
+
+  fetchGroup().then(response => {
+    this.setState({
+      groups: response.groups
+    });
+  });
+}
+```
+
+## 单向数据流
+
+React当中的`state`通常被认为是*局部的*或者*封装的*，除了拥有并设置它的组件之外，其它任何组件都不能对其进行访问。因此，父子组件之间，可以通过将`state`赋值给`props`的方式，将父组件的内部状态传递给子组件。
+
+```jsx
+<FormattedDate date={this.state.date} />
+
+function FormattedDate(props) {
+  return <h2>It is {props.date.toLocaleTimeString()}.</h2>;
+}
+```
+
+上面代码当中的`FormattedDate`组件通过其props接收了父组件传递过来的状态`this.state.date`。因此，可以认为React组件之间的数据流向是从**父组件至子组件**，即一个**由上至下**的关系，通常被称为**单向数据流**，
+
+> 可以将一个组件树中的`props`想象成一个瀑布流，每个单独组件的`state`如同一个个的独立水源，在任意时间节点加入到瀑布流当中，然后共同向下流动。
+
+```jsx
+function App() {
+  return (
+    <div>
+      <Clock />
+      <Clock />
+      <Clock />
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('app')
+);
 ```
