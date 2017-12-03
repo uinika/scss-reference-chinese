@@ -363,7 +363,7 @@ function pure(firstname, lastname) {
 }
 
 function impure(firstname, lastname) {
-  firstname = "nothing"; // 对props进行了修改，因此不建议这样做
+  firstname = "nothing"; // 对props进行了修改，不建议这样做
 }
 ```
 
@@ -372,5 +372,171 @@ function impure(firstname, lastname) {
 
 ## State
 
+首先，我们来改写之前定时器`timer`的例子。
+
+```jsx
+function timer() {
+  const element = (
+    <div>
+      <h1>你好, React 16.2.0 !</h1>
+      <h2>现在时间是{new Date().toLocaleTimeString()}。</h2>
+    </div>
+  );
+  ReactDOM.render(
+    element,
+    document.getElementById('app')
+  );
+}
+setInterval(timer, 1000);
+```
+
+然后，将JSX元素`element`从`timer()`函数中提取出来，并抽象为一个JSX组件`Clock`，然后通过`props`向组件传递当前`date`参数。
+
+```jsx
+function Clock(props) {
+  return (
+    <div>
+      <h1>Hello, world!</h1>
+      <h2>It is {props.date.toLocaleTimeString()}.</h2>
+    </div>
+  );
+}
+
+function timer() {
+  ReactDOM.render(
+    <Clock date={new Date()} />,
+    document.getElementById('app')
+  );
+}
+
+setInterval(timer, 1000);
+```
+
+但是，我们希望`Clock`组件的更新总是来自于其内部状态，而非通过组件外部的`props`进行传入，如同下面代码这样：
+
+```jsx
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('root')
+);
+```
+
+这就引出了React组件当中的另一个重要概念**state**，`state`与`props`非常类似，但是其属于组件私有，只能由组件自身进行控制。另外，前面章节有提到**类组件具有比函数式组件更丰富的特性**，而`state`就是这些特性当中的一个，因为它只能由类组件进行使用。
+
+
+### 将函数式组件转换为类组件
+
+首先，需要建立一个继承自`React.Component`ES6的Class类，并添加一个`render()`方法；然后，将组件内容移动至该方法当中，并将函数式组件中传入的`props`参数，修改为通过`this.props`进行引用。
+
+```jsx
+class Clock extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.props.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+```
+
+### 向类组件添加state
+
+首先，将`render()`函数中的`this.props.date`替换为`this.state.date`。
+
+```jsx
+class Clock extends React.Component {
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+```
+
+然后，定义一个`constructor()`构造方法去初始化`this.state`。
+
+```jsx
+class Clock extends React.Component {
+  // 注意这里是如何将props传递到构造函数中的
+  constructor(props) {
+    super(props); // 类组件总是会使用props作为参数调用基类构造器。
+    this.state = {date: new Date()};
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+```
+
+最后，从`<Clock />`元素移除作为`props`的`date`属性。
+
+```jsx
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('app')
+);
+```
+
+最终结果看起来是下面这样的：
+
+```jsx
+class Clock extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {date: new Date()};
+  }
+
+  render() {
+    return (
+      <div>
+        <h1>Hello, world!</h1>
+        <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Clock />,
+  document.getElementById('app')
+);
+```
+
+接下来，我们需要利用React组件提供的**生命周期方法**，每间隔1秒对当前显示的时间进行更新。
 
 ## Lifecycle
+
+多组件应用程序开发当中，非常重要的一点在于：**在组件被销毁的时候去释放组件占用的资源**。即当组件被渲染至DOM的时候，需要初始化`Clock`组件中的定时器，React生命周期中称为`mounting挂载`；然后在组件被销毁时，清除组件定时器所占用的资源，React生命周期中称为`unmounting卸载`。React提供了两个**生命周期钩子（*lifecycle hooks*）**：`componentDidMount()`和`componentWillUnmount()`。
+
+### componentDidMount()钩子
+
+React组件被渲染到HTML DOM后被执行，可以用来初始化之前例子中的定义器。
+
+```jsx
+componentDidMount() {
+  // 设置timer ID到this指针
+  this.timerID = setInterval(
+    () => this.tick(),
+    1000
+  );
+}
+```
+
+### componentWillUnmount()钩子
+
+
+
+```jsx
+
+```
