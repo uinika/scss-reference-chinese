@@ -681,4 +681,83 @@ ReactDOM.render(
 );
 ```
 
-![](react/state-update.gif "React只对变化的那部分DOM内容进行更新")
+![](react/state-update.gif "每个React组件都会单独更新")
+
+
+## 事件
+
+React事件机制与原生JavaScript事件机制语法上有以下不同：
+
+（1）React事件名称使用驼峰命名camelCase。
+
+（2）JSX可以直接使用函数作为事件处理器。
+
+```jsx
+// 原生JavaScript事件
+<button onclick="activateLasers()">
+  Activate Lasers
+</button>
+
+// React事件
+<button onClick={activateLasers}>
+  Activate Lasers
+</button>
+```
+
+（3）React不能通过返回`false`阻止事件默认行为，而必须显式调用`preventDefault()`方法。
+
+```jsx
+<a href="#" onclick="console.log('The link was clicked.'); return false">
+  Click me
+</a>
+
+function ActionLink() {
+  function handleClick(e) {
+    e.preventDefault();
+    console.log('The link was clicked.');
+  }
+
+  return (
+    <a href="#" onClick={handleClick}>点击目标</a>
+  );
+}
+```
+
+上面代码中，传入事件处理函数`handleClick(e)`的参数`e`是React遵循[W3C UI Events事件规范](https://www.w3.org/TR/DOM-Level-3-Events/)实现的合成事件，因此毋需担心跨浏览器兼容性问题。
+
+使用ES6的class定义一个类组件时，通用的做法是以**类方法**的形式定义事件处理函数，例如下面代码定义了一个可以点击切换【打开】和【关闭】状态的按钮。
+
+```jsx
+class Toggle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {isToggleOn: true};
+
+    // 使用bind()方法，将this作用域绑定至回调函数
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    this.setState(prevState => ({
+      isToggleOn: !prevState.isToggleOn
+    }));
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        {this.state.isToggleOn ? '打开' : '关闭'}
+      </button>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Toggle />,
+  document.getElementById('app')
+);
+```
+
+![](react/event-toggle.gif "切换按钮内容的点击事件")
+
+大家注意理解上面代码中JSX回调函数内`this`的意义，JavaScript中类方法默认没有绑定至当前对象的`this`，
