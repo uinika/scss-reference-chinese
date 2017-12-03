@@ -140,7 +140,7 @@ Babel会将JSX编译为一个`React.createElement()`函数调用，因此下面�
 ```jsx
 const element1 = (
   <h1 className="demo">
-    Hello, world!
+    你好, React 16.2.0！
   </h1>
 );
 ```
@@ -148,19 +148,19 @@ const element1 = (
 const element2 = React.createElement(
   'h1',
   {className: 'demo'},
-  'Hello, React 16.2.0!'
+  '你好, React 16.2.0！'
 );
 ```
 
 虽然`React.createElement()`会执行各类检查帮助你编写准确无误的代码，但是本质上其建立的对象是下面的样子：
 
 ```jsx
-// Note: this structure is simplified
+// 为了理解方便，下面展示的对象是被简化后的
 const element = {
   type: 'h1',
   props: {
     className: 'demo',
-    children: 'Hello, React 16.2.0!'
+    children: '你好, React 16.2.0！'
   }
 };
 ```
@@ -662,6 +662,8 @@ function FormattedDate(props) {
 
 > 可以将一个组件树中的`props`想象成一个瀑布流，每个单独组件的`state`如同一个个的独立水源，在任意时间节点加入到瀑布流当中，然后共同向下流动。
 
+下面代码中，在一个`App`组件内部渲染了多个`Clock`组件，每个组件的时间都会独立进行更新，互相不受影响。
+
 ```jsx
 function App() {
   return (
@@ -678,3 +680,5 @@ ReactDOM.render(
   document.getElementById('app')
 );
 ```
+
+![](react/state-update.gif "React只对变化的那部分DOM内容进行更新")
