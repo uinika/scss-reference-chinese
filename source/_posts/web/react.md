@@ -417,7 +417,7 @@ setInterval(timer, 1000);
 ```jsx
 ReactDOM.render(
   <Clock />,
-  document.getElementById('root')
+  document.getElementById('app')
 );
 ```
 
@@ -760,4 +760,268 @@ ReactDOM.render(
 
 ![](react/event-toggle.gif "切换按钮内容的点击事件")
 
-大家注意理解上面代码中JSX回调函数内`this`的意义，JavaScript中类方法默认没有绑定至当前对象的`this`，
+大家注意理解上面类组件`constructor()`构造函数当中，`this.handleClick.bind(this)`的含义。使用`bind()`是为了将类组件的`this`作用域绑定至指定函数，从而方便的在该函数内部使用`this`操作React类组件上的其它方法。
+
+### 绑定组件this到事件处理函数
+
+当然，如果你认为`bind()`使用起来又臭又长，这里有2种方式可以绕开它：
+
+（1）通过实验性的类属性转换语法（*Class properties transform*）正确绑定`this`到事件回调函数当中，不过需要额外安装`babel-plugin-transform-class-properties`插件支持。
+
+```jsx
+class Button extends React.Component {
+  // 本质是将一个箭头函数赋值给一个变量
+  handleClick = () => {
+    console.log('这是：', this);
+  }
+
+  render() {
+    return (
+      <button onClick={this.handleClick}>
+        点击我
+      </button>
+    );
+  }
+}
+```
+
+（2）或者通过箭头函数的方式直接调用事件处理函数。
+
+```jsx
+class Button extends React.Component {
+  handleClick() {
+    console.log('这是：', this);
+  }
+
+  render() {
+    // 这样的书写语法可以确保this正确的绑定到handleClick
+    return (
+      <button onClick={(e) => this.handleClick(e)}>
+        点击我
+      </button>
+    );
+  }
+}
+```
+
+> 这种方式的缺点在于每次不同的事件回调函数被建立时都会触发React组件的重绘（*比如下面的Button*），如果此时事件回调传递`props`到子级组件，则这些组件全部都会发生重绘，从而对页面性能造成影响。因此，React官方更加推荐**通过组件构造器调用`bind()`**和**类属性语法**这两种方式。
+
+### 向事件处理函数传递参数
+
+通常情况下，我们都需要传递参数到事件处理函数，例如传递每一行的`id`，下面使用的`arrow functions`和`Function.prototype.bind`两种写法都是等效的。
+
+```jsx
+<button onClick={(e) => this.deleteRow(id, e)}>删除行</button>
+<button onClick={this.deleteRow.bind(this, id)}>删除行</button>
+```
+
+第1个参数`e`表示的是React事件对象，紧随其后的第2个参数即用来表示`id`。
+
+
+## 条件渲染
+
+React中的条件渲染类似于JavaScript中的条件运算，可以通过`if`等条件运算符去动态展示元素、组件的状态。
+
+```jsx
+function User(props) {
+  return <h1>欢迎回来！</h1>;
+}
+
+function Guest(props) {
+  return <h1>请登录！</h1>;
+}
+
+// 通过Greeting组件条件渲染上面定义的2个组件
+function Greeting(props) {
+  const isLogged = props.isLogged;
+  if (isLogged) {
+    return <User />;
+  }
+  return <Guest />;
+}
+
+ReactDOM.render(
+  <Greeting isLogged={false} />, // 尝试将false改成true，会得到不同的展示结果
+  document.getElementById('app')
+);
+```
+
+### 元素变量
+
+可以将React元素赋值给一个变量，这样可以方便的在组件内部进行条件渲染。下面例子中的`<LoginControl />`组件会根据自身的状态，有条件的渲染`<LoginButton />`或`<LogoutButton />`以及之前例子中的`<Greeting />`组件。
+
+```jsx
+// 无状态组件
+function LoginButton(props) {
+  return (
+    <button onClick={props.onClick}> 登入 </button>
+  );
+}
+
+// 无状态组件
+function LogoutButton(props) {
+  return (
+    <button onClick={props.onClick}> 登出 </button>
+  );
+}
+
+// 带有状态的组件
+class LoginControl extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleLoginClick = this.handleLoginClick.bind(this);
+    this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.state = {isLogged: false};
+  }
+
+  handleLoginClick() {
+    this.setState({isLogged: true});
+  }
+  handleLogoutClick() {
+    this.setState({isLogged: false});
+  }
+
+  render() {
+    let button = null;
+    const isLogged = this.state.isLogged;
+
+    if (isLogged) {
+      button = <LogoutButton onClick={this.handleLogoutClick} />;
+    } else {
+      button = <LoginButton onClick={this.handleLoginClick} />;
+    }
+
+    return (
+      <div>
+        <Greeting isLogged={isLogged} /> {button}
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <LoginControl />,
+  document.getElementById('app')
+);
+```
+
+![](react/conditional-rendering.gif "条件渲染示例")
+
+
+声明一个变量和使用`if`关键字是进行条件渲染非常好的方式，但有些时候可能需要使用到更简短的语法，接下来介绍几种行内的条件渲染方式：
+
+### 内联条件渲染-&&运算符
+
+将JSX表达式嵌入到一个花括号`{}`运算符中（*表达式中包含了JavaScript逻辑和`&&`操作符*），可以方便的将React元素包含到条件渲染判断语句当中。
+
+```jsx
+function Mailbox(props) {
+  const unreadMessages = props.unreadMessages;
+  return (
+    <div>
+      <h1>Hello!</h1>
+      {unreadMessages.length > 0 &&
+        <h2>
+          You have {unreadMessages.length} unread messages.
+        </h2>
+      }
+    </div>
+  );
+}
+
+const messages = ['React', 'Re: React', 'Re:Re: React'];
+ReactDOM.render(
+  <Mailbox unreadMessages={messages} />,
+  document.getElementById('app')
+);
+```
+
+JavaScript当中`true && 表达式`的结果总是`表达式`，而`false && 表达式`的结果总是`false`。换而言之，如果条件判断结果为`true`，则`&&`运算符右侧的React元素将会出现在输出当中，如果为`false`则React会自动跳过不进行任何渲染。
+
+### 内联条件渲染-三目运算符
+
+另外一种使用内联条件渲染的方式是通过三目运算符`condition ? true : false`，下面例子中使用它对一小块文本进行了条件渲染。
+
+```jsx
+render() {
+  const isLogged = this.state.isLogged;
+  return (
+    <div>
+      用户 <b>{isLogged ? '已经' : '没有'}</b> 登录.
+    </div>
+  );
+}
+```
+
+三目运算符也可以用于进行多行的条件渲染：
+
+```jsx
+render() {
+  const isLogged = this.state.isLogged;
+  return (
+    <div>
+      {isLogged ? (
+        <LogoutButton onClick={this.handleLogoutClick} />
+      ) : (
+        <LoginButton onClick={this.handleLoginClick} />
+      )}
+    </div>
+  );
+}
+```
+
+> 如同JavaScript一样，条件渲染的使用完全依照开发团队的习惯和实际工作的需求，但是无论如何都不要书写过于复杂的条件渲染语句，否则可以考虑将条件渲染过程抽象为一个具体的组件。
+
+### 阻止组件的渲染
+
+极少的情况下，开发人员需要将组件隐藏起来，即便它已经被其它组件渲染出来，如果需要这样做，可以让组件`render()`函数返回`null`而非JSX的内容。
+
+下面的例子中，组件`<WarningBanner />`的渲染依赖于一个名为`warn`的props值，如果其值为`false`则该组件不会渲染。
+
+```jsx
+function WarningBanner(props) {
+  if (!props.warn) {
+    return null;
+  }
+
+  return (
+    <div className="warning">
+      警告信息！
+    </div>
+  );
+}
+
+class Page extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {showWarning: true}
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+
+  handleToggleClick() {
+    this.setState(prevState => ({
+      showWarning: !prevState.showWarning
+    }));
+  }
+
+  render() {
+    return (
+      <div>
+        <WarningBanner warn={this.state.showWarning} />
+        <button onClick={this.handleToggleClick}>
+          {this.state.showWarning ? '隐藏' : '显示'}
+        </button>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Page />,
+  document.getElementById('app')
+);
+```
+
+![](react/prevent-component-render.gif "阻止组件的渲染")
+
+> React组件的`render()`方法返回`null`值并不会影响组件**生命周期钩子函数**的触发，诸如`componentWillUpdate()`和`componentDidUpdate()`依然会被正常调用。
