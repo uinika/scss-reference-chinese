@@ -1204,6 +1204,20 @@ const content = posts.map((post) =>
 
 ### 嵌入map()至JSX
 
+JSX允许通过花括号`{}`嵌入任意表达式，因此可以将`map()`嵌入至JSX行内使用。
 
+```jsx
+function NumberList(props) {
+  const numbers = props.numbers;
+  return (
+    <ul>
+      {numbers.map((number) =>
+        <ListItem key={number.toString()} value={number} />
+      )}
+    </ul>
+  );
+}
+```
 
+某些情况下，这样的内联风格可以得到更加整洁的代码，但如果滥用也可能会影响代码的可读性，因此需要根据实际场景权衡后再使用。但是，仍然需要注意的一点：**如果`map()`循环体的嵌套过深，可以考虑将其抽象为组件**。
 
