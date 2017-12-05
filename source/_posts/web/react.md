@@ -1025,3 +1025,185 @@ ReactDOM.render(
 ![](react/prevent-component-render.gif "阻止组件的渲染")
 
 > React组件的`render()`方法返回`null`值并不会影响组件**生命周期钩子函数**的触发，诸如`componentWillUpdate()`和`componentDidUpdate()`依然会被正常调用。
+
+
+## List和Key
+
+通常情况下，在JavaScript当中我们会像下面代码这样循环一个数组列表。
+
+```jsx
+const numbers = [1, 2, 3, 4, 5];
+const doubled = numbers.map((number) => number * 2);
+console.log(doubled); // [2, 4, 6, 8, 10]
+```
+
+React当中循环一个组件列表的方式与上面非常相似，下面代码会渲染出一个从1至5编号的无序列表。
+
+```jsx
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+  <li>{number}</li>
+);
+
+ReactDOM.render(
+  <ul>{listItems}</ul>,
+  document.getElementById('app')
+);
+```
+
+### 列表组件
+
+接下来，我们将上面例子中的列表循环封装到一个组件当中去，该组件将会接收一个`numbers`数组作为`props`。
+
+```jsx
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    <li>{number}</li>
+  );
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('app')
+);
+```
+
+但是，当你执行这段代码时，会得到这个警告信息：`Warning: Each child in an array or iterator should have a unique "key" prop.`。这里，通过添加`key={number.toString()}`可以修复该问题。
+
+```jsx
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // 列表循环中的`key`是一个特殊的字符串属性
+    <li key={number.toString()}>
+      {number}
+    </li>
+  );
+  return (
+    <ul>{listItems}</ul>
+  );
+}
+```
+
+### 列表循环的key
+
+`key`属性用来帮助React鉴别具体哪一项内容发生了变化，可以给列表循环当中的每个具体项一个确切的、稳定的标识。
+
+```jsx
+const numbers = [1, 2, 3, 4, 5];
+const listItems = numbers.map((number) =>
+  <li key={number.toString()}>
+    {number}
+  </li>
+);
+```
+
+最佳实践是使用字符串类型的键值来作为列表循环当中每项的唯一标识，通常情况下可以使用列表的`id`值来作为`key`。
+
+```jsx
+const todoItems = todos.map((todo) =>
+  <li key={todo.id}>
+    {todo.text}
+  </li>
+);
+```
+
+如果没有稳定的`id`值，可以考虑使用循环列表每项的索引值`index`作为`key`。
+
+```jsx
+const todoItems = todos.map((todo, index) =>
+  <li key={index}>
+    {todo.text}
+  </li>
+);
+```
+
+在列表项顺序可能发生变化的场景下，React官方并不推荐使用索引作为`key`，因为会带来性能方面的负面影响，并引发组件状态的问题。
+
+### key的使用位置 
+
+属性`key`只作用于数组循环上下文的内部，通常情况下是在ES6提供的`map()`遍历方法内。
+
+```jsx
+function ListItem(props) {
+  // 这里不需要指定key值
+  return <li>{props.value}</li>;
+}
+
+function NumberList(props) {
+  const numbers = props.numbers;
+  const listItems = numbers.map((number) =>
+    // key必须放置在数组循环的作用域范围内（即map()方法内部）
+    <ListItem key={number.toString()} value={number} />
+  );
+  return (
+    <ul>
+      {listItems}
+    </ul>
+  );
+}
+
+const numbers = [1, 2, 3, 4, 5];
+ReactDOM.render(
+  <NumberList numbers={numbers} />,
+  document.getElementById('app')
+);
+```
+
+### key必须唯一
+
+`key`值必须保持在数组循环作用域范围内的唯一，而非全局上下文范围内的唯一，因此在不同的数组循环内使用相同`key`值是被允许的。
+
+```jsx
+function Blog(props) {
+  const sidebar = (
+    <ul>
+      {props.posts.map((post) =>
+        <li key={post.id}> {post.title} </li>
+      )}
+    </ul>
+  );
+  const content = props.posts.map((post) =>
+    <div key={post.id}>
+      <h3>{post.title}</h3>
+      <p>{post.content}</p>
+    </div>
+  );
+  return (
+    <div>
+      {sidebar}
+      <hr />
+      {content}
+    </div>
+  );
+}
+
+const posts = [
+  {id: 1, title: '你好', content: '欢迎使用React 16.2.0！'},
+  {id: 2, title: '安装方式', content: '可以通过npm和yarn安装React'}
+];
+ReactDOM.render(
+  <Blog posts={posts} />,
+  document.getElementById('app')
+);
+```
+
+`key`仅仅只是作为React内部的标记，并不会被渲染到组件和DOM当中，如果在组件内部需要使用到`key`的属性值，可以考虑也同时将其传递给组件的`props`。
+
+```jsx
+const content = posts.map((post) =>
+  // post.id同时赋值给了key属性和id props。
+  <Post key={post.id} id={post.id} title={post.title} />
+);
+```
+
+### 嵌入map()至JSX
+
+
+
+
