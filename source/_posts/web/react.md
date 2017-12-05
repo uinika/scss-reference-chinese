@@ -515,7 +515,7 @@ ReactDOM.render(
 
 接下来，我们需要利用React组件提供的**生命周期方法**，每间隔1秒对当前显示的时间进行更新。
 
-## Lifecycle
+## 生命周期钩子
 
 多组件应用程序开发当中，非常重要的一点在于：**在组件被销毁的时候去释放组件占用的资源**。即当组件被渲染至DOM的时候，需要初始化`Clock`组件中的定时器，React生命周期中称为`mounting挂载`；然后在组件被销毁时，清除组件定时器所占用的资源，React生命周期中称为`unmounting卸载`。React提供了两个**生命周期钩子（*lifecycle hooks*）**：`componentDidMount()`和`componentWillUnmount()`。
 
