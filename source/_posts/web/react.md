@@ -4,12 +4,11 @@ tags: JavaScript
 categories: Web
 ---
 
-全文翻译自[React 16.2.0英文文档](https://reactjs.org/)，适当精简了生产环境不常使用的内容，并对部分比较复杂的概念进行更翔实的解读，以及与Vue2进行了一些特性上的比较。应该是目前**最新**、**最完整**的React上手指南，适合已经具备**组件式**前端框架开发经验的同学快速上手React 16。本文将会首先对React 16所带来的一系列变化和新特性进行分析，然后覆盖了React官网[Docs](https://reactjs.org/docs/hello-world.html)当中的**Quick Start**和**Advanced Guides**的内容，最后对[tutorial](https://reactjs.org/tutorial/tutorial.html)的完整示例代码进行分析。
+全文翻译自[React 16.2.0英文文档](https://reactjs.org/)，适当精简了生产环境不常使用的内容，并对部分比较复杂的概念进行了更加翔实的解读，以及与Vue2进行了一些特性方面的比较。本文首先对React 16所带来的一系列变化和新特性进行解读，然后覆盖了React官网[Docs](https://reactjs.org/docs/hello-world.html)当中的**Quick Start**和**Advanced Guides**的内容，最后对[tutorial](https://reactjs.org/tutorial/tutorial.html)的完整示例代码进行分析。应该是目前**最新**、**最完整**的React上手指南，适合已经具备**组件式**前端框架开发经验的同学快速上手**React 16**。
 
 ![](react/logo.ico)
 
 <!-- more -->
-
 
 ## 快速开始
 
