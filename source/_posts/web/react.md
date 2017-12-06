@@ -4,7 +4,7 @@ tags: JavaScript
 categories: Web
 ---
 
-全文翻译自[React 16.2.0英文文档](https://reactjs.org/)，适当精简了生产环境不常使用的内容，并对部分比较复杂的概念进行更翔实的解读，以及与Vue2进行了一些特性上的比较。应该是目前**最新**、**最完整**的React上手指南，适合已经具备**组件式**前端框架开发经验的同学快速上手React 16。
+全文翻译自[React 16.2.0英文文档](https://reactjs.org/)，适当精简了生产环境不常使用的内容，并对部分比较复杂的概念进行更翔实的解读，以及与Vue2进行了一些特性上的比较。应该是目前**最新**、**最完整**的React上手指南，适合已经具备**组件式**前端框架开发经验的同学快速上手React 16。本文将会首先对React 16所带来的一系列变化和新特性进行分析，然后覆盖了React官网[Docs](https://reactjs.org/docs/hello-world.html)当中的**Quick Start**和**Advanced Guides**的内容，最后对[tutorial](https://reactjs.org/tutorial/tutorial.html)的完整示例代码进行分析。
 
 ![](react/logo.ico)
 
@@ -1220,4 +1220,115 @@ function NumberList(props) {
 ```
 
 某些情况下，这样的内联风格可以得到更加整洁的代码，但如果滥用也可能会影响代码的可读性，因此需要根据实际场景权衡后再使用。但是，仍然需要注意的一点：**如果`map()`循环体的嵌套过深，可以考虑将其抽象为组件**。
+
+
+## 表单
+
+HTML表单与React表单的工作方式有些不同，因为React需要去保持一些内部状态。例如，下面的HTML表单将会接收一个name字段：
+
+```html
+<form>
+  <label>
+    名称：<input type="text" name="name" />
+  </label>
+  <input type="submit" value="Submit" />
+</form>
+```
+
+HTML表单在用户点击提交请求之后会跳转到一个新的页面，React当中虽然能够完成同样的工作，但是通常情况会使用一个JavaScript事件处理函数去操控表单提交行为，从而获取和控制用户在表单当中的输入行为，这种标准方式在React当中被称为**受控组件**。
+
+### 受控组件
+
+HTML表单元素`<input>`、`<textarea>`、`<select>`会根据用户输入维护自己的状态，React当中这些变化的状态会由组件的`state`来维护，并只能使用`setState()`进行更新。接下来，我们融合HTML原生表单和React组件`state`的行为，让React组件在渲染表单元素的同时，也能够控制其输入状态。这种输入状态受到React控制的HTML表单就被称为**受控组件（*Controlled Components*）**。
+
+下面的代码，将会使用受控组件来重写本章开头的HTML表单示例：
+
+```jsx
+class InputForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: ''};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    // toUpperCase()可以让用户输入的英文总是大写
+    this.setState({value: event.target.value.toUpperCase()});
+  }
+
+  handleSubmit(event) {
+    alert('当前提交的名称：' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          名称：<input type="text" value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+上面例子中，当`value`属性设置到表单元素时，其值总是`this.state.value`的值，从而让React的`state`成为表单输入的内容的**单一来源**。伴随每次用户的输入`handleChange`都会通过`this.setState()`对`this.state.value`进行更新，从而完成HTML表单到React状态的**双向绑定**。
+
+> 受控组件中的每个状态变化都会关联对应的事件处理函数。
+
+### textarea标签
+
+HTML的`<textarea>`标签，通过标签内部的字符串来定义其文本内容，如同下面这样：
+
+```html
+<textarea>
+  Hello there, this is some text in a text area
+</textarea>
+```
+
+React当中的`<textarea>`依然会通过一个`value`属性来代替标签内部的字符串，其用法和上面的`<input>`标签相似。
+
+```jsx
+class TextareaForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: '这是一句默认显示在输入域中的内容。'
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert('当前提交的内容: ' + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          输入内容：<textarea value={this.state.value} onChange={this.handleChange} />
+        </label>
+        <input type="submit" value="Submit" />
+      </form>
+    );
+  }
+}
+```
+
+### select标签
+
+HTML中的`<select>`用来建立一个下拉列表，
+
+
 
