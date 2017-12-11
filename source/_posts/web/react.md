@@ -1327,7 +1327,129 @@ class TextareaForm extends React.Component {
 
 ### select标签
 
-HTML中的`<select>`用来建立一个下拉列表，
+HTML中的`<select>`用来建立一个下拉列表，下面列表描述了一系列汽车品牌，并且通过`selected`属性默认选中了**奔驰**。
 
+```html
+<select>
+  <option value="benz" selected>奔驰</option>
+  <option value="volkswagen">大众</option>
+  <option value="peugeot">标致</option>
+  <option value="renault">雷诺</option>
+</select>
+```
 
+React中使用`value`属性代替了上面列表中`selected`默认选中的功能，因为只需要在一个位置进行更新，所以能够更加方便的使用**受控组件**。
+
+```jsx
+class FavoriteCarForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {value: "coconut"'};
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleChange(event) {
+    this.setState({value: event.target.value});
+  }
+
+  handleSubmit(event) {
+    alert("选择你最喜欢的汽车是: " + this.state.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          选择你最喜欢的汽车:
+          <select value={this.state.value} onChange={this.handleChange}>
+            <option value="benz">奔驰</option>
+            <option value="volkswagen">大众</option>
+            <option value="peugeot">标致</option>
+            <option value="renault">雷诺</option>
+          </select>
+        </label>
+        <input type="submit" value="确定" />
+      </form>
+    );
+  }
+}
+```
+
+你也可以传递一个数组到`value`属性当中，从而能够在`<select>`标签中选择多个属性。
+
+```jsx
+<select multiple={true} value={['B', 'C']}>
+```
+
+> 总体而言，React当中`<input type="text">`、`<textarea>`、`<select>`的工作方式都非常类似，他们都能够接收一个`value`属性。
+
+### 操作多个输入域
+
+当需要操作多个输入域的时候，你可以为这些输入域添加`name`属性，然后通过事件处理函数参数所提供的`event.target.name`来判断各自的行为。
+
+```jsx
+class Reservation extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isGoing: true,
+      numberOfGuests: 2
+    };
+    this.handleInputChange = this.handleInputChange.bind(this);
+  }
+
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    // 注意ES6被计算属性名称语法的使用
+    this.setState({
+      [name]: value
+    });
+  }
+
+  render() {
+    return (
+      <form>
+        <label>
+          Is going:
+          <input name="isGoing" checked={this.state.isGoing} onChange={this.handleInputChange} type="checkbox" />
+        </label>
+        <br />
+        <label>
+          Number of guests:
+          <input name="numberOfGuests" value={this.state.numberOfGuests} onChange={this.handleInputChange} type="number" />
+        </label>
+      </form>
+    );
+  }
+}
+```
+
+### 设置属性值为null
+
+将输入域控件的`value`属性设置为`undefined`或者`null`，可以控制其编辑状态。
+
+```jsx
+const mountedNode = document.getElementById('app');
+
+ReactDOM.render(
+  <input value="你好" />,
+  mountedNode
+);
+
+setTimeout(function() {
+  ReactDOM.render(
+    <input value={null} />,
+    mountedNode
+  );
+}, 5000);
+```
+
+### 转换成为受控组件
+
+通常情况下，使用受控组件是比较冗长乏味的，因为需要编写大量事件函数去处理状态的变化，并将结果传递给React组件进行展示，这对于旧系统向React的技术迁移极不友好。这种场景下，其实可以考虑使用**非受控组件**（*uncontrolled components*），这是一种处理表单输入的替代技术，后面的章节将会对其进行说明。
 
