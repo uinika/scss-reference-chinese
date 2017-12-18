@@ -1456,11 +1456,125 @@ setTimeout(function() {
 
 ## 状态提升
 
+当多个组件需要反映相同的状态数据时，通常建议将状态提升到这些组件的共同父级组件当中。下面，通过一个沸腾水温计算器的例子来进行说明。
+
+首先，我们建立一个`BoilingVerdict`组件，该组件接收一个摄氏温度作为props，并打印出超过100度的沸腾水温。
+
+```jsx
+function BoilingVerdict(props) {
+  if (props.celsius >= 100) {
+    return <p>The water would boil.</p>;
+  }
+  return <p>The water would not boil.</p>;
+}
+```
+
+然后，再建立一个`Calculator`组件，用来输入温度并将其状态保持在`this.state.temperature`当中，并将这个输入值渲染到至`BoilingVerdict`组件。
+
+```jsx
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {temperature: ''};
+  }
+
+  handleChange(e) {
+    this.setState({temperature: e.target.value});
+  }
+
+  render() {
+    const temperature = this.state.temperature;
+    return (
+      <fieldset>
+        <legend>Enter temperature in Celsius:</legend>
+        <input
+          value={temperature}
+          onChange={this.handleChange} />
+
+        <BoilingVerdict
+          celsius={parseFloat(temperature)} />
+
+      </fieldset>
+    );
+  }
+}
+```
+
+### 添加第2个输入域
+
+接下来，需要再添加一个输入域来输入华氏温度，并保持它们的状态同步。
+
+首先，从`Calculator`组件抽象一个`TemperatureInput`组件，并增加一个名称为`scale`的props（*值为c或者f*），
+
+```jsx
+const scaleNames = {
+  c: 'Celsius',
+  f: 'Fahrenheit'
+};
+
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.state = {temperature: ''};
+  }
+
+  handleChange(e) {
+    this.setState({temperature: e.target.value});
+  }
+
+  render() {
+    const temperature = this.state.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+```
+
+然后，修改一下`Calculator`组件，使其能够分别渲染`scale`为`c`或`f`的两个`TemperatureInput`组件。
+
+```jsx
+class Calculator extends React.Component {
+  render() {
+    return (
+      <div>
+        <TemperatureInput scale="c" />
+        <TemperatureInput scale="f" />
+      </div>
+    );
+  }
+}
+```
+
+进行到这一步，我们已经拥有两个输入域，但是输入其中的一个，并不会导致另一个同步更新，这并不符合本章节开头的需求。而且由于温度状态位于`TemperatureInput`组件内部，`Calculator`组件无法直接对其进行显示。
+
+
+### 编写转换函数
+
+在这里编写两个摄氏/华氏温度的相互转换的函数。
+
+```jsx
+function toCelsius(fahrenheit) {
+  return (fahrenheit - 32) * 5 / 9;
+}
+
+function toFahrenheit(celsius) {
+  return (celsius * 9 / 5) + 32;
+}
+```
 
 
 
 
 ## 组合与继承
+
 
 
 ## React设计思想
