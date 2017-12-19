@@ -1558,7 +1558,7 @@ class Calculator extends React.Component {
 
 ### 编写转换函数
 
-在这里编写两个摄氏/华氏温度的相互转换的函数。
+我们的例子中，还需要两个对摄氏/华氏温度进行相互转换的函数。
 
 ```jsx
 function toCelsius(fahrenheit) {
@@ -1569,6 +1569,96 @@ function toFahrenheit(celsius) {
   return (celsius * 9 / 5) + 32;
 }
 ```
+
+以及一个对输入温度进行合法性校验的函数，不合法时返回空字符串，合法则返回值精确到小数点第3位。
+
+```jsx
+function tryConvert(temperature, convert) {
+  const input = parseFloat(temperature);
+  if (Number.isNaN(input)) {
+    return '';
+  }
+  const output = convert(input);
+  const rounded = Math.round(output * 1000) / 1000;
+  return rounded.toString();
+}
+
+tryConvert('abc', toCelsius); // 返回空字符串
+tryConvert('10.22', toFahrenheit); // 返回'50.396'
+```
+
+根据上面改造之后，`TemperatureInput`组件已经可以独立的保持输入值在各自的`state`当中。但是我们希望保持两个输入域的同步，比如输入华氏温度的时候，摄氏温度会自动展示被转换后的温度值。
+
+### 完整Demo
+
+React当中，多个组件之间`state`的共享，需要将这些`state`放置到共同的父级组件，这种方式被称为**state状态提升**。这个例子中，我们需要将`TemperatureInput`组件里需要共享的`state`移动到`Calculator`组件内，然后通过`TemperatureInput`组件上的`props`属性向下分发这些共享数据，最终实现两个`TemperatureInput`组件内的输入值的同步更新。
+
+```jsx
+class TemperatureInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(e) {
+    this.props.onTemperatureChange(e.target.value);
+  }
+
+  render() {
+    const temperature = this.props.temperature;
+    const scale = this.props.scale;
+    return (
+      <fieldset>
+        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <input value={temperature}
+               onChange={this.handleChange} />
+      </fieldset>
+    );
+  }
+}
+```
+
+```jsx
+class Calculator extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleCelsiusChange = this.handleCelsiusChange.bind(this);
+    this.handleFahrenheitChange = this.handleFahrenheitChange.bind(this);
+    this.state = {temperature: '', scale: 'c'};
+  }
+
+  handleCelsiusChange(temperature) {
+    this.setState({scale: 'c', temperature});
+  }
+
+  handleFahrenheitChange(temperature) {
+    this.setState({scale: 'f', temperature});
+  }
+
+  render() {
+    const scale = this.state.scale;
+    const temperature = this.state.temperature;
+    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
+    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+
+    return (
+      <div>
+        <TemperatureInput scale="c" temperature={celsius}
+          onTemperatureChange={this.handleCelsiusChange} />
+
+        <TemperatureInput scale="f" temperature={fahrenheit}
+          onTemperatureChange={this.handleFahrenheitChange} />
+
+        <BoilingVerdict celsius={parseFloat(celsius)} />
+      </div>
+    );
+  }
+}
+```
+
+
+
+
 
 
 
