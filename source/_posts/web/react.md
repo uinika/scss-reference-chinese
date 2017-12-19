@@ -1463,9 +1463,9 @@ setTimeout(function() {
 ```jsx
 function BoilingVerdict(props) {
   if (props.celsius >= 100) {
-    return <p>The water would boil.</p>;
+    return <p>水将会沸腾！</p>;
   }
-  return <p>The water would not boil.</p>;
+  return <p>水不会沸腾！</p>;
 }
 ```
 
@@ -1487,7 +1487,7 @@ class Calculator extends React.Component {
     const temperature = this.state.temperature;
     return (
       <fieldset>
-        <legend>Enter temperature in Celsius:</legend>
+        <legend>请输入摄氏温度：</legend>
         <input
           value={temperature}
           onChange={this.handleChange} />
@@ -1509,8 +1509,8 @@ class Calculator extends React.Component {
 
 ```jsx
 const scaleNames = {
-  c: 'Celsius',
-  f: 'Fahrenheit'
+  c: '摄氏',
+  f: '华氏'
 };
 
 class TemperatureInput extends React.Component {
@@ -1529,7 +1529,7 @@ class TemperatureInput extends React.Component {
     const scale = this.props.scale;
     return (
       <fieldset>
-        <legend>Enter temperature in {scaleNames[scale]}:</legend>
+        <legend>请输入{scaleNames[scale]}温度：</legend>
         <input value={temperature}
                onChange={this.handleChange} />
       </fieldset>
@@ -1601,6 +1601,7 @@ class TemperatureInput extends React.Component {
   }
 
   handleChange(e) {
+    // 调用父组件通过props传入进来的事件处理函数，从而实现在子组件更新父组件的state
     this.props.onTemperatureChange(e.target.value);
   }
 
@@ -1610,8 +1611,8 @@ class TemperatureInput extends React.Component {
     return (
       <fieldset>
         <legend>Enter temperature in {scaleNames[scale]}:</legend>
-        <input value={temperature}
-               onChange={this.handleChange} />
+        // 当输入域的值发生变化时，触发本组件内的handleChange事件处理函数
+        <input value={temperature} onChange={this.handleChange} />
       </fieldset>
     );
   }
@@ -1627,27 +1628,27 @@ class Calculator extends React.Component {
     this.state = {temperature: '', scale: 'c'};
   }
 
+  // 通过props传递给子组件的事件处理函数，让子组件具备修改父组件state的能力
   handleCelsiusChange(temperature) {
     this.setState({scale: 'c', temperature});
   }
-
   handleFahrenheitChange(temperature) {
     this.setState({scale: 'f', temperature});
   }
 
   render() {
-    const scale = this.state.scale;
-    const temperature = this.state.temperature;
-    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature;
-    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature;
+    const scale = this.state.scale; // 温度单位
+    const temperature = this.state.temperature; // 温度值
+    const celsius = scale === 'f' ? tryConvert(temperature, toCelsius) : temperature; // 摄氏温度
+    const fahrenheit = scale === 'c' ? tryConvert(temperature, toFahrenheit) : temperature; // 华氏温度
 
     return (
       <div>
         <TemperatureInput scale="c" temperature={celsius}
-          onTemperatureChange={this.handleCelsiusChange} />
+           onTemperatureChange={this.handleCelsiusChange} />
 
         <TemperatureInput scale="f" temperature={fahrenheit}
-          onTemperatureChange={this.handleFahrenheitChange} />
+           onTemperatureChange={this.handleFahrenheitChange} />
 
         <BoilingVerdict celsius={parseFloat(celsius)} />
       </div>
@@ -1656,6 +1657,13 @@ class Calculator extends React.Component {
 }
 ```
 
+![](react/lifting-state-up.gif "state状态提升")
+
+通常情况下，更新`state`将会触发组件的重绘，如果多个组件需要共享同一个`state`，可以考虑将这些`state`抬升到其共同的父组件当中，然后通过**至上而下**的数据流来完成`state`的同步更新。
+
+相比于Angular、Vue2原生提供的双向绑定机制，React当中`state`的**状态提升**涉及到书写更多的样板代码，但优点在于更加容易探测到一些潜在的bug，以及在状态变化过程中切入一些处理逻辑，比如上面例子中体现的数字精度控制和输入数据类型校验。
+
+> *事实上，Vue2的响应式更新机制是属于组件级别的，而且已经取消了组件内部的`state`属性，有效避免组件间`state`互相污染的问题，因此FB认为这是优点的说法比较牵强，否则也不会在Redux之后有MobX的出现。*
 
 
 
