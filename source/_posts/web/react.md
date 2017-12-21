@@ -1666,12 +1666,103 @@ class Calculator extends React.Component {
 > *事实上，Vue2的响应式更新机制是属于组件级别的，而且已经取消了组件内部的`state`属性，有效避免组件间`state`互相污染的问题，因此FB认为这是优点的说法比较牵强，否则也不会在Redux之后有MobX的出现。*
 
 
-
-
-
-
-
 ## 组合与继承
+
+React组件拥有强大的组合模型，我们推荐通过组合而非继承来完成组件的复用。
+
+### 内容包含
+
+默认情况下，许多组件并不了解其子元素的情况（*比如侧边栏和对话框组件*），这样的情况推荐使用`props`的`children`属性**将组件内部嵌套的元素内容直接渲染至组件的输出当中**，例如下面就定义了一个使用该属性的组件：
+
+```jsx
+function Border(props) {
+  return (
+    <div className={'border-' + props.color}>
+      {props.children}
+    </div>
+  );
+}
+```
+
+接下来，使用JSX语法向这个组件内放入任意内容。
+
+```jsx
+function Dialog() {
+  return (
+    <Border color="blue">
+      <h1 className="title">标题</h1>
+      <p className="message">内容</p>
+    </Border>
+  );
+}
+```
+
+最后添加一个额外的样式，为组件的渲染内容呈现一个蓝色的边框。
+
+```css
+.blue-border {
+  border: 10px solid blue;
+}
+```
+
+`<border />`组件内的JSX元素内容最终会被渲染到组件内`{props.children}`所在的位置，最后的结果看起来是下面这样的：
+
+![](composition-inheritance-1.png "渲染结果")
+
+React当中`{props.children}`的作用类似于Vue2当中的`<slot />`元素，本质都是为了将嵌入组件的内容，在组件渲染时以合适的方式进行展示。当在需要嵌入多段内容的情况下，Vue2通过具名插槽`<slot name="">`来解决这个问题，而React解决该问题的方式与Vue2类似。
+
+```jsx
+function Box(props) {
+  return (
+    <div className="box">
+      <div className="left"> {props.left} </div>
+      <div className="right"> {props.right} </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Box left={<Contacts />} right={<Chat />} />
+  );
+}
+```
+
+```css
+.box { width: 100%; height: 100%; }
+.left { float: left; width: 30%; height: 100%; }
+.right { float: left; width: 70%; height: 100%; }
+```
+
+**React组件本质是一个对象**，因此可以将其作为`props`的属性值进行传递，上面代码的执行结果如下：
+
+![](composition-inheritance-2.png "渲染结果")
+
+### 特殊化
+
+某些场景下，需要对某个组件进行特殊化处理，比如将`Dialog`组件具象成为一个`WelcomeDialog`组件，通常情况大家会首先想到使用继承，但是React当中依然可以通过使用组合解决这个问题。即在`WelcomeDialog`组件内渲染`Dialog`组件，并通过`props`属性配置`Dialog`的行为。
+
+```jsx
+function Dialog(props) {
+  return (
+    <Border color="blue">
+      <h1 className="title"> {props.title} </h1>
+      <p className="message"> {props.message} </p>
+    </Border>
+  );
+}
+
+function WelcomeDialog() {
+  return (
+    <Dialog title="欢迎" message="感谢访问！" />
+  );
+}
+```
+
+Facebook开发团队内部已经使用React实现了数以千计的组件，但是并未出现需要推荐使用继承结构的用例。通过搭配使用`props`与`组合`，可以灵活的定制各类组件。另外需要特别注意的是，React组件可以接受任意类型的`props`，包括原生的对象或者回调函数，甚至是一个React组件对象本身。
+
+> 而对于非UI相关的功能性复用，建议分离到单独的JavaScript模块当中，以功能函数、对象或类的方式进行实现。
+
 
 
 
