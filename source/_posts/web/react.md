@@ -1764,12 +1764,265 @@ Facebook开发团队内部已经使用React实现了数以千计的组件，但�
 > 而对于非UI相关的功能性复用，建议分离到单独的JavaScript模块当中，以功能函数、对象或类的方式进行实现。
 
 
+## React编程思想
 
+React特别适用于大规模的JavaScript应用程序，并且已经在Facebook和Instagram相关产品上进行了实践。React最优秀的特性来自于其提出的组件化思想，即将DOM页面分片断进行开发，通过DOM片断进行业务逻辑和功能层面的复用。组件的拆分可以遵从设计模式中的单一职责原则（*single responsibility principle*），即一个组件理想状态下只完成一件事情，下面是React官网提供的一个商品表格的示例：
 
-## React设计思想
+![](react/thinking-in-react-components.png)
+
+### 组件嵌套结构
+
+```
+FilterableProductTable
+└── SearchBar
+└── ProductTable
+   └── ProductCategoryRow
+   └── ProductRow
+```
+
+### 组件功能说明
+
+`FilterableProductTable`：**橙色**，包含所有组件。
+`SearchBar`：**蓝色**，接收用户输入。
+`ProductTable`：**绿色**，基于用户输入显示和过滤数据集合。
+`ProductCategoryRow`：**青色**，显示分类的标题。
+`ProductRow`：**红色**，显示每款商品。
+
+### 完整示例代码
+
+```jsx
+/* ProductCategoryRow */
+class ProductCategoryRow extends React.Component {
+  render() {
+    const category = this.props.category;
+    return (
+      <tr>
+        <th colSpan="2">
+          {category}
+        </th>
+      </tr>
+    );
+  }
+}
+
+/* ProductRow */
+class ProductRow extends React.Component {
+  render() {
+    const product = this.props.product;
+    const name = product.stocked ?
+      product.name :
+      <span style={{color: 'red'}}> {product.name} </span>;
+
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{product.price}</td>
+      </tr>
+    );
+  }
+}
+
+/* ProductTable */
+class ProductTable extends React.Component {
+  render() {
+    const filterText = this.props.filterText;
+    const inStockOnly = this.props.inStockOnly;
+
+    const rows = [];
+    let lastCategory = null;
+
+    this.props.products.forEach((product) => {
+      if (product.name.indexOf(filterText) === -1) {
+        return;
+      }
+      if (inStockOnly && !product.stocked) {
+        return;
+      }
+      if (product.category !== lastCategory) {
+        rows.push( <ProductCategoryRow category={product.category} key={product.category} />
+        );
+      }
+      rows.push(
+        <ProductRow
+          product={product}
+          key={product.name}
+        />
+      );
+      lastCategory = product.category;
+    });
+
+    return (
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>{rows}</tbody>
+      </table>
+    );
+  }
+}
+
+/* SearchBar */
+class SearchBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleInStockChange = this.handleInStockChange.bind(this);
+  }
+  
+  handleFilterTextChange(e) {
+    this.props.onFilterTextChange(e.target.value);
+  }
+  
+  handleInStockChange(e) {
+    this.props.onInStockChange(e.target.checked);
+  }
+  
+  render() {
+    return (
+      <form>
+        <input type="text" placeholder="Search..." value={this.props.filterText} onChange={this.handleFilterTextChange} />
+        <p>
+          <input type="checkbox" checked={this.props.inStockOnly} onChange={this.handleInStockChange} />
+          {' '} Only show products in stock
+        </p>
+      </form>
+    );
+  }
+}
+
+/* FilterableProductTable */
+class FilterableProductTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      filterText: '',
+      inStockOnly: false
+    };
+    
+    this.handleFilterTextChange = this.handleFilterTextChange.bind(this);
+    this.handleInStockChange = this.handleInStockChange.bind(this);
+  }
+
+  handleFilterTextChange(filterText) {
+    this.setState({
+      filterText: filterText
+    });
+  }
+  
+  handleInStockChange(inStockOnly) {
+    this.setState({
+      inStockOnly: inStockOnly
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <SearchBar
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+          onFilterTextChange={this.handleFilterTextChange}
+          onInStockChange={this.handleInStockChange}
+        />
+        <ProductTable
+          products={this.props.products}
+          filterText={this.state.filterText}
+          inStockOnly={this.state.inStockOnly}
+        />
+      </div>
+    );
+  }
+}
+
+/* JSON API */
+const PRODUCTS = [
+  {category: 'Sporting Goods', price: '$49.99', stocked: true, name: 'Football'},
+  {category: 'Sporting Goods', price: '$9.99', stocked: true, name: 'Baseball'},
+  {category: 'Sporting Goods', price: '$29.99', stocked: false, name: 'Basketball'},
+  {category: 'Electronics', price: '$99.99', stocked: true, name: 'iPod Touch'},
+  {category: 'Electronics', price: '$399.99', stocked: false, name: 'iPhone 5'},
+  {category: 'Electronics', price: '$199.99', stocked: true, name: 'Nexus 7'}
+];
+
+ReactDOM.render(
+  <FilterableProductTable products={PRODUCTS} />,
+  document.getElementById('app')
+);
+```
+
+![](react/thinking-in-react-mock.gif "代码运行结果")
+
+> React拥有2种不同类型的**模型数据**（*Model*）：`props`和`state`。
 
 
 ## 深入JSX
+
+本质上而言，JSX其实是`React.createElement(component, props, ...children)`函数的语法糖。
+
+```JSX
+// JSX
+<MyButton color="blue" shadowSize={2}>
+  点击我
+</MyButton>
+
+// 等效的React.createElement()
+React.createElement(
+  MyButton,
+  { color: 'blue', shadowSize: 2 },
+  '点击我'
+)
+```
+
+```JSX
+// 使用自关闭标签的JSX
+<div className="sidebar" />
+
+// 上面JSX会被编译为如下代码
+React.createElement(
+  'div',
+  { className: 'sidebar' },
+  null
+)
+```
+
+### 指定React的元素类型
+
+React当中，可以将组件赋值给一个变量或者常量，如果代码中使用名为`<Test>`的组件，则组件对应的`Test`变量必须位于当前组件的作用域内。此外，定义组件时必须显式引入`React`库，即使当前组件没有直接对其进行引用。
+
+```jsx
+import React from 'react'; // 这样的引用是必须的
+import CustomButton from './CustomButton';
+
+function WarningButton() {
+  return <CustomButton color="red" />;
+  // return React.createElement(CustomButton, {color: 'red'}, null);
+}
+```
+
+当唯一的模块需要`export`多个React组件时，可以将组件定义为一个对象的属性后再行导出，然后在JSX内通过`.`操作符进行引用。
+
+```jsx
+import React from 'react';
+
+const MyComponents = {
+  DatePicker: function DatePicker(props) {
+    return <div>Imagine a {props.color} datepicker here.</div>;
+  }
+}
+
+function BlueDatePicker() {
+  // 通过MyComponents.DatePicker引用上面对象MyComponents内定义的DatePicker组件
+  return <MyComponents.DatePicker color="blue" />;
+}
+```
+
+React组件名称的**首字母**通常使用**大写**，可以
+
+
 
 
 ## 使用PropTypes类型检查
