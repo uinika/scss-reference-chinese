@@ -2108,13 +2108,49 @@ function contextSwitching(props) {
 <MyComponent message={'Hello React16！'} />
 ```
 
-传递的字符串变量可以是非HTML转义的，因此下面的两个JSX表达式依然等效。
+传递的字符串变量可以是非HTML转义的，因此下面的两个JSX表达式仍然是等效的。
 
 ```jsx
 <MyComponent message="&lt;5" />
 
 <MyComponent message={'<5'} />
 ```
+
+#### props默认为true
+
+如果没有向组件的props传递值（*声明props但并未进行赋值*），则该**props的值默认为`true`**，下面的两行代码因此是等效的：
+
+```jsx
+<MyTextBox autocomplete />
+
+<MyTextBox autocomplete={true} />
+```
+
+> 通常情况并不建议缺省props的值，因为这样容易与ES6的对象快捷声明特性，语法上发生混淆。
+
+#### 分离属性
+
+如果你的props是一个对象，可以考虑使用ES6的剩余属性运算符`...`，将所有的props一次性传入组件。
+
+```jsx
+function Component1() {
+  return <Hello firstName="Hank" lastName="Zen" />;
+}
+
+function Component2() {
+  const props = {firstName: 'Hank', lastName: 'Zen'};
+  return <Hello {...props} />;
+}
+```
+
+
+
+
+
+
+
+
+
 
 
 
