@@ -2003,7 +2003,7 @@ function WarningButton() {
 }
 ```
 
-当唯一的模块需要`export`多个React组件时，可以将组件定义为一个对象的属性后再行导出，然后在JSX内通过`.`操作符进行引用。
+当一个模块需要`export`多个React组件时，可以将这些组件定义为一个对象的属性之后导出，然后JSX内使用时通过`.`操作符进行引用。
 
 ```jsx
 import React from 'react';
@@ -2020,7 +2020,23 @@ function BlueDatePicker() {
 }
 ```
 
-React组件名称的**首字母**通常使用**大写**，可以
+**用户自定义组件的名称首字母必须大写**，以便于在字面上与原生的`<div>`或`<span>`进行有效区分。
+
+```jsx
+import React from 'react';
+
+// 正确！自定义组件首字母大写。
+function Hello(props) {
+  // 正确！原生HTML标签是小写的。
+  return <div>Hello {props.toWhat}</div>;
+}
+
+function HelloWorld() {
+  // 正确! React能够正确识别首字母大写的自定义组件。
+  return <Hello toWhat="World" />;
+}
+```
+
 
 
 
