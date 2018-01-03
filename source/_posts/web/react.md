@@ -2103,17 +2103,17 @@ function contextSwitching(props) {
 可以向props传递字符串字面量，下面的两个JSX是等效的。
 
 ```jsx
-<MyComponent message="hello world" />
+<MyComponent message="Hello React16！" />
 
-<MyComponent message={'hello world'} />
+<MyComponent message={'Hello React16！'} />
 ```
 
 传递的字符串变量可以是非HTML转义的，因此下面的两个JSX表达式依然等效。
 
 ```jsx
-<MyComponent message="&lt;3" />
+<MyComponent message="&lt;5" />
 
-<MyComponent message={'<3'} />
+<MyComponent message={'<5'} />
 ```
 
 
