@@ -2037,6 +2037,86 @@ function HelloWorld() {
 }
 ```
 
+不能以React元素的方式使用JavaScript表达式，例如下面的代码：
+
+```jsx
+import React from 'react';
+import { PhotoStory, VideoStory } from './stories';
+
+const components = {
+  photo: PhotoStory,
+  video: VideoStory
+};
+
+function Story(props) {
+  // 错误，JSX类型不能是一个表达式。
+  return <components[props.storyType] story={props.story} />;
+}
+```
+
+解决上面问题，需要将表达式赋值给一个首字母大写的变量，参见下面的代码：
+
+```jsx
+import React from 'react';
+import { PhotoStory, VideoStory } from './stories';
+
+const components = {
+  photo: PhotoStory,
+  video: VideoStory
+};
+
+function Story(props) {
+  // 正确！JSX类型可以是一个首字母大写的变量。
+  const SpecificStory = components[props.storyType];
+  return <SpecificStory story={props.story} />;
+}
+```
+
+### JSX中的props
+
+#### 以JavaScript表达式的方式
+
+开发人员可以通过`{}`传递任意JavaScript表达式到`prpps`。
+
+```jsx
+// MyComponent组件的props.foo的值为10
+<MyComponent foo={1 + 2 + 3 + 4} />
+```
+
+`if`和`for`语句并不属于JavaScript中的表达式，因此可以直接用于JSX。
+
+```jsx
+function contextSwitching(props) {
+  let name;
+  if (props.context == "internet") {
+    name = <i>Uinika</i>;
+  }
+  else if(props.context === "reallife") {
+    name = <i>Hank</i>;
+  }
+  return <p>在{props.context}里我叫{name}</p>;
+}
+```
+
+#### 字符串字面量
+
+可以向props传递字符串字面量，下面的两个JSX是等效的。
+
+```jsx
+<MyComponent message="hello world" />
+
+<MyComponent message={'hello world'} />
+```
+
+传递的字符串变量可以是非HTML转义的，因此下面的两个JSX表达式依然等效。
+
+```jsx
+<MyComponent message="&lt;3" />
+
+<MyComponent message={'<3'} />
+```
+
+
 
 
 
