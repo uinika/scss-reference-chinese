@@ -2128,9 +2128,9 @@ function contextSwitching(props) {
 
 > 通常情况并不建议缺省props的值，因为这样容易与ES6的对象快捷声明特性，语法上发生混淆。
 
-#### 分离属性
+#### props对象扩展运算
 
-如果你的props是一个对象，可以考虑使用ES6的剩余属性运算符`...`，将所有的props一次性传入组件。
+如果你的`props`是一个**对象**，可以考虑使用ES6的**对象扩展运算符**`...`，将所有的`props`一次性传入组件。
 
 ```jsx
 function Component1() {
@@ -2142,6 +2142,68 @@ function Component2() {
   return <Hello {...props} />;
 }
 ```
+
+你还可以让组件使用特定的`props`，然后通过对象扩展运算符传递其它所有`props`。 
+
+```jsx
+const Button = props => {
+  const { kind, ...all } = props;
+  const className = kind === "primary" ? "btn-primary" : "btn-default";
+  return <button className={className} {...all} />;
+};
+
+const App = () => {
+  return (
+    <div>
+      <Button kind="primary" onClick={() => console.log("被点击了!")}>
+        Hello React 16.2！
+      </Button>
+    </div>
+  );
+};
+```
+
+上面例子中的`{ kind, ...all }`只会获取props中的`kind`属性，然后将`props`中其它属性全部赋值给`...all`，
+
+> 对象扩展运算符是非常有用的工具，但是容易将一些不必要的`props`传递给组件，因此建议酌情根据需要进行使用。
+
+
+## JSX的children
+
+JSX表达式开始、结束标签内的内容会以特殊的props形式传递：`props.children`，React有几种不同的方式去传递这些`children`。
+
+### 字符串字面量
+
+在JSX开始和结束标签内直接书写字符串，`props.children`的值就是这段字符串内容。字符串的内容可以是非HTML转义的，因此编写JSX就像编写HTML一样。
+
+```jsx
+// MyComponent组件的props.children就是"Hello React 16!"
+<MyComponent>Hello React 16!</MyComponent>
+
+// JSX内可以直接书写HTML字符实体
+<div>Hank &amp; Github.</div>
+```
+
+JSX会自动移除开始和结束行的空格，标签附近的新的行也会被同时移除，标签内部内容当中出现的空格会被缩进为一个空格，所以下面JSX代码的渲染结果都相同。
+
+```jsx
+<div>Hello React 16!</div>
+
+<div>
+  Hello React 16!
+</div>
+
+<div>
+  Hello
+  React 16!
+</div>
+
+<div>
+
+  Hello React 16!
+</div>
+```
+
 
 
 
