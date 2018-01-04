@@ -2020,7 +2020,7 @@ function BlueDatePicker() {
 }
 ```
 
-**用户自定义组件的名称首字母必须大写**，以便于在字面上与原生的`<div>`或`<span>`进行有效区分。
+**用户自定义组件的名称首字母必须大写**，以便于在字面上与原生的`<v>`或`<span>`进行有效区分。
 
 ```jsx
 import React from 'react';
@@ -2168,11 +2168,11 @@ const App = () => {
 > 对象扩展运算符是非常有用的工具，但是容易将一些不必要的`props`传递给组件，因此建议酌情根据需要进行使用。
 
 
-## JSX的children
+### JSX的children
 
 JSX表达式开始、结束标签内的内容会以特殊的props形式传递：`props.children`，React有几种不同的方式去传递这些`children`。
 
-### 字符串字面量
+#### 字符串字面量
 
 在JSX开始和结束标签内直接书写字符串，`props.children`的值就是这段字符串内容。字符串的内容可以是非HTML转义的，因此编写JSX就像编写HTML一样。
 
@@ -2187,27 +2187,109 @@ JSX表达式开始、结束标签内的内容会以特殊的props形式传递：
 JSX会自动移除开始和结束行的空格，标签附近的新的行也会被同时移除，标签内部内容当中出现的空格会被缩进为一个空格，所以下面JSX代码的渲染结果都相同。
 
 ```jsx
-<div>Hello React 16!</div>
+<p>Hello React 16!</p>
 
-<div>
+<p>
   Hello React 16!
-</div>
+</p>
 
-<div>
+<p>
   Hello
   React 16!
-</div>
+</p>
 
-<div>
+<p>
 
   Hello React 16!
-</div>
+</p>
 ```
 
+#### 嵌套的JSX
+
+JSX开始结束标签内依然可以使用其它标签作为子元素，从而能够以嵌套的使用各类React组件和HTML元素。
+
+```jsx
+<MyContainer>
+  <MyFirstComponent />
+  <MySecondComponent />
+</MyContainer>
+```
+
+React16带来的一个重要新特性之一是：**组件可以直接返回一个数组元素**。
+
+```jsx
+render() {
+  // 毋需将多个列表元素包裹到一个元素当中返回，这样可以防止破坏HTML页面语义化
+  return [
+    // 一定要记得为每个列表元素添加唯一的key
+    <li key="A">First item</li>,
+    <li key="B">Second item</li>,
+    <li key="C">Third item</li>,
+  ];
+}
+```
+
+#### JavaScript表达式作为子元素
+
+React可以通过`{}`运算符使用任意JavaScript表达式作为JSX子元素，例如下面两个表达式就是等效的：
+
+```jsx
+<MyComponent>foo</MyComponent>
+
+<MyComponent>{'foo'}</MyComponent>
+```
+
+这在渲染任意长度的JSX表达式列表时非常有用，请参见下面的代码：
+
+```jsx
+function Item(props) {
+  return <li>{props.message}</li>;
+}
+
+function List() {
+  const todos = ['工作', '生活', '运动'，'早睡早起'];
+  return (
+    <ul>
+      {todos.map((message) => <Item key={message} message={message} />)}
+    </ul>
+  );
+}
+```
+
+JavaScript表达式可以与其它类型子元素混用，这在为模板绑定数据的时候非常有用。
+
+```jsx
+function Hello(props) {
+  return <div>Hello {props.addressee}!</div>;
+}
+```
+
+#### 函数作为子元素
 
 
 
 
+
+
+### boolean、null、undefined会被忽略
+
+`boolean`、`null`、`undefined`都是合法的子元素，这些类型的内容不会被渲染，因此下面例子中的JSX会渲染相同的结果：
+
+```jsx
+<div />
+
+<div></div>
+
+<div>{false}</div>
+
+<div>{null}</div>
+
+<div>{undefined}</div>
+
+<div>{true}</div>
+```
+
+这种状况通常用于条件运算，
 
 
 
