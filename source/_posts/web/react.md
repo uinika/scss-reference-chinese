@@ -2266,10 +2266,28 @@ function Hello(props) {
 
 #### 函数作为子元素
 
+与`props`属性一样，`props.children`可以传递任意类型的数据，组件会在渲染前解析`props.children`中的内容。例如，可以通过`props.children`向一个自定义组件传递回调函数。
 
+```jsx
+// Calls the children callback numTimes to produce a repeated component
+function Repeat(props) {
+  let items = [];
+  for (let i = 0; i < props.numTimes; i++) {
+    items.push(props.children(i));
+  }
+  return <div>{items}</div>;
+}
 
+function ListOfTenThings() {
+  return (
+    <Repeat numTimes={10}>
+      {(index) => <div key={index}>This is item {index} in the list</div>}
+    </Repeat>
+  );
+}
+```
 
-
+> 上面的方法日常开发中并不常用，但是在一些需要对JSX功能进行扩展的的场景下还是非常有用的。
 
 ### boolean、null、undefined会被忽略
 
@@ -2289,12 +2307,38 @@ function Hello(props) {
 <div>{true}</div>
 ```
 
-这种状况通常用于条件运算，
+这对于条件运算是非常有用的，下面的JSX当`showHeader`为`true`时只会渲染出一个`<Header />`。
 
+```jsx
+<div>
+  {showHeader && <Header />}
+  <Content />
+</div>
+```
 
+值得注意的是，数字**0**（*布尔运算中通常被判断为假值*）会被React原样渲染，例如当下面代码中的`props.messages`是一个空数组的时候，数值`0`将会被展示到页面上。
 
+```jsx
+<div>
+  {props.messages.length && <MessageList messages={props.messages} /> }
+</div>
+```
 
+解决这个问题，需要显式的使用布尔运算符`&&`，将上面的代码修改成下面这样：
 
+```jsx
+<div>
+  {props.messages.length > 0 && <MessageList messages={props.messages} />}
+</div>
+```
+
+与此相反，如果你需要将`false`、`true`、`null`、`undefined`之类的值展示到页面，需要首先将这些值转换为字符串。
+
+```jsx
+<div>
+  My JavaScript variable is {String(myVariable)}.
+</div>
+```
 
 
 
