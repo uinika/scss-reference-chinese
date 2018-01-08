@@ -2332,7 +2332,7 @@ function ListOfTenThings() {
 </div>
 ```
 
-与此相反，如果你需要将`false`、`true`、`null`、`undefined`之类的值展示到页面，需要首先将这些值转换为字符串。
+与此相反，如果需要将`false`、`true`、`null`、`undefined`之类的值展示到页面，需要首先将这些值转换为字符串。
 
 ```jsx
 <div>
