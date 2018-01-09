@@ -2422,21 +2422,18 @@ MyComponent.propTypes = {
   customProp: function(props, propName, componentName) {
     if (!/matchme/.test(props[propName])) {
       return new Error(
-        'Invalid prop `' + propName + '` supplied to' +
-        ' `' + componentName + '`. Validation failed.'
+        '不合法的prop `' + propName + '` 被应用到' +
+        ' `' + componentName + '`. 校验失败.'
       );
     }
   },
 
-  // 可以在arrayOf和objectOf上指定自定义的校验器，校验失败同样返回一个Error对象，  The validator
-  // will be called for each key in the array or object. The first two
-  // arguments of the validator are the array or object itself, and the
-  // current item's key.
+  // 在arrayOf和objectOf上指定自定义的校验器，校验失败同样返回一个Error对象，校验器会在array或object的每个属性上得到调用，校验器第1个参数是array或object本身，第2个参数是当前项目的key值。
   customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     if (!/matchme/.test(propValue[key])) {
       return new Error(
-        'Invalid prop `' + propFullName + '` supplied to' +
-        ' `' + componentName + '`. Validation failed.'
+        '不合法的prop `' + propFullName + '` 被应用到' +
+        ' `' + componentName + '`. 校验失败.'
       );
     }
   })
