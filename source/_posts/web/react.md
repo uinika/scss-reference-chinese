@@ -2341,11 +2341,108 @@ function ListOfTenThings() {
 ```
 
 
+## 使用PropTypes进行类型检查
 
+从伴随应用程序规模的增长，需要进行大量的类型检查工作，因此React内建了组件`props`类型检查机制。但是从React v15.5开始，`React.PropTypes`被迁移到单独的`prop-types`包。
 
+```jsx
+import React from 'react';
+import PropTypes from 'prop-types';
 
+class Component extends React.Component {
+  render() {
+    return <div>{this.props.text}</div>;
+  }
+}
 
-## 使用PropTypes类型检查
+Component.propTypes = {
+  text: PropTypes.string.isRequired,
+};
+```
+
+`PropTypes`对象上暴露了一系列校验器，用来确保当前组件接收的数据是合法的，例如上面代码中的`PropTypes.string.isRequired`，当`props`的值非法时，浏览器控制台将会接收到警告信息。
+
+> 出于性能方面的考量，PropTypes类型检查只工作在**开发模式**下。
+
+### PropTypes
+
+下面是PropTypes上各类校验器的使用实例：
+
+```jsx
+import PropTypes from 'prop-types';
+
+MyComponent.propTypes = {
+  // 可以将PropTypes声明为JS数据类型。
+  optionalArray: PropTypes.array,
+  optionalBool: PropTypes.bool,
+  optionalFunc: PropTypes.func,
+  optionalNumber: PropTypes.number,
+  optionalObject: PropTypes.object,
+  optionalString: PropTypes.string,
+  optionalSymbol: PropTypes.symbol,
+
+  // 所有能够被React渲染的内容，例如：numbers, strings, elements, array以及fragment。
+  optionalNode: PropTypes.node,
+
+  // 一个React元素。
+  optionalElement: PropTypes.element,
+
+  // 还可以将prop声明为一个类的实例，需要使用到instanceof操作符。
+  optionalMessage: PropTypes.instanceOf(Message),
+
+  // 确保prop是指定枚举类型中的值。
+  optionalEnum: PropTypes.oneOf(['News', 'Photos']),
+
+  // 拥有指定类型属性之一。
+  optionalUnion: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Message)
+  ]),
+
+  // 一个确切数据类型的数组。
+  optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
+
+  // 具有特定类型的属性值的对象。
+  optionalObjectOf: PropTypes.objectOf(PropTypes.number),
+
+  // 对拥有特定结构的对象进行校验。
+  optionalObjectWithShape: PropTypes.shape({
+    color: PropTypes.string,
+    fontSize: PropTypes.number
+  }),
+
+  // 可以链式的调用isRequired，当指定prop缺省的时候，会打印出相应的警告信息。
+  requiredFunc: PropTypes.func.isRequired,
+
+  // 任意数据类型
+  requiredAny: PropTypes.any.isRequired,
+
+  // 指定一个自定义的校验器，校验失败返回一个Error对象（不能直接console.warn或者throw）。
+  customProp: function(props, propName, componentName) {
+    if (!/matchme/.test(props[propName])) {
+      return new Error(
+        'Invalid prop `' + propName + '` supplied to' +
+        ' `' + componentName + '`. Validation failed.'
+      );
+    }
+  },
+
+  // 可以在arrayOf和objectOf上指定自定义的校验器，校验失败同样返回一个Error对象，  The validator
+  // will be called for each key in the array or object. The first two
+  // arguments of the validator are the array or object itself, and the
+  // current item's key.
+  customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
+    if (!/matchme/.test(propValue[key])) {
+      return new Error(
+        'Invalid prop `' + propFullName + '` supplied to' +
+        ' `' + componentName + '`. Validation failed.'
+      );
+    }
+  })
+};
+```
+
 
 
 ## 静态类型检查
