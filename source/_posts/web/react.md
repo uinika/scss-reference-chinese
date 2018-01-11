@@ -2489,7 +2489,7 @@ ReactDOM.render(
 );
 ```
 
-如果你使用了Babel的`transform-class-properties`插件，就可以方便的通过React组件类的静态属性来声明默认值，这个语法在ES6规范中还没有稳定，因此需要在Babel进行编译后才能在浏览器中正常工作。
+如果你使用了Babel的[transform-class-properties](https://babeljs.io/docs/plugins/transform-class-properties/)插件，就可以方便的通过React组件类的静态属性来声明默认值，这个语法在ES6规范中还没有稳定，因此需要在Babel进行编译后才能在浏览器中正常工作。
 
 ```jsx
 class Demo extends React.Component {
