@@ -2418,7 +2418,7 @@ MyComponent.propTypes = {
   // 任意数据类型
   requiredAny: PropTypes.any.isRequired,
 
-  // 指定一个自定义的校验器，校验失败返回一个Error对象（不能直接console.warn或者throw）。
+  // 指定一个自定义的校验器，校验失败返回一个Error对象（不要直接console.warn或者throw）。
   customProp: function(props, propName, componentName) {
     if (!/matchme/.test(props[propName])) {
       return new Error(
@@ -2428,7 +2428,7 @@ MyComponent.propTypes = {
     }
   },
 
-  // 在arrayOf和objectOf上指定自定义的校验器，校验失败同样返回一个Error对象，校验器会在array或object的每个属性上得到调用，校验器第1个参数是array或object本身，第2个参数是当前项目的key值。
+  // 在arrayOf和objectOf上指定自定义的校验器，校验失败同样返回一个Error对象，校验器会在array或object的每个属性上得到调用，校验器第1个参数是array或object本身，第2个参数是当前项的key值。
   customArrayProp: PropTypes.arrayOf(function(propValue, key, componentName, location, propFullName) {
     if (!/matchme/.test(propValue[key])) {
       return new Error(
