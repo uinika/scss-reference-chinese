@@ -2387,38 +2387,38 @@ MyComponent.propTypes = {
   // 一个React元素。
   optionalElement: PropTypes.element,
 
-  // 还可以将prop声明为一个类的实例，需要使用到instanceof操作符。
+  // 通过instanceof操作符将prop声明为一个类的实例。
   optionalMessage: PropTypes.instanceOf(Message),
 
-  // 确保prop是指定枚举类型中的值。
+  // 确保props是指定枚举类型中的值。
   optionalEnum: PropTypes.oneOf(['News', 'Photos']),
 
-  // 拥有指定类型属性之一。
+  // 判断是否属于指定类型之一。
   optionalUnion: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
     PropTypes.instanceOf(Message)
   ]),
 
-  // 一个确切数据类型的数组。
+  // 拥有指定数据类型的数组。
   optionalArrayOf: PropTypes.arrayOf(PropTypes.number),
 
-  // 具有特定类型的属性值的对象。
+  // 具有特定类型属性值的对象。
   optionalObjectOf: PropTypes.objectOf(PropTypes.number),
 
-  // 对拥有特定结构的对象进行校验。
+  // 对拥有特定属性结构的对象进行校验。
   optionalObjectWithShape: PropTypes.shape({
     color: PropTypes.string,
     fontSize: PropTypes.number
   }),
 
-  // 可以链式的调用isRequired，当指定prop缺省的时候，会打印出相应的警告信息。
+  // 可以链式调用isRequired，指定props缺省时会打印警告信息。
   requiredFunc: PropTypes.func.isRequired,
 
   // 任意数据类型
   requiredAny: PropTypes.any.isRequired,
 
-  // 指定一个自定义的校验器，校验失败返回一个Error对象（不要直接console.warn或者throw）。
+  // 自定义的校验器，校验失败返回一个Error对象（不要直接console.warn或者throw）。
   customProp: function(props, propName, componentName) {
     if (!/matchme/.test(props[propName])) {
       return new Error(
@@ -2440,6 +2440,73 @@ MyComponent.propTypes = {
 };
 ```
 
+### 需要单一的子元素
+
+通过`PropTypes.element`可以指定当前组件只能拥有一个单一的子元素，否则将会出现告警信息。
+
+```jsx
+import PropTypes from 'prop-types';
+
+class MyComponent extends React.Component {
+  render() {
+    // 只能拥有一个单一的子元素，否则将会打印告警信息。
+    const children = this.props.children;
+    return (
+      <div>
+        {children}
+      </div>
+    );
+  }
+}
+
+MyComponent.propTypes = {
+  children: PropTypes.element.isRequired
+};
+```
+
+### 默认的props值
+
+可以通过React组件的`defaultProps`属性为`props`指定默认值。
+
+```jsx
+class Demo extends React.Component {
+  render() {
+    return (
+      <h1>Hello, {this.props.name}</h1>
+    );
+  }
+}
+
+// 为props指定默认值
+Demo.defaultProps = {
+  name: 'React!'
+};
+
+// 渲染出"Hello, React!":
+ReactDOM.render(
+  <Demo />,
+  document.getElementById('app')
+);
+```
+
+如果你使用了Babel的`transform-class-properties`插件，就可以方便的通过React组件类的静态属性来声明默认值，这个语法在ES6规范中还没有稳定，因此需要在Babel进行编译后才能在浏览器中正常工作。
+
+```jsx
+class Demo extends React.Component {
+  // 通过静态属性来声明默认值
+  static defaultProps = {
+    name: 'React!'
+  }
+
+  render() {
+    return (
+      <div>Hello, {this.props.name}</div>
+    )
+  }
+}
+```
+
+上面代码中的`defaultProps`属性用来确保`this.props.name`总是会拥有一个缺省值，**propTypes检查发生在`defaultProps`属性被解析之后，因此类型检查机制依然可以应用到`defaultProps`上面**。
 
 
 ## 静态类型检查
