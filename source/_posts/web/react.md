@@ -2508,9 +2508,7 @@ class Demo extends React.Component {
 
 上面代码中的`defaultProps`属性用来确保`this.props.name`总是会拥有一个缺省值，**propTypes检查发生在`defaultProps`属性被解析之后，因此类型检查机制依然可以应用到`defaultProps`上面**。
 
-
-## 静态类型检查
-
+> 开发环境下，还可以通过[Flow](https://flow.org/)和[TypeScript](https://www.typescriptlang.org/)进行静态的数据类型检查，可以方便的在代码运行之前检测到数据类型方面的问题。
 
 ## Refs和DOM
 
