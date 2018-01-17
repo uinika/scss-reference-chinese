@@ -2514,6 +2514,41 @@ class Demo extends React.Component {
 
 React组件数据流当中，父组件向下与子组件沟通的唯一方式是通过`props`，传入新的`props`值然后子组件被重新渲染。某些场景下（*管理输入聚焦、文本选择、多媒体回放，触发命令式动画，整合第3方DOM类库。*），需要在React组件数据流范围之外对子元素（*即可能是React组件，也可能是DOM元素*）进行修改，为此React提供了`ref`组件属性来满足这种需求。
 
+### 添加ref属性到DOM元素
+
+React提供的`ref`属性可以添加到任意组件，`ref`属性接收一个回调函数，该函数会在组件`mounted`或`unmounted`后执行。
+
+当`ref`属性应用于HTML元素的时候，`ref`回调函数会接收到该元素对应的DOM对象，例如下面的代码就通过`ref`存储一个DOM结点的引用。
+
+````jsx
+class CustomTextInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.focusTextInput = this.focusTextInput.bind(this);
+  }
+
+  focusTextInput() {
+    // 使用原生DOM API显式的聚焦到文本输入框
+    this.textInput.focus();
+  }
+
+  render() {
+    // 使用ref回调函数，保存一个文本输入域DOM元素的引用到实例属性，比如this.textInput
+    return (
+      <div>
+        <input
+          type="text"
+          ref={(input) => { this.textInput = input; }} />
+        <input
+          type="button"
+          value="Focus the text input"
+          onClick={this.focusTextInput}
+        />
+      </div>
+    );
+  }
+}
+```
 
 
 
