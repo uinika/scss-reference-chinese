@@ -25,7 +25,7 @@ sudo ntfsfix /dev/sda4
 ```javascript
 {
   "workbench.statusBar.visible": false,
-  "workbench.activityBar.visible": true,
+  "workbench.activityBar.visible": false,
   "editor.tabSize": 2,
   "editor.fontSize": 12,
   "editor.fontFamily": "Source Code Pro, Consolas, Ubuntu mono",
@@ -35,9 +35,7 @@ sudo ntfsfix /dev/sda4
   "window.openFilesInNewWindow": "on",
   "explorer.openEditors.visible": 0,
   "editor.lineHeight": 19,
-  "typescript.check.tscVersion": false,
   "window.menuBarVisibility": "toggle",
-  "workbench.welcome.enabled": false,
   "editor.wordWrap": "on",
   "editor.wordWrapColumn": 100,
   "editor.minimap.enabled": false,
@@ -49,7 +47,9 @@ sudo ntfsfix /dev/sda4
   "emmet.syntaxProfiles": {
     "vue-html": "html",
     "vue": "html"
-  }
+  },
+  "explorer.confirmDelete": false,
+  "csharp.suppressDotnetInstallWarning": true
 }
 ```
 
