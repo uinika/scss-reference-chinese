@@ -128,6 +128,37 @@ sudo apt-get update
 sudo apt-get install openshot-qt
 ```
 
+## Wine
+
+64位系统上安装32位架构兼容：
+
+```bash
+sudo dpkg --add-architecture i386 
+```
+
+添加远程仓库源地址：
+
+```
+wget -nc https://dl.winehq.org/wine-builds/Release.key
+sudo apt-key add Release.key
+# for Ubuntu
+sudo apt-add-repository https://dl.winehq.org/wine-builds/ubuntu/
+# for Linux mint 18
+sudo apt-add-repository 'deb https://dl.winehq.org/wine-builds/ubuntu/ xenial main'
+```
+
+更新源地址：
+
+```bash
+sudo apt-get update
+```
+
+安装稳定版：
+
+```bash
+sudo apt-get install --install-recommends winehq-stable
+```
+
 ## Root Password
 
 ```bash
