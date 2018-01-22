@@ -2514,7 +2514,7 @@ class Demo extends React.Component {
 
 React组件数据流当中，父组件向下与子组件沟通的唯一方式是通过`props`，传入新的`props`值然后子组件被重新渲染。某些场景下（*管理输入聚焦、文本选择、多媒体回放，触发命令式动画，整合第3方DOM类库。*），需要在React组件数据流范围之外对子元素（*即可能是React组件，也可能是DOM元素*）进行修改，为此React提供了`ref`组件属性来满足这种需求。
 
-### 添加ref属性到DOM元素
+### 添加关于DOM元素的ref属性
 
 React提供的`ref`属性可以添加到任意组件，`ref`属性接收一个回调函数，该函数会在组件`mounted`或`unmounted`后执行。
 
@@ -2549,6 +2549,15 @@ class CustomTextInput extends React.Component {
   }
 }
 ```
+
+React会在组件挂载的时候调用`ref`上的回调函数，然后在组件卸载时将该`ref`赋值为`null`；因此，**`ref`上的回调函数先于`componentDidMount`或`componentDidUpdate`生命周期函数执行**。
+
+> 通过`ref`回调来设置类上的某个属性是React操作局部DOM的常见方式，这里推荐使用上面例子中的**行内箭头函数**：`ref={input => this.textInput = input}`。
+
+### 添加关于类组件的ref属性
+
+
+
 
 
 
