@@ -20,6 +20,26 @@ sudo ntfsfix /dev/sda4
 
 <!-- more -->
 
+## SSH key
+
+查看本地公钥是否存在：
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
+生成公钥，该指令会要求提供公钥的保存位置和文件名，可以敲Enter键使用默认值：
+
+```
+ssh-keygen -t rsa -C "uinika@163.com"
+```
+
+查看默认生成的公钥：
+
+```
+cat ~/.ssh/id_rsa.pub
+```
+
 ## VSCode
 
 ```javascript
