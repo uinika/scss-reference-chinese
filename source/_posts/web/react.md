@@ -2520,7 +2520,7 @@ React提供的`ref`属性可以添加到任意组件，`ref`属性接收一个�
 
 当`ref`属性应用于HTML元素的时候，`ref`回调函数会接收到该元素对应的DOM对象，例如下面的代码就通过`ref`存储一个DOM结点的引用。
 
-````jsx
+```jsx
 class CustomTextInput extends React.Component {
   constructor(props) {
     super(props);
@@ -2554,10 +2554,79 @@ React会在组件挂载的时候调用`ref`上的回调函数，然后在组件�
 
 > 通过`ref`回调来设置类上的某个属性是React操作局部DOM的常见方式，这里推荐使用上面例子中的**行内箭头函数**：`ref={input => this.textInput = input}`。
 
-### 添加关于类组件的ref属性
+### 将ref属性引用到当前类组件
 
+当`ref`属性用于自定义类组件的时候，`ref`回调函数的参数将会接收到被挂载组件的实例，接下来我们为前面的`CustomTextInput`组件模拟组件挂载后被点击的效果：
 
+```jsx
+class AutoFocusTextInput extends React.Component {
+  componentDidMount() {
+    this.textInput.focusTextInput();
+  }
 
+  render() {
+    return (
+      <CustomTextInput
+        ref={(input) => { this.textInput = input; }} />
+    );
+  }
+}
+```
+
+* 上面代码只能工作在`CustomTextInput`以类组件进行声明的时候。
+
+```jsx
+class CustomTextInput extends React.Component { // ... }
+```
+
+### ref与函数式组件
+
+因为函数式组件并不拥有实例对象，因此不可以在`ref`回调函数中使用`this`进行赋值操作。
+
+```jsx
+function MyFunctionalComponent() {
+  return <input />;
+}
+
+class Parent extends React.Component {
+  render() {
+    // 下面的代码将不会工作！
+    return (
+      <MyFunctionalComponent ref={(input) => { this.textInput = input; }} />
+    );
+  }
+}
+```
+
+但是可以在`ref`回调函数中通过变量来引用当前组件。
+
+```jsx
+function CustomTextInput(props) {
+  // 变量textInput必须先进行声明，以便后续的ref回调函数能够访问到它。
+  let textInput = null;
+
+  function handleClick() {
+    textInput.focus();
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        ref={(input) => { textInput = input; }} />
+      <input
+        type="button"
+        value="Focus the text input"
+        onClick={handleClick}
+      />
+    </div>
+  );  
+}
+```
+
+### 
+
+极少的情况下（*触发focus事件、测量子组件的尺寸和位置*），开发人员需要在父组件访问子组件的DOM（*虽然React并不推荐这么做，因为这样会破坏组件的封装性*），这种时候可以向子组件添加`ref`属性，
 
 
 
