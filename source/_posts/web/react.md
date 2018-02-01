@@ -2624,11 +2624,30 @@ function CustomTextInput(props) {
 }
 ```
 
-### 
+### 暴露子组件的DOM引用到父组件
 
-极少的情况下（*触发focus事件、测量子组件的尺寸和位置*），开发人员需要在父组件访问子组件的DOM（*虽然React并不推荐这么做，因为这样会破坏组件的封装性*）。
+极少的情况下（*触发子组件的focus事件以及尺寸和位置*），开发人员需要在父组件访问子组件的DOM节点（*虽然React并不推荐这么做，因为这样会破坏组件的封装性*）。
 
-向子组件添加`ref`属性，开发人员将获得子组件的实例而非DOM节点，而且这样并不能工作在函数类型组件当中。
+虽然你可以添加一个ref到子组件，但这并不是一个理想的解决方案，因为你只会获取到组件实例而非DOM节点，并且这样也无法用于函数类型组件。这里推荐在子组件内暴露用一个特殊的`prop`，让子组件能够通过该`prop`接收到一个任意名称的函数（*例如下面函数中的inputRef*），然后通过`ref`属性将该函数关联到DOM节点，最终使得父组件能够通过一个中间层级的组件，传递其`ref`回调函数至子DOM节点，而且能够同时工作在类组件和函数组件当中，示例代码如下：
+
+```jsx
+// 中间层级组件
+function CustomTextInput(props) {
+  return (
+    <div>
+      <input ref={props.inputRef} />
+    </div>
+  );
+}
+
+class Parent extends React.Component {
+  render() {
+    return (
+      <CustomTextInput inputRef={el => this.inputElement = el} />
+    );
+  }
+}
+```
 
 
 
