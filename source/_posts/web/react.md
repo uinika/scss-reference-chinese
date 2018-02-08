@@ -2699,6 +2699,93 @@ class Grandparent extends React.Component {
 
 ## 非受控组件
 
+大多数情况下，我们推荐使用**受控组件**去实现表单，即表单数据由React组件所控制。另一种方式是使用**非受控组件**，即表单数据由DOM对象所控制。
+
+使用非受控组件，可以通过一个`ref`从DOM获取表单值，代替为组件的每次状态更新编写事件处理器，下面示例将会接收一个用户输入的字符串然后弹出。
+
+```jsx
+class NameForm extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(event) {
+    alert('被提交的字符串：' + this.input.value);
+    event.preventDefault();
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          输入的字符串：<input type="text" ref={(input) => this.input = input} />
+        </label>
+        <input type="submit" value="提交" />
+      </form>
+    );
+  }
+}
+```
+
+非受控组件能够更加容易的整合React以及非React代码，而且代码更加精简与小巧，言外之意React官方推荐通常情况应使用非受控组件。
+
+### 默认值
+
+在React组件的渲染生命周期中，`form`元素上的`value`属性将会重写DOM上的`value`属性值。使用非受控组件的时候，通常会希望React指定一个能够避免后续非受控更新的初始值，这里需要使用`defaultValue`来代替原生的`value`属性。
+
+```jsx
+render() {
+  return (
+    <form onSubmit={this.handleSubmit}>
+      <label>
+        名称：<input defaultValue="Hank" ref={(input) => this.input = input} type="text" />
+      </label>
+      <input type="submit" value="提交" />
+    </form>
+  );
+}
+```
+
+同样的，`<input type="checkbox">`和`<input type="radio">`支持`defaultChecked`，`<select>`和`<textarea>`支持`defaultValue`。
+
+### 文件上传
+
+React中的`<input type="file">`总是属于非受控组件，因为其值只能被用户设置，而非编程控制。
+
+我们可以通过JavaScript原生的`File API`对上传文件进行操作，下面的例子体现了如何通过引用DOM节点的`ref`，在上传事件处理函数中对文件进行操作。
+
+```jsx
+class FileInput extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  handleSubmit(event) {
+    event.preventDefault();
+    alert(
+      `Selected file - ${this.fileInput.files[0].name}`
+    );
+  }
+
+  render() {
+    return (
+      <form onSubmit={this.handleSubmit}>
+        <label>
+          上传文件：<input type="file" ref={input => {this.fileInput = input;}} />
+        </label>
+        <br />
+        <button type="submit">提交文件</button>
+      </form>
+    );
+  }
+}
+
+ReactDOM.render(
+  <FileInput />,
+  document.getElementById('app')
+);
+```
 
 ## 性能优化
 
