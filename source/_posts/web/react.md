@@ -2651,7 +2651,7 @@ class Parent extends React.Component {
 
 在上面的例子当中，`Parent`组件通过`CustomTextInput`组件的`prop.inputRef`来传递`ref`回调函数，而`CustomTextInput`组件又将该回调函数传递给`<input>`。因此，`Parent`组件中的`this.inputElement`将会被设置为`CustomTextInput`组件内`<input>`所对应的DOM结点（**非常重要**）。
 
-除了可以同时更加广泛的用于函数式组件和类组件，这种模式的另一个优点在于适用于任意嵌套深度的组件，例如在下面例子中，`Grandparent`组件需要操纵`CustomTextInput`组件的DOM，只需要通过`Parent`的`props`进行一次赋值传递。
+除了可以同时更加广泛的用于函数式组件和类组件，这种模式的另一个优点在于适用于任意嵌套深度的组件。
 
 ```jsx
 // 子组件
@@ -2683,6 +2683,19 @@ class Grandparent extends React.Component {
   }
 }
 ```
+
+上面例子中，`Grandparent`组件需要操纵`CustomTextInput`组件的DOM，只需要通过`Parent`的`props`进行一次赋值传递，从而让`Grandparent`组件中的`this.inputElement`被设置为`CustomTextInput`组件当中的`<input>`元素的DOM。
+
+> 出于更全面的考虑，React官方并不建议直接暴露DOM节点对象，但是可以作为一种应急的处理方式。而且这种方式，需要向子组件添加一些功能代码，如果不希望对子组件造成污染，另一个选择是使用`ReactDOM.findDOMNode(component)`方法。
+
+### 遗留API：字符串类型的ref属性
+
+如果使用早期版本的React，你可能会熟悉在组件上使用字符串类型的`ref`属性，例如`<input type="text" ref="textInput" />`元素可以通过`this.refs.textInput`获取其DOM节点，但是**目前React官方不建议这样做，因为存在一些悬而末决的问题，并且可能在未来React发布版本中被移除，所以建议通过上面回调函数的模式去使用`ref`**。
+
+### 附加说明
+
+如果`ref`属性是通过行内函数进行定义的，那么在组件更新的时候它将会被调用两次（*第1次值为`null`，第2次为DOM元素*），这是因为组件渲染时会建立函数对象的新实例，React需要清除旧的`ref`然后设置新的。我们可以通过将`ref`回调函数定义为类组件方法避免该问题，但是大部份情况下这并不会对开发和用户体验造成影响。
+
 
 ## 非受控组件
 
