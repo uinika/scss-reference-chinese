@@ -2804,13 +2804,49 @@ render() {
 }
 ```
 
-### 动机
+### 动机与用法
 
-### 用法
+定义一个列表组件：
+
+```jsx
+class Table extends React.Component {
+  render() {
+    return (
+      <table>
+        <tr><Columns /></tr>
+      </table>
+    );
+  }
+}
+```
+
+组件`Columns`将会返回多个`<td>`元素，
+
+```jsx
+class Columns extends React.Component {
+  render() {
+    return (
+      <React.Fragment>
+        <td>Hello</td>
+        <td>World</td>
+      </React.Fragment>
+    );
+  }
+}
+```
+
+`<Table />`组件的渲染结果：
+
+```html
+<table>
+  <tr>
+    <td>Hello</td>
+    <td>World</td>
+  </tr>
+</table>
+```
 
 ### 快捷语法
-
-
 
 
 ## Portals
