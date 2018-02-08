@@ -2649,8 +2649,40 @@ class Parent extends React.Component {
 }
 ```
 
-在上面的例子当中，`Parent`组件通过`CustomTextInput`组件的`prop.inputRef`来传递`ref`回调函数，而`CustomTextInput`组件又将该回调函数传递给`<input>`。因此，`Parent`组件中的`this.inputElement`将会被设置为`CustomTextInput`组件里`<input>`所对应的DOM结点。
+在上面的例子当中，`Parent`组件通过`CustomTextInput`组件的`prop.inputRef`来传递`ref`回调函数，而`CustomTextInput`组件又将该回调函数传递给`<input>`。因此，`Parent`组件中的`this.inputElement`将会被设置为`CustomTextInput`组件内`<input>`所对应的DOM结点（**非常重要**）。
 
+除了可以同时更加广泛的用于函数式组件和类组件，这种模式的另一个优点在于适用于任意嵌套深度的组件，例如在下面例子中，`Grandparent`组件需要操纵`CustomTextInput`组件的DOM，只需要通过`Parent`的`props`进行一次赋值传递。
+
+```jsx
+// 子组件
+function CustomTextInput(props) {
+  return (
+    <div>
+      <input ref={props.inputRef} />
+    </div>
+  );
+}
+
+// 父组件
+function Parent(props) {
+  return (
+    <div>
+      My input: <CustomTextInput inputRef={props.inputRef} />
+    </div>
+  );
+}
+
+// 祖父组件
+class Grandparent extends React.Component {
+  render() {
+    return (
+      <Parent
+        inputRef={el => this.inputElement = el}
+      />
+    );
+  }
+}
+```
 
 ## 非受控组件
 
