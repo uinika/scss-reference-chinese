@@ -2787,6 +2787,36 @@ ReactDOM.render(
 );
 ```
 
+
+## Fragments
+
+React组件有时候需要返回多个元素，新特性`React.Fragment`可以让你在不增加冗余DOM节点的情况下，聚合一系列（*多个*）子元素到DOM。
+
+```jsx
+render() {
+  return (
+    <React.Fragment>
+      <ChildA />
+      <ChildB />
+      <ChildC />
+    </React.Fragment>
+  );
+}
+```
+
+### 动机
+
+### 用法
+
+### 快捷语法
+
+
+
+
+## Portals
+
+## 错误边界
+
 ## 性能优化
 
 
