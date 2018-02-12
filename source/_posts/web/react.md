@@ -2957,7 +2957,7 @@ Portals的典型应用场景是在父组件拥有`overflow: hidden`或`z-index`�
 
 ### 事件冒泡
 
-
+虽然portal可以用于DOM树的任意位置，
 
 ```jsx
 <html>
