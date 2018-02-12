@@ -2790,7 +2790,7 @@ ReactDOM.render(
 
 ## Fragments
 
-React组件有时候需要返回多个元素，新特性`React.Fragment`可以让你在不增加冗余DOM节点的情况下，聚合一系列（*多个*）子元素到DOM。
+React组件有时需要返回多个元素，新特性`React.Fragment`可以在不增加冗余DOM节点的情况下，聚合一系列（*多个*）子元素到DOM上去。
 
 ```jsx
 render() {
@@ -2804,23 +2804,52 @@ render() {
 }
 ```
 
-### 动机与用法
+### 动机
 
-定义一个列表组件：
+当组件需要返回一个列表时，通用的处理方式如下：
 
 ```jsx
+// Table组件需要Columns组件渲染单个的表格的数据
 class Table extends React.Component {
   render() {
     return (
       <table>
-        <tr><Columns /></tr>
+        <tr>
+          <Columns />
+        </tr>
       </table>
     );
   }
 }
+
+// Columns组件需要返回多个<td>元素，让生成的HTML合法可用；但是过去React返回的元素必须拥有一个根元素，因此不得不加上<div>标签。
+class Columns extends React.Component {
+  render() {
+    return (
+      <div>
+        <td>Hello</td>
+        <td>World</td>
+      </div>
+    );
+  }
+}
+
+// 最终渲染的结果如下，
+<table>
+  <tr>
+    <div>
+      <td>Hello</td>
+      <td>World</td>
+    </div>
+  </tr>
+</table>
 ```
 
-组件`Columns`将会返回多个`<td>`元素，
+> 冗余的`<div>`元素嵌套在`<tr>`元素下并不合乎HTML规范，因此React引入`React.Fragment`新特性解决这个通点。
+
+### 用法
+
+使用`<React.Fragment>`改写上面的例子。
 
 ```jsx
 class Columns extends React.Component {
@@ -2833,11 +2862,8 @@ class Columns extends React.Component {
     );
   }
 }
-```
 
-`<Table />`组件的渲染结果：
-
-```html
+// 最终的输出结果没有冗余的<div>标签
 <table>
   <tr>
     <td>Hello</td>
@@ -2848,10 +2874,187 @@ class Columns extends React.Component {
 
 ### 快捷语法
 
+React 16当中，我们可以使用新添加的`fragment`快捷语法`<></>`。
+
+```jsx
+class Columns extends React.Component {
+  render() {
+    return (
+      <>
+        <td>Hello</td>
+        <td>World</td>
+      </>
+    );
+  }
+}
+```
+
+> Babel之类的编译工具可能暂不支持`fragment`快捷语法，因此未受支持的场合可以继续使用`<React.Fragment>`。
+
+### 带key属性的fragment
+
+`<React.Fragment>`可以拥有一个`key`属性，用于映射一个集合到fragment数组。
+
+```jsx
+function Production(props) {
+  return (
+    <dl>
+      {props.items.map(item => (
+        // 如果没有提供key属性, React将会提示关于key的警告信息
+        <React.Fragment key={item.id}>
+          <dt>{item.name}</dt>
+          <dd>{item.info}</dd>
+        </React.Fragment>
+      ))}
+    </dl>
+  );
+}
+```
+
+> `key`是可以传入`Fragment`的唯一属性，未来React官方可能会添加更丰富的属性，比如对事件提供支持。
+
 
 ## Portals
 
+Portals提供了渲染子元素到父组件DOM继承树之外DOM节点的方法。 
+
+```jsx
+ReactDOM.createPortal(child, container)
+```
+
+参数`child`可以是任意可渲染的React子元素（*element、string、fragment*），参数`container`是一个DOM元素。
+
+### 用法
+
+通常，当你从一个组件的render()方法返回HTML元素的时候，这些元素将会被挂载到相邻父节点的子元素下面。
+
+```jsx
+render() {
+  // React将会渲染children到div下面
+  return (
+    <div>
+      {this.props.children}
+    </div>
+  );
+}
+```
+
+但是，有时需要插入一个子元素到DOM不同的位置。
+
+```jsx
+render() {
+  // 下面代码React不会建立新的div，只会渲染children到domNode（可以是任意可用的DOM节点，不管其位于DOM中的哪个位置）。
+  return ReactDOM.createPortal(
+    this.props.children,
+    domNode,
+  );
+}
+```
+
+Portals的典型应用场景是在父组件拥有`overflow: hidden`或`z-index`样式时，需要子元素在视觉上打破其容器（*即在指定位置进行层叠展示，例如：对话框、提示信息、浮动卡片*）。
+
+
+
+### 事件冒泡
+
+
+
+```jsx
+<html>
+  <body>
+    <div id="app-root"></div>
+    <div id="modal-root"></div>
+  </body>
+</html>
+```
+
+```jsx
+// These two containers are siblings in the DOM
+const appRoot = document.getElementById('app-root');
+const modalRoot = document.getElementById('modal-root');
+
+class Modal extends React.Component {
+  constructor(props) {
+    super(props);
+    this.el = document.createElement('div');
+  }
+
+  componentDidMount() {
+    // The portal element is inserted in the DOM tree after
+    // the Modal's children are mounted, meaning that children
+    // will be mounted on a detached DOM node. If a child
+    // component requires to be attached to the DOM tree
+    // immediately when mounted, for example to measure a
+    // DOM node, or uses 'autoFocus' in a descendant, add
+    // state to Modal and only render the children when Modal
+    // is inserted in the DOM tree.
+    modalRoot.appendChild(this.el);
+  }
+
+  componentWillUnmount() {
+    modalRoot.removeChild(this.el);
+  }
+
+  render() {
+    return ReactDOM.createPortal(
+      this.props.children,
+      this.el,
+    );
+  }
+}
+
+class Parent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {clicks: 0};
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick() {
+    // This will fire when the button in Child is clicked,
+    // updating Parent's state, even though button
+    // is not direct descendant in the DOM.
+    this.setState(prevState => ({
+      clicks: prevState.clicks + 1
+    }));
+  }
+
+  render() {
+    return (
+      <div onClick={this.handleClick}>
+        <p>Number of clicks: {this.state.clicks}</p>
+        <p>
+          Open up the browser DevTools
+          to observe that the button
+          is not a child of the div
+          with the onClick handler.
+        </p>
+        <Modal>
+          <Child />
+        </Modal>
+      </div>
+    );
+  }
+}
+
+function Child() {
+  // The click event on this button will bubble up to parent,
+  // because there is no 'onClick' attribute defined
+  return (
+    <div className="modal">
+      <button>Click</button>
+    </div>
+  );
+}
+
+ReactDOM.render(<Parent />, appRoot);
+```
+
+## Web组件
+
+
 ## 错误边界
+
 
 ## 性能优化
 
