@@ -1032,39 +1032,55 @@ $content: "Non-null content" !default;
 
 ## @规则与指令
 
-Sass支持所有CSS3的`@-Rules`规则以及Sass特有的`#Directive`指令。
+SASS支持所有CSS3的`@-Rules`规则，以及SASS特有的`#Directive`指令。
 
 ### @import / #import
 
-Sass拓展`@import`允许其导入`.scss`或`.sass`文件，导入的文件将合并、编译到相同CSS文件，文件中的变量和mixin都可以在导入位置使用。
+SASS拓展了CSS的`@import`允许其导入`.scss`或`.sass`文件，导入的文件将合并、编译到一个CSS文件，文件中的变量和mixin都可以在导入的主文件当中使用。
 
-但是在下面情况当中，`@import`仅作为普通CSS语句处理，不会导入Sass文件。
+SASS会基于当前目录查找其它文件，以及Rack、Rails或者Merb下的SASS文件目录。可以通过`:load_paths`或`--load-path`选项指定额外的搜索目录。 
 
-1. 文件拓展名为`.css`
-2. 文件名以`http://`开头
-3. 文件名是`url()`
-4. `@import`包含媒体查询
+`@import`通过指定路径以及文件名来引入SASS文件，但是在下面4种情况当中，`@import`仅被编译为普通的CSS语句：
 
-除上述情况外，文件拓展名为`.scss`或`.sass`的情况都会进行预编译处理，即使拓展名缺省依然可以正确进行导入。
+1. 如果文件拓展名为`.css`。
+2. 如果文件名以`http://`开头。
+3. 如果文件名是`url()`
+4. 如果`@import`包含媒体查询语句。
+
+```scss
+/*===== SCSS =====*/
+@import "app.css";
+@import "pp" screen;
+@import "https://uinika.github.io/app";
+@import url(app);
+
+/*===== CSS =====*/
+@import url(app.css);
+@import "pp" screen;
+@import "https://uinika.github.io/app";
+@import url(app);
+```
+
+除上述四种情况外，文件拓展名为`.scss`或`.sass`的情况都会进行预编译处理，即使**文件拓展名缺省**依然能够正确的进行导入。
 
 ```scss
 // 下面2种导入方式等效
-@import 'base.scss;
 @import 'base';
+@import 'base.scss;
 ```
 
-Sass允许在同一个`@import`语句内导入多个文件。
+SASS允许在一个`@import`语句内同时导入多个文件。
 
 ```scss
-@import 'base', 'reset';
+@import 'base', 'reset', 'app';
 ```
 
-`@import`语句内也可以使用`#{}`插值，但是只能用于标准CSS的`@import url("");`导入方式。
+`@import`语句内可以有限制的使用`#{}`插值，即不能动态的导入基于变量的SASS文件，只能用于标准CSS的`@import url("");`导入方式。
 
 ```scss
 /*===== SCSS =====*/
 $family: unquote("Droid+Sans");
-@import url("http://fonts.googleapis.com/css?family=\#{$family}");
+@import url("http://fonts.googleapis.com/css?family=#{$family}");
 
 /*===== CSS =====*/
 @import url("http://fonts.googleapis.com/css?family=Droid+Sans");
@@ -1088,9 +1104,9 @@ $family: unquote("Droid+Sans");
 .demo {
   color: red;
 }
-// 在文件app.scss中引入demo
+
 #app {
-  @import "demo";
+  @import "demo"; // 在文件app.scss中引入demo.scss
 }
 
 /*===== CSS =====*/
@@ -1583,13 +1599,265 @@ a.important {
 
 ### @debug
 
+`@debug`指令打印SassScript表达式的值到标准错误输出流，可以用来调试具有复杂SassScript的SASS文件，例如：
+
+```scss
+/*===== SCSS =====*/
+@debug 10em + 12em;
+
+/*===== CSS =====*/
+Line 1 DEBUG: 22em
+```
+
 ### @warn
+
+`@warn`指令打印SassScript表达式的值到标准错误输出流，在警告用户弃用库或者修复`mixin`轻微错误的场景比较有用，`@warn`和`@debug`存在2个主要区别：
+
+> 可以使用`--quiet`命令行选项或SASS的`:quiet`选项来关闭`@warn`警告。
+> 样式表trace将与消息一起被打印，开发人员可以方便的看到`@warn`警告发生在样式表的哪里个位置。
+
+```scss
+/*===== SCSS =====*/
+@mixin adjust-location($x, $y) {
+  @if unitless($x) {
+    @warn "Assuming #{$x} to be in pixels";
+    $x: 1px * $x;
+  }
+  @if unitless($y) {
+    @warn "Assuming #{$y} to be in pixels";
+    $y: 1px * $y;
+  }
+  position: relative;
+  left: $x;
+  top: $y;
+}
+```
 
 ### @error
 
+`@error`指令抛出一个SassScript表达式的值作为致命错误，其中包含了友好的堆栈trace，可以用来验证`mixin`和`function`的参数，例如：
+
+```scss
+@mixin adjust-location($x, $y) {
+  @if unitless($x) {
+    @error "$x may not be unitless, was #{$x}.";
+  }
+  @if unitless($y) {
+    @error "$y may not be unitless, was #{$y}.";
+  }
+  position: relative;
+  left: $x;
+  top: $y;
+}
+```
+
+> SASS当前还没有提供捕获`@error`的方式。
 
 
 ## 控制指令和表达式
+
+SassScript支持一些基本的控制指令和表达式，例如只在某些条件下包含样式，或是在多次变化中包含相同的样式。
+
+> 控制指令属于高级特性，并不经常使用，主要用于`mixins`当中，尤其是对于Compass这样的库。
+
+### `if()`
+
+内置的`if()`函数允许在一个条件处理分支返回两种可能的结果，它可以用于任意的脚本上下文。`if()`函数只能判断相应的那个参数并且返回，这允许引用已经被定义或者计算的变量，否则将会导致错误发生（*例如除以零*）。
+
+```scss
+/*===== SCSS =====*/
+div {
+  width: if(true, 1px, 2px);
+  height: if(false, 1px, 2px); 
+}
+
+/*===== CSS =====*/
+div {
+  width: 1px;
+  height: 2px; }
+```
+
+### `@if`
+
+`@if`指令接收一个SassScript表达式，当表达式返回`false`或者`null`之外的数据时，会选择使用接下来的嵌套语句，
+
+```scss
+/*===== SCSS =====*/
+p {
+  @if 1+1==2 {
+    border: 1px solid;
+  }
+  @if 5 < 3 {
+    border: 2px dotted;
+  }
+  @if null {
+    border: 3px double;
+  }
+}
+
+/*===== CSS =====*/
+p {
+  border: 1px solid; }
+```
+
+`@if`语句后面可以跟随多个`@else if`语句和一个`@else`语句，如果`@if`语句失败，SASS将逐个尝试`@else if`语句，直至其中一个成功；如果全部失败，则会执行`@else`语句。例如：
+
+```scss
+/*===== SCSS =====*/
+$type: monster;
+p {
+  @if $type==ocean {
+    color: blue;
+  }
+  @else if $type==matador {
+    color: red;
+  }
+  @else if $type==monster {
+    color: green;
+  }
+  @else {
+    color: black;
+  }
+}
+
+/*===== CSS =====*/
+p {
+  color: green; }
+```
+
+### `@for`
+
+`@for`指令用于重复输出一组样式，每次重复时都会存在一个计数器变量用于调整输出结果。该指令拥有`@for $var from <start> through <end>`和`@for $var from <start> to <end>`两种形式。
+
+`$var`可以是任意变量名（例如`$i`），`<start>`和`<end>`是返回整数的SassScript表达式，如果`<start>`大于`<end>`，那么计数器将会进行递减而非递增。
+
+`@for`指令会设置`$var`为指定范围内的连续数值，对于`from...through`数值范围包括`<start>`和`<end>`的值，对于`from...to`会从`<start>`开始运行，但不会包括`<end>`的值。
+
+```scss
+/*===== SCSS =====*/
+@for $i from 1 through 3 {
+  .item-#{$i} {
+    width: 2em * $i;
+  }
+}
+
+/*===== CSS =====*/
+.item-1 {
+  width: 2em; }
+
+.item-2 {
+  width: 4em; }
+
+.item-3 {
+  width: 6em; }
+```
+
+
+### `@each`
+
+`@each`指令的使用格式为`@each $var in <list or map>`，其中`$var`可以是任意变量名称（_例如`$length`或`$name`_），而`<list or map>`是一个返回`list`或者`map`的SassScript表达式。
+
+`@each`规则设置`$var`为`list`或`map`当中的每一项，输出样式中将会使用`$var`的实际值。
+
+```scss
+/*===== SCSS =====*/
+@each $animal in puma, sea-slug, egret, salamander {
+  .#{$animal}-icon {
+    background-image: url('/images/#{$animal}.png');
+  }
+}
+
+/*===== CSS =====*/
+.puma-icon {
+  background-image: url("/images/puma.png"); }
+
+.sea-slug-icon {
+  background-image: url("/images/sea-slug.png"); }
+
+.egret-icon {
+  background-image: url("/images/egret.png"); }
+
+.salamander-icon {
+  background-image: url("/images/salamander.png"); }
+```
+
+#### 多重赋值
+
+`@each`指令能够以`@each $var1, $var2, ... in <list>`的格式使用多个变量，如果`<list>`是一个列表中的列表元素，那么子列表中的每个元素将会被分配至各自的变量，例如：
+
+```scss
+/*===== SCSS =====*/
+@each $animal, $color, $cursor in (puma, black, default), (sea-slug, blue, pointer), (egret, white, move) {
+  .#{$animal}-icon {
+    background-image: url('/images/#{$animal}.png');
+    border: 2px solid $color;
+    cursor: $cursor;
+  }
+}
+
+/*===== CSS =====*/
+.puma-icon {
+  background-image: url("/images/puma.png");
+  border: 2px solid black;
+  cursor: default; }
+
+.sea-slug-icon {
+  background-image: url("/images/sea-slug.png");
+  border: 2px solid blue;
+  cursor: pointer; }
+
+.egret-icon {
+  background-image: url("/images/egret.png");
+  border: 2px solid white;
+  cursor: move; }
+```
+
+由于`maps`被视为一个键值对的列表，所以多重赋值也能够正常的工作，例如：
+
+```scss
+/*===== SCSS =====*/
+@each $header, $size in (h1: 2em, h2: 1.5em, h3: 1.2em) {
+  #{$header} {
+    font-size: $size;
+  }
+}
+
+/*===== CSS =====*/
+h1 {
+  font-size: 2em; }
+
+h2 {
+  font-size: 1.5em; }
+
+h3 {
+  font-size: 1.2em; }
+```
+
+
+### `@while`
+
+`@while`指令可以用来重复输出嵌套的样式，直至SassScript表达式返回结果为`false`，可以用于实现比`@for`语句更复杂的循环，但日常开发较少使用。
+
+```scss
+/*===== SCSS =====*/
+$i: 6;
+@while $i>0 {
+  .item-#{$i} {
+    width: 2em * $i;
+  }
+  $i: $i - 2;
+}
+
+/*===== CSS =====*/
+.item-6 {
+  width: 12em; }
+
+.item-4 {
+  width: 8em; }
+
+.item-2 {
+  width: 4em; }
+```
 
 
 ## Mixin指令
