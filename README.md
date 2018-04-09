@@ -12,7 +12,7 @@
 如果正在使用的是Linux发行版，需要通过`apt`安装[Ruby](http://www.ruby-lang.org/en/)以及`build-essential`。
 
 ```bash
-➜  sudo apt-get intall ruby-dev
+➜  sudo apt-get install ruby-dev
 ➜  gem install sass
 ```
 
@@ -1862,12 +1862,459 @@ $i: 6;
 
 ## Mixin指令
 
+混入（*Mixin*）可以用来定义Web应用当中需要**复用**的样式，避免出现`.float-left`这样的无语义class。**混入**里可以包含CSS规则以及SASS语法，甚至可以携带参数和引入变量，从而方便的生成各种灵活的样式。
+
+### 定义混入：`@mixin`
+
+混入（*Mixin*）通过SASSR提供的`@mixin`指令来定义，后面跟随混入的名称与参数以及内容块，例如下面代码定义了一个名为`large-text`的Mixin：
+
+```scss
+@mixin large-text {
+  font: {
+    family: Arial;
+    size: 20px;
+    weight: bold;
+  }
+  color: #ff0000;
+}
+```
+
+混入Mixin当中可以同时包含选择器和CSS属性，其中选择器还可以包含父级的选择器，例如：
+
+```scss
+@mixin clearfix {
+  display: inline-block;
+  &:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+  * html & {
+    height: 1px
+  }
+}
+```
+
+> 因为历史原因，混入Mixin的名字以及其它SASS标识符可以互换连字符`-`和下划线`_`，例如对于名称为`add-column`的混入，也可以将其视为`add_column`，反之亦然。
+
+
+### 包含混入：`@include`
+
+`@include`指令通过混入的名称和可选的参数，可以引入特定的混入Mixin至文档，从而包含并复用其样式，例如下面代码：
+
+```scss
+/*===== SCSS =====*/
+@mixin large-text {
+  font: {
+    family: Arial;
+    size: 20px;
+    weight: bold;
+  }
+  color: #ff0000;
+}
+
+.page-title {
+  @include large-text;
+  padding: 4px;
+  margin-top: 10px;
+}
+
+/*===== CSS =====*/
+.page-title {
+  font-family: Arial;
+  font-size: 20px;
+  font-weight: bold;
+  color: #ff0000;
+  padding: 4px;
+  margin-top: 10px; }
+```
+
+混入Mixin可以包含在其它规则之外，只要它们不直接定义CSS属性或使用父选择器引用，例如：
+
+```scss
+/*===== SCSS =====*/
+@mixin silly-links {
+  a {
+    color: blue;
+    background-color: red;
+  }
+}
+
+@include silly-links;
+
+/*===== CSS =====*/
+a {
+  color: blue;
+  background-color: red; }
+```
+
+混入Mixin也可以包含其它的混入，接下来看下面的代码：
+
+```scss
+@mixin compound {
+  @include highlighted-background;
+  @include header-text;
+}
+
+@mixin highlighted-background {
+  background-color: #fc0;
+}
+
+@mixin header-text {
+  font-size: 20px;
+}
+```
+
+> 事实上，混入Mixin还可以包含自己，但是在SASS 3.3版本之前，这种递归调用的行为是被禁止的。另外，只有定义了后代选择器的混入Mixin可以安全的混入源文件的顶层。
+
+### 参数
+
+混入Mixin可以使用SassScript的值作为参数，参数被包括在混入当中并作为为变量提供给其内部使用。多个参数通过逗号`,`分隔，然后通过传递对应顺序的参数进行调用，例如：
+
+```scss
+/*===== SCSS =====*/
+@mixin sexy-border($color, $width) {
+  border: {
+    color: $color;
+    width: $width;
+    style: dashed;
+  }
+}
+
+p {
+  @include sexy-border(blue, 1in);
+}
+
+/*===== CSS =====*/
+p {
+  border-color: blue;
+  border-width: 1in;
+  border-style: dashed; }
+```
+
+混入Mixin可以通过变量赋值语法为参数指定默认值，调用的时候如果缺省参数，则使用默认值代替，例如：
+
+```scss
+/*===== SCSS =====*/
+// 定义参数$width的默认值为1
+@mixin sexy-border($color, $width: 1in) {
+  border: {
+    color: $color;
+    width: $width;
+    style: dashed;
+  }
+}
+
+p {
+  @include sexy-border(blue);
+}
+
+h1 {
+  @include sexy-border(blue, 2in);
+}
+
+/*===== CSS =====*/
+p {
+  border-color: blue;
+  border-width: 1in;
+  border-style: dashed; }
+
+h1 {
+  border-color: blue;
+  border-width: 2in;
+  border-style: dashed; }
+```
+
+#### 关键字参数
+
+混入Mixin在通过`@include指令`进行引入时也可以使用显式的关键字参数，例如可以将上面例子改写为：
+
+```scss
+p {
+  @include sexy-border($color: blue);
+}
+
+h1 {
+  @include sexy-border($color: blue, $width: 2in);
+}
+```
+
+> 虽然上面的方式不够简明，但能够使Scss代码更加容易阅读，并让函数接口更加灵活，并方便的进行多参数的混入。命名参数可以按照任意顺序进行传递，如果有默认值可以省略。并且由于命名参数本质上是变量名称，因此下划线`_`和连字符`-`可以互换使用。
+
+#### 尾部逗号
+
+如果传入**混入Mixin**或者**函数Function**的最后一个参数是位置性的或关键字风格的，那么可以在这个参数后面跟随一个逗号`,`，这种编码风格可以更加简洁的进行重构，并且减少语法错误。
+
+#### 可变参数
+
+有些场景下，**混入Mixin**或者**函数Function**的参数个数是不确定的，例如创建一个可以接收任意数量参数的`box-shadow`混入。SASS里可以通过`...`符号添加**可变参数**支持，将所有剩余的参数包装到一个列表List。
+
+```scss
+/*===== SCSS =====*/
+@mixin box-shadow($shadows...) {
+  -moz-box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  box-shadow: $shadows;
+}
+
+.shadows {
+  @include box-shadow(0px 4px 5px #666, 2px 6px 10px #999);
+}
+
+/*===== CSS =====*/
+.shadows {
+  -moz-box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
+  -webkit-box-shadow: 0px 4px 5px #666, 2px 6px 10px #999;
+  box-shadow: 0px 4px 5px #666, 2px 6px 10px #999; }
+```
+
+可变参数可以包含任意需要传递给**混入Mixin**或者**函数Function**的关键字参数，它们可以通过[`keywords($args)`](http://sass-lang.com/documentation/Sass/Script/Functions.html#keywords-instance_method)函数 进行访问，该函数将会返回一个Map，将它们作为一个从字符串（_不包含`$`_）到值的映射返回。
+
+可变参数也可以在调用Mixin的时候使用，使用相同的语法能够扩展一个值的列表List，以便每个值作为单独的参数传入；或者扩展值的Map，从而使每个键值对都会作为一个关键字参数来进行处理。例如：
+
+```scss
+/*===== SCSS =====*/
+@mixin colors($text, $background, $border) {
+  color: $text;
+  background-color: $background;
+  border-color: $border;
+}
+
+// 使用List作为参数
+$values: #ff0000, #00ff00, #0000ff;
+.primary {
+  @include colors($values...);
+}
+
+// 使用Map作为参数
+$value-map: (text: #00ff00, background: #0000ff, border: #ff0000);
+.secondary {
+  @include colors($value-map...);
+}
+
+/*===== CSS =====*/
+.primary {
+  color: #ff0000;
+  background-color: #00ff00;
+  border-color: #0000ff; }
+
+.secondary {
+  color: #00ff00;
+  background-color: #0000ff;
+  border-color: #ff0000; }
+```
+
+> 可以同时传递一个List和一个Map参数，只要List参数位于Map类型参数之前，例如`@include colors($values..., $map...)`。
+
+我们可以通过可变参数包装Mixin并添加额外样式，而不改变Mixin的参数签名。这样**参数**将会通过被包装的Mixin直接进行传递，例如：
+
+```scss
+@mixin wrapped-stylish-mixin($args...) {
+  font-weight: bold;
+  @include stylish-mixin($args...);
+}
+
+.stylish {
+  // $width参数将会以关键字的形式传递到stylish-mixin
+  @include wrapped-stylish-mixin(#00ff00, $width: 100px);
+}
+```
+
+### 传入内容块到Mixin
+
+**样式块**可以传递到混入Mixin所包含样式的位置，它们会出现在Mixin内任意`@content`指令的位置，从而能够定义关联到选择器和指令的构造的抽象。
+
+```scss
+/*===== SCSS =====*/
+@mixin apply-to-ie6-only {
+  * html {
+    @content;
+  }
+}
+
+@include apply-to-ie6-only {
+  #logo {
+    background-image: url(/logo.gif);
+  }
+}
+
+/*===== CSS =====*/
+* html #logo {
+  background-image: url(/logo.gif); }
+```
+
+同样的Mixin可以在简写语法的`.sass`文件中完成（_`@mixin`和`@include`分别用`=`和`+`表示_）。
+
+```scss
+=apply-to-ie6-only
+  * html
+    @content
+
++apply-to-ie6-only
+  #logo
+    background-image: url(/logo.gif)
+```
+
+> 注意： 当`@content`指令被指定多次或者位于一个循环当中，样式块将会在每次调用中被复制并引用。
+
+有些Mixin可能需要传入一个内容块，或者根据是否传入内容块而具备不同的行为。当内容块传递至当前Mixin的时候，[`content-exists()`](http://sass-lang.com/documentation/Sass/Script/Functions.html#content_exists-instance_method)函数将会返回`true`，从而该函数可以用于帮助实现这类行为。
+
+#### 变量作用域与内容块
+
+传递给Mixin的内容块会在其定义的作用域中进行运算，而非混入Mixin的作用域。这意味Mixin当中的局部变量不能传递至样式块，并将其解析为全局值使用。
+
+```scss
+/*===== SCSS =====*/
+$color: white;
+@mixin colors($color: blue) {
+  background-color: $color;
+  @content;
+  border-color: $color;
+}
+
+.colors {
+  @include colors {
+    color: $color;
+  }
+}
+
+/*===== CSS =====*/
+.colors {
+  background-color: blue;
+  color: white;
+  border-color: blue; }
+```
+
+此外，这还清楚的表明，在被传递的内容块中使用的变量与Mixin，会关联到内容块定义位置的其它样式。
+
+```scss
+/*===== SCSS =====*/
+@mixin smartphone {
+  @content;
+  color: gold;
+}
+
+#sidebar {
+  $sidebar-width: 300px;
+  width: $sidebar-width;
+  @include smartphone {
+    width: $sidebar-width / 3;
+  }
+}
+
+/*===== CSS =====*/
+#sidebar {
+  width: 300px;
+  width: 100px;
+  color: gold; }
+```
+
 
 ## 函数指令
+
+SASS支持开发人员自定义函数，并且在任意值或脚本上下文里使用，例如：
+
+```scss
+/*===== SCSS =====*/
+$grid-width: 40px;
+$gutter-width: 10px;
+
+@function grid-width($n) {
+  @return $n * $grid-width + ($n - 1) * $gutter-width;
+}
+
+#sidebar {
+  width: grid-width(5);
+}
+
+/*===== CSS =====*/
+#sidebar {
+  width: 240px; }
+```
+
+正如上面代码所展示的，函数可以访问任意全局变量并接收参数，其行为类似一个混入Mixin。函数可以包含语句，并且必须调用`@return`来设置函数的返回值。
+
+与Mixin一样，SASS可以通过关键字参数调用自定义函数，因此可以像下面这样调用上面例子中的函数：
+
+```scss
+#sidebar {
+  width: grid-width($n: 5);
+}
+```
+
+建议在函数前面添加前缀以避免命名冲突，同时也能够有效区分哪些是自定义的函数，例如为自定义函数添加公司名称作为前缀`-uinika-grid-width`。自定义函数同样也支持可变参数，使用方式与混入Mixin相同。
+
+> 同样由于历史原因，函数名以及其它SASS标识符当中的连字符`-`和下划线`_`都是可以互换的，如果定义了一个名为`grid-width`的函数，那么同样可以通过`grid_width`进行调用，反之亦然。
 
 
 ## 输出类型
 
+虽然SASS默认输出的CSS格式是良好的，但是可以根据开发人员的个人习惯，使用SASS提供的其它4种输出格式。即可以通过`:style`选项进行设定，也可以在命令行中直接使用`--style`标志。
 
-## 继承Sass
+### `:nested`
 
+**嵌套nested**是SASS默认的输出格式，每个属性都会占据一行，但缩进不是固定的，每个规则都基于其嵌套深度进行缩进。例如：
+
+```scss
+#main {
+  color: #fff;
+  background-color: #000; }
+  #main p {
+    width: 10em; }
+
+.huge {
+  font-size: 10em;
+  font-weight: bold;
+  text-decoration: underline; }
+```
+
+> 嵌套格式在阅读较大CSS工程文件时能够帮助开发人员快速的了解代码的结构。
+
+### `:expanded`
+
+**扩展expanded**格式类似于人工手写的CSS样式，每个属性和规则都独占用一行。规则当中的CSS属性会进行缩进，但规则本身并不会进行任何特殊的缩进，例如：
+
+```scss
+#main {
+  color: #fff;
+  background-color: #000;
+}
+#main p {
+  width: 10em;
+}
+
+.huge {
+  font-size: 10em;
+  font-weight: bold;
+  text-decoration: underline;
+}
+```
+
+### `:compact`
+
+**紧凑compact**格式比起上述两种格式占据的空间更小，这种格式将重点聚焦在选择器而非CSS属性上。每个CSS规则独自占据一行，该行还包括全部的CSS属性。*每个嵌套的规则都会另起新行，不嵌套的选择器会输出空白行作为分隔*，例如：
+
+```scss
+#main { color: #fff; background-color: #000; }
+#main p { width: 10em; }
+
+.huge { font-size: 10em; font-weight: bold; text-decoration: underline; }
+```
+
+### `:compressed`
+
+**压缩compressed**格式会尽可能减小所生成文件的体积，并在该文件末尾产生一个换行。除了必要的选择器分隔之外，几乎没有多余的空格。这种格式会让颜色等CSS属性值以最简短的方式来进行表示，由于代码可读性极差，因此主要用于生产环境。
+
+```css
+#main{color:#fff;background-color:#000}#main p{width:10em}.huge{font-size:10em;font-weight:bold;text-decoration:underline}
+```
+
+## 扩展SASS
+
+对于前端开发人员的特殊需求，SASS为提供了多项高阶定制功能，但是使用这些功能需要非常熟悉**Ruby**。例如自定义SASS函数、缓存存储、自定义导入器等等，这些功能在日常前端开发工作当中并不常用，可以根据需要查阅SASS的源码API文档。
+
+-----
+
+**2018年4月10日，全文完。**
